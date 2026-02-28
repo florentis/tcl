@@ -1110,17 +1110,12 @@ ParseTokens(
 	    /* Expression substition context */
 		Tcl_Parse *exprParsePtr;
 		exprParsePtr =(Tcl_Parse *)TclStackAlloc(parsePtr->interp, sizeof(Tcl_Parse));
-		
-		src++; 	// src == '['
-		numBytes --;
-		
-		Tcl_ParseExpr(parsePtr->interp, src, numBytes, exprParsePtr);
-		
-		src++;              // src == '('
-		numBytes --;
-		
+		if (Tcl_ParseExpr(parsePtr->interp, src, numBytes, exprParsePtr) != TCL_OK) {
+			return TCL_ERROR;
+		}
+				
 		tokenPtr->type = TCL_TOKEN_SUB_EXPR;
-		tokenPtr->start = &src[-1];
+		tokenPtr->start = src;
 		tokenPtr->size = exprParsePtr->commandSize+2;
 		parsePtr->numTokens++;
 		src+=exprParsePtr->commandSize+2;
@@ -2276,11 +2271,9 @@ TclSubstTokens(
 	}
 	case TCL_TOKEN_SUB_EXPR : {
 	    Tcl_Obj * expressionObj;
-	    Tcl_Obj * expressionResult;
 	    expressionObj = Tcl_NewStringObj(tokenPtr->start+1, tokenPtr->size-2);
-	    
-	    code = Tcl_ExprObj(interp, expressionObj, &expressionResult);
-	    appendObj = expressionResult;
+	    code = Tcl_ExprObj(interp, expressionObj, &appendObj);
+	    Tcl_DecrRefCount(expressionObj);
 	    break;
 	}
 	case TCL_TOKEN_VARIABLE: {
