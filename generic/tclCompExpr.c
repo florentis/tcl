@@ -622,11 +622,10 @@ ParseExpr(
     int substExpressionContext=0;
     Tcl_Size originalLength=numBytes;
     
-    if(start[-1] == '[' && start[0] == '(' ) {
+    if(start[0] == '[' && start[1] == '(' ) {
 	// Expression substitution context
 	substExpressionContext=1;
-
-	start++; //skip the open parenthesis '(' : it's part of the expression substitution syntax
+	start++; //skip the open bracket '[', keep the parenthese 
 	numBytes--;
     }
 	
@@ -961,7 +960,7 @@ ParseExpr(
 			TclStackAlloc(interp, sizeof(Tcl_Parse));
 
 		tokenPtr = parsePtr->tokenPtr + parsePtr->numTokens;
-		if (start[1] == '(') {
+		if (numBytes > 1 && start[1] == '(') {
 		    tokenPtr->type = TCL_TOKEN_SUB_EXPR;
 		} else {
 			tokenPtr->type = TCL_TOKEN_COMMAND;
@@ -982,8 +981,6 @@ ParseExpr(
 		    }
 			if (nestSubstExprShorthand == 1) {			    
 			    start = nestedPtr->commandStart + nestedPtr->commandSize-3;
-			    // printf("size of nest expr : %d\n", (int)nestedPtr->commandSize-3);
-			    // printf("lastchars : %c%c\n", start[-1], start[0]);
 			} else {
 		    	start = nestedPtr->commandStart + nestedPtr->commandSize;
 			}
@@ -1129,11 +1126,10 @@ ParseExpr(
 		if (substExpressionContext == 1) {
 			if (start[0] == ')') {
 		    	nb_paren--;
-		        if (numBytes >= 1 && (nb_paren == -1 && start[1] ==']')) {
+		        if (numBytes >= 1 && nb_paren == 0 && start[1] ==']') {
 					//// End of expr substitution
-					parsePtr->commandSize = originalLength - numBytes - 1;
-					numBytes=0;
-					continue;
+					parsePtr->commandSize = originalLength - numBytes;
+					numBytes=0; // make ParseLexeme add a END node
 		    	}					   
 			}		
 	    }
@@ -1909,13 +1905,14 @@ Tcl_ParseExpr(
     if (numBytes < 0) {
 	numBytes = (start ? strlen(start) : 0);
     }
+	
     code = ParseExpr(interp, start, numBytes, &opTree, litList, funcList,
 	    	exprParsePtr, true /* parseOnly */);
     Tcl_DecrRefCount(funcList);
     Tcl_DecrRefCount(litList);
 	if (code == TCL_OK) {
-		if(start[-1] == '[' && start[0] == '(' ) {
-	    	// Expression Substitution Context
+		if(numBytes> 1 && start[0] == '[' && start[1] == '(' ) {
+	    	// Expression Substitution Context : transfert the command size to parseToken.
 			parsePtr->commandSize = exprParsePtr->commandSize;
 		} else {
     		TclParseInit(interp, start, numBytes, parsePtr);
