@@ -235,6 +235,24 @@ Tcl_ParseCommand(
     parsePtr->commentSize = 0;
     parsePtr->commandStart = NULL;
     parsePtr->commandSize = 0;
+ 	if (start[0] == '(' && start[numBytes-1] == ')') {
+		// Script expression Shorthand : returns an Expression Token
+		parsePtr->commandStart = start;
+ 		parsePtr->commandSize = numBytes;
+ 		parsePtr->numWords =2;
+ 		parsePtr->tokenPtr[0].type = TCL_TOKEN_SUB_EXPR;
+ 		parsePtr->tokenPtr[0].numComponents=1;
+		parsePtr->tokenPtr[0].start = start;
+ 		parsePtr->tokenPtr[0].size = 0;
+		TclGrowParseTokenArray(parsePtr, 1);
+	
+ 		tokenPtr = &parsePtr->tokenPtr[1];
+ 		tokenPtr->type = TCL_TOKEN_SIMPLE_WORD;
+ 		tokenPtr->start = start;
+ 		tokenPtr->size = numBytes;
+ 		tokenPtr->numComponents=0;
+ 		return TCL_OK;
+    }
     if (nested != 0) {
 	terminators = TYPE_COMMAND_END | TYPE_CLOSE_BRACK;
     } else {
@@ -1110,6 +1128,21 @@ ParseTokens(
 	    }
 	    src += parsePtr->tokenPtr[varToken].size;
 	    numBytes -= parsePtr->tokenPtr[varToken].size;
+	} else if (numBytes>=2 && src[0] == '[' && src[1] == '(') {
+ 	    /* Inline Expression substitution context */
+	    Tcl_Parse *exprParsePtr;
+	    exprParsePtr =(Tcl_Parse *)TclStackAlloc(parsePtr->interp, sizeof(Tcl_Parse));
+	    if (Tcl_ParseExpr(parsePtr->interp, src, numBytes, exprParsePtr) != TCL_OK) {
+			return TCL_ERROR;
+	    }
+	    
+	    tokenPtr->type = TCL_TOKEN_SUB_EXPR;
+	    tokenPtr->start = src;
+	    tokenPtr->size = exprParsePtr->commandSize+2;
+	    parsePtr->numTokens++;
+	    src+=exprParsePtr->commandSize+2;
+	    numBytes-=exprParsePtr->commandSize+2;
+	    TclStackFree(parsePtr->interp, exprParsePtr);
 	} else if (*src == '[') {
 	    Tcl_Parse *nestedPtr;
 
@@ -2224,7 +2257,13 @@ TclSubstTokens(
 		adjust++;
 	    }
 	    break;
-
+	case TCL_TOKEN_SUB_EXPR : {
+	    Tcl_Obj * expressionObj;
+ 	    expressionObj = Tcl_NewStringObj(tokenPtr->start+1, tokenPtr->size-2);
+ 	    code = Tcl_ExprObj(interp, expressionObj, &appendObj);
+ 	    Tcl_DecrRefCount(expressionObj);
+ 	    break;
+	}
 	case TCL_TOKEN_COMMAND: {
 	    /* TIP #280: Transfer line information to nested command */
 	    iPtr->numLevels++;
