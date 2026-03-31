@@ -825,8 +825,14 @@ TclSetByteCodeFromAny(
     if (clLocPtr) {
 	compEnv.clNext = &clLocPtr->loc[0];
     }
-
-    TclCompileScript(interp, stringPtr, length, &compEnv);
+    /* Script Expression Shorthand Support :
+	* The script begin with a '(' and finish with a ')' ?
+	* compile it as expression ! */
+    if (stringPtr[0] == '(' && stringPtr[length-1] == ')') {
+       TclCompileExpr(interp, &stringPtr[1], length-2, &compEnv, 0);
+     } else {
+	    TclCompileScript(interp, stringPtr, length, &compEnv);
+	 }
 
     /*
      * Compilation succeeded. Add a "done" instruction at the end.
@@ -2275,10 +2281,20 @@ TclCompileScript(
 	     */
 	    iPtr->numLevels++;
 
-	    lastCmdIdx = CompileCommandTokens(interp, parsePtr, envPtr);
-
+		/* Script Expression Shorthand : 
+		   if Token was of TCL_TOKEN_SUB_EXPR category.
+		   Compile it as expression.
+		*/
+        if (parsePtr->tokenPtr[0].type == TCL_TOKEN_SUB_EXPR) {
+			  TclCompileExpr(interp, &parsePtr->tokenPtr[1].start[0], parsePtr->tokenPtr[1].size, envPtr, true);
+              TclEmitOpcode(INST_POP, envPtr);
+              lastCmdIdx=envPtr->numCommands;
+              numBytes=0;
+        } else {
+            lastCmdIdx = CompileCommandTokens(interp, parsePtr, envPtr);
+        }
+		
 	    iPtr->numLevels--;
-
 	    /*
 	     * TIP #280: Track lines in the just compiled command.
 	     */
@@ -2431,6 +2447,7 @@ TclCompileTokens(
     int isLiteral;
     Tcl_Size maxNumCL, numCL;
     Tcl_Size *clPosition = NULL;
+	int twoCharsSymbol = 0; //used in expr subst context
     int depth = TclGetStackDepth(envPtr);
 
     /*
@@ -2534,6 +2551,23 @@ TclCompileTokens(
 	    envPtr->line -= adjust;
 	    numObjsToConcat++;
 	    break;
+		
+	case TCL_TOKEN_SUB_EXPR :
+		/* EXPR Shorthand */
+		/* The traitment of accumulated char must be corrected for two symbol chars */
+        if (Tcl_DStringLength(&textBuffer) > 1) {
+        	int literal;
+            literal = TclRegisterDStringLiteral(envPtr, &textBuffer);
+            TclEmitPush(literal, envPtr);
+            numObjsToConcat++;
+            Tcl_DStringFree(&textBuffer);
+       }
+       twoCharsSymbol=1;
+       envPtr->line += adjust;
+       TclCompileExpr(interp,  tokenPtr->start+1, tokenPtr->size-2, envPtr, 0);
+       envPtr->line -= adjust;
+       numObjsToConcat++;
+       break;
 
 	case TCL_TOKEN_VARIABLE:
 	    /*
@@ -2565,7 +2599,9 @@ TclCompileTokens(
      * Push any accumulated characters appearing at the end.
      */
 
-    if (Tcl_DStringLength(&textBuffer) > 0) {
+    if (Tcl_DStringLength(&textBuffer) > 0  
+		&&  twoCharsSymbol != 1 /* dirty hack (Expression Shorthand) */
+		)) {
 	int literal = TclRegisterDStringLiteral(envPtr, &textBuffer);
 
 	TclEmitPush(literal, envPtr);
