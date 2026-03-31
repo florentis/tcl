@@ -2598,10 +2598,9 @@ TclCompileTokens(
     /*
      * Push any accumulated characters appearing at the end.
      */
-
+	/* twoCharsSymbol is a dirty hack (Expression Shorthand) */
     if (Tcl_DStringLength(&textBuffer) > 0  
-		&&  twoCharsSymbol != 1 /* dirty hack (Expression Shorthand) */
-		)) {
+		&&  twoCharsSymbol != 1 ) {
 	int literal = TclRegisterDStringLiteral(envPtr, &textBuffer);
 
 	TclEmitPush(literal, envPtr);
