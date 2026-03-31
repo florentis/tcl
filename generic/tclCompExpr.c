@@ -276,7 +276,7 @@ enum LexemeCodes {
     STR_GT = BINARY | 29,
     STR_LEQ = BINARY | 30,
     STR_GEQ = BINARY | 31,
-    END = BINARY | 32		/* This lexeme represents the end of the
+    END = BINARY, | 32		/* This lexeme represents the end of the
 				 * string being parsed. Treating it as a
 				 * binary operator follows the same logic as
 				 * the CLOSE_PAREN lexeme and END pairs with
@@ -302,6 +302,8 @@ enum Precedence {
     PREC_CLOSE_PAREN,	/* ")" */
     PREC_OPEN_PAREN,	/* "(" */
     PREC_COMMA,		/* "," */
+    PREC_SEPARATOR,        /* ";" */
+    PREC_ASSIGN,          /* "=" */
     PREC_CONDITIONAL,	/* "?", ":" */
     PREC_OR,		/* "||" */
     PREC_AND,		/* "&&" */
@@ -314,7 +316,7 @@ enum Precedence {
     PREC_ADD,		/* "+", "-" */
     PREC_MULT,		/* "*", "/", "%" */
     PREC_EXPON,		/* "**" */
-    PREC_UNARY		/* "+", "-", FUNCTION, "!", "~" */, NULL_FUNC, LIST
+    PREC_UNARY		/* "+", "-", FUNCTION, "!", "~" , NULL_FUNC, LIST */
 };
 
 /*
@@ -1411,16 +1413,17 @@ ParseExpr(
 		if  ((incompletePtr->lexeme != OPEN_PAREN)
 			|| (incompletePtr[-1].lexeme != FUNCTION)) {
 			
-			if (incompletePtr[-1].lexeme == NULL_FUNC) {
-				// Native list handling : using the room we created before in UNARY Branch.
-				incompletePtr[-1].lexeme = FUNCTION;
-		    } else {
-		    	TclNewLiteralStringObj(msg,
-			    	"unexpected \",\" outside function argument list");
-		    	errCode = "SURPRISE";
-		    	goto error;
-			}
-	    }
+				if (incompletePtr[-1].lexeme == NULL_FUNC) {
+					// Native list handling : using the room we created before in UNARY Branch.
+					incompletePtr[-1].lexeme = FUNCTION;
+		    	} else {
+		    		TclNewLiteralStringObj(msg,
+			    		"unexpected \",\" outside function argument list");
+		    		errCode = "SURPRISE";
+		    		goto error;
+				}
+			}	
+	    }	
 
 	    /* Operator ":" may only be right operand of "?" */
 	    if (IsOperator(complete) && (nodes[complete].lexeme == COLON)) {
@@ -2488,7 +2491,6 @@ CompileExprTree(
 		case SEPARATOR :
 			TclEmitOpcode(INST_POP, envPtr);
 			break;
-	    }
 	    }
 	} else {
 	    int pc1, pc2, target;
