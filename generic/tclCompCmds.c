@@ -3550,7 +3550,13 @@ TclPushVarName(
 
 		elemTokenPtr = (Tcl_Token *)TclStackAlloc(interp, sizeof(Tcl_Token));
 		allocedTokens = 1;
-		elemTokenPtr->type = TCL_TOKEN_TEXT;
+		/* INDEX EXPRESSION SHORTHAND : */
+		/* An index enclosed in a second set of parenthesis is taken as en expression */
+		if (*elName == '(' && *(last--) == ')' ) {
+        	elemTokenPtr->type = TCL_TOKEN_SUB_EXPR;
+       	} else {
+       		elemTokenPtr->type = TCL_TOKEN_TEXT;
+       	}
 		elemTokenPtr->start = elName;
 		elemTokenPtr->size = elNameLen;
 		elemTokenPtr->numComponents = 0;
