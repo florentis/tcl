@@ -212,6 +212,8 @@ enum LexemeCodes {
 				 * CLOSE_PAREN below. */
     NOT = UNARY | 6,
     BIT_NOT = UNARY | 7,
+    NULL_FUNC = UNARY | 8,          /* Ambigous : can result in no_func or in function list */
+    LIST = UNARY | 9,               /*  list  : Maybe to be used later */
 
     /* Binary operator lexemes */
 
@@ -280,6 +282,9 @@ enum LexemeCodes {
 				 * the CLOSE_PAREN lexeme and END pairs with
 				 * START, in the same way that CLOSE_PAREN
 				 * pairs with OPEN_PAREN. */
+	SEPARATOR = BINARY | 33,
+    ASSIGN = BINARY | 34               /* ASSIGN, like EXPON is right associative, 
+										  * and this distinction is coded directly in ParseExpr */
 };
 
 /*
@@ -309,7 +314,7 @@ enum Precedence {
     PREC_ADD,		/* "+", "-" */
     PREC_MULT,		/* "*", "/", "%" */
     PREC_EXPON,		/* "**" */
-    PREC_UNARY		/* "+", "-", FUNCTION, "!", "~" */
+    PREC_UNARY		/* "+", "-", FUNCTION, "!", "~" */, NULL_FUNC, LIST
 };
 
 /*
@@ -358,8 +363,10 @@ static const unsigned char prec[] = {
     PREC_COMPARE,	/* STR_LEQ */
     PREC_COMPARE,	/* STR_GEQ */
     PREC_END,		/* END */
+	PREC_SEPARATOR,      /* SEPARATOR */
+    PREC_ASSIGN,            /* ASSIGN */
     /* Expansion room for more binary operators */
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     /* Unary operator lexemes */
     PREC_UNARY,		/* UNARY_PLUS */
@@ -369,6 +376,8 @@ static const unsigned char prec[] = {
     PREC_OPEN_PAREN,	/* OPEN_PAREN */
     PREC_UNARY,		/* NOT*/
     PREC_UNARY,		/* BIT_NOT*/
+   	PREC_UNARY,               /*NULL_FUNC */
+    PREC_UNARY                /* LIST */
 };
 
 /*
@@ -415,8 +424,10 @@ static const unsigned char instruction[] = {
     INST_STR_LE,	/* STR_LEQ */
     INST_STR_GE,	/* STR_GEQ */
     0,			/* END */
+	0,          /* SEPARATOR */
+    0,          /* ASSIGN */
     /* Expansion room for more binary operators */
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     /* Unary operator lexemes */
     INST_UPLUS,		/* UNARY_PLUS */
@@ -426,6 +437,8 @@ static const unsigned char instruction[] = {
     0,			/* OPEN_PAREN */
     INST_LNOT,		/* NOT*/
     INST_BITNOT,	/* BIT_NOT*/
+    0,                  /* NULL_FUNC */
+    0                   /* LIST */
 };
 
 /*
@@ -459,9 +472,9 @@ static const unsigned char Lexeme[] = {
 	COMMA		/* , */,	MINUS		/* - */,
 	0		/* . */,	DIVIDE		/* / */,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,			/* 0-9 */
-	COLON		/* : */,	INVALID		/* ; */,
+	COLON		/* : */,	SEPARATOR		/* ; */,
 	0		/* < or << or <= */,
-	0		/* == or INVALID */,
+	0		/* == or = */,
 	0		/* > or >> or >= */,
 	QUESTION	/* ? */,	INVALID		/* @ */,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,		/* A-M */
@@ -618,6 +631,21 @@ ParseExpr(
 				 * error message readable, we impose this
 				 * limit on the substring size we extract. */
 
+	int nb_paren=0;
+    int substExpressionContext=0;
+    Tcl_Size originalLength=numBytes;
+        
+    if(start[0] == '[' && start[1] == '(' ) {
+		// Inline expression substitution context
+		substExpressionContext=1;
+		start++; //skip the open bracket '[', keep the parenthese 
+		numBytes--;
+    }
+    /* create the list func name object */
+    Tcl_Obj *listName;
+    TclNewLiteralStringObj(listName, "list");
+
+	
     TclParseInit(interp, start, numBytes, parsePtr);
 
     nodes = (OpNode *)Tcl_AttemptAlloc(nodesAvailable * sizeof(OpNode));
@@ -658,7 +686,7 @@ ParseExpr(
 	 * space for one if required.
 	 */
 
-	if (nodesUsed >= nodesAvailable) {
+	if (nodesUsed >= nodesAvailable-1) {
 	    unsigned int size = nodesUsed * 2;
 	    OpNode *newPtr = NULL;
 
@@ -735,6 +763,15 @@ ParseExpr(
 		    Tcl_ListObjAppendElement(NULL, funcList, literal);
 		} else if (Tcl_GetBooleanFromObj(NULL,literal,&b) == TCL_OK) {
 		    lexeme = BOOL_LIT;
+		}  else if (literal && start[scanned+TclParseAllWhiteSpace(
+				  start+scanned, numBytes-scanned)] == '=') {
+		    /* ASSIGNEMENT OPERATOR : We accept barewords on variable assignement */
+			/* the varname is appendes to the List of literals */
+		    Tcl_ListObjAppendElement(NULL, litList, literal);
+		    complete = lastParsed = OT_LITERAL;
+		    start += scanned;
+		    numBytes -= scanned;
+		    continue;
 		} else {
 		    /*
 		     * Tricky case: see test expr-62.10
@@ -943,7 +980,13 @@ ParseExpr(
 			TclStackAlloc(interp, sizeof(Tcl_Parse));
 
 		tokenPtr = parsePtr->tokenPtr + parsePtr->numTokens;
-		tokenPtr->type = TCL_TOKEN_COMMAND;
+		int nestSubstExprShorthand = 0;
+		if (numBytes > 1 && start[1] == '(') {
+			// To be seen : TCL_TOKEN_SUB_EXPR has been added is Tcl_ParseCommand since then 
+		    tokenPtr->type = TCL_TOKEN_SUB_EXPR;
+		} else {
+			tokenPtr->type = TCL_TOKEN_COMMAND;
+		}
 		tokenPtr->start = start;
 		tokenPtr->numComponents = 0;
 
@@ -958,7 +1001,13 @@ ParseExpr(
 			parsePtr->incomplete = nestedPtr->incomplete;
 			break;
 		    }
-		    start = nestedPtr->commandStart + nestedPtr->commandSize;
+			if (nestSubstExprShorthand == 1) {
+				// Expr nested shorthand : inline Expr shorthand in expr
+				// the size must be reduce by 2 because the expression doesn't contain the brackets
+			    start = nestedPtr->commandStart + nestedPtr->commandSize-2;
+		    } else {
+				start = nestedPtr->commandStart + nestedPtr->commandSize;
+		    }
 		    Tcl_FreeParse(nestedPtr);
 		    if ((nestedPtr->term < end) && (nestedPtr->term[0] == ']')
 			    && !nestedPtr->incomplete) {
@@ -1043,7 +1092,12 @@ ParseExpr(
 	} /* case LEAF */
 
 	case UNARY:
-
+	    if (substExpressionContext == 1) {
+			// We count the parents (in the aim to find the length of inline expression shorthand)
+			if (start[0]== '(') {
+		    	nb_paren++;    
+			}
+	    }
 	    /*
 	     * A unary operator appearing just after something that's not an
 	     * operator is a syntax error -- something trying to be the left
@@ -1057,7 +1111,20 @@ ParseExpr(
 		errCode = "MISSING";
 		goto error;
 	    }
-
+		 if (lexeme == OPEN_PAREN && nodePtr[-1].lexeme != FUNCTION ) {
+		 	/* Native list handling */
+			/* we don't know yet if there will be a "comma outside func error", 
+			   but we have to create a room to add list func in case */
+			nodePtr->lexeme = NULL_FUNC;
+			nodePtr->precedence = prec[NULL_FUNC];
+			nodePtr->mark = MARK_RIGHT;
+			nodePtr->constant = 0; 
+			nodePtr->p.prev = incomplete;
+			incomplete = lastParsed = nodesUsed;
+			Tcl_ListObjAppendElement(NULL, funcList, listName); 
+			nodesUsed++;
+			nodePtr = nodes + nodesUsed;
+	    }
 	    /*
 	     * Create an OpNode for the unary operator.
 	     */
@@ -1073,7 +1140,7 @@ ParseExpr(
 	     * expression, so long as the argument is a constant expression.
 	     */
 
-	    nodePtr->constant = (lexeme != FUNCTION);
+	    nodePtr->constant = (lexeme != FUNCTION || lexeme == NULL_FUNC);
 
 	    /*
 	     * This unary operator is a new incomplete tree, so push it onto
@@ -1089,7 +1156,16 @@ ParseExpr(
 	case BINARY: {
 	    OpNode *incompletePtr;
 	    unsigned char precedence = prec[lexeme];
-
+	    if (substExpressionContext == 1) {
+			if (start[0] == ')') {
+		    	nb_paren--;
+		    	if (numBytes >= 1 && nb_paren == 0 && start[1] ==']') {
+					// we found the end of an inline expr substitution
+					parsePtr->commandSize = originalLength - numBytes;
+					numBytes=0; // make ParseLexeme add a END node
+		    	}					   
+			}		
+	    }
 	    /*
 	     * A binary operator appearing just after another operator is a
 	     * syntax error -- one of the two operators is missing an operand.
@@ -1199,7 +1275,11 @@ ParseExpr(
 		     */
 
 		    if (lexeme == EXPON) {
-			break;
+				break;
+		    }
+			/* Right association rules for assignment. */
+		    if (lexeme == ASSIGN) {
+				break;
 		    }
 
 		    /*
@@ -1279,7 +1359,15 @@ ParseExpr(
 			|| (incompletePtr->lexeme == FUNCTION)) {
 		    nodes[complete].constant = incompletePtr->constant;
 		}
-
+		/*
+		 * We declare all ASSIGN operators to be non-constant
+		 * expressions because we do not want to optimize their
+		 * variable-setting side effects out of existence.
+		 */
+		if (incompletePtr->lexeme == ASSIGN) {
+		    incompletePtr->constant = 0;
+		}
+			
 		if (incompletePtr->lexeme == START) {
 		    /*
 		     * Completing the START tree indicates we're done.
@@ -1322,11 +1410,16 @@ ParseExpr(
 	    if (lexeme == COMMA) {
 		if  ((incompletePtr->lexeme != OPEN_PAREN)
 			|| (incompletePtr[-1].lexeme != FUNCTION)) {
-		    TclNewLiteralStringObj(msg,
-			    "unexpected \",\" outside function argument list");
-		    errCode = "SURPRISE";
-		    goto error;
-		}
+			
+			if (incompletePtr[-1].lexeme == NULL_FUNC) {
+				// Native list handling : using the room we created before in UNARY Branch.
+				incompletePtr[-1].lexeme = FUNCTION;
+		    } else {
+		    	TclNewLiteralStringObj(msg,
+			    	"unexpected \",\" outside function argument list");
+		    	errCode = "SURPRISE";
+		    	goto error;
+			}
 	    }
 
 	    /* Operator ":" may only be right operand of "?" */
@@ -1874,8 +1967,13 @@ Tcl_ParseExpr(
 
     TclParseInit(interp, start, numBytes, parsePtr);
     if (code == TCL_OK) {
-	ConvertTreeToTokens(start, numBytes,
-		opTree, exprParsePtr->tokenPtr, parsePtr);
+		if(numBytes> 1 && start[0] == '[' && start[1] == '(' ) {
+	    // It was an Inlined Expression Substitution Context : transfert the command size to parseToken.
+	    	parsePtr->commandSize = exprParsePtr->commandSize;
+		} else {
+			ConvertTreeToTokens(start, numBytes,
+					opTree, exprParsePtr->tokenPtr, parsePtr);
+		}
     } else {
 	parsePtr->term = exprParsePtr->term;
 	parsePtr->errorType = exprParsePtr->errorType;
@@ -1918,7 +2016,7 @@ ParseLexeme(
     Tcl_Obj *literal = NULL;
     unsigned char byte;
 
-    if (numBytes == 0) {
+    if (numBytes <= 0) {
 	*lexemePtr = END;
 	return 0;
     }
@@ -1954,9 +2052,9 @@ ParseLexeme(
 	    *lexemePtr = EQUAL;
 	    return 2;
 	}
-	*lexemePtr = INCOMPLETE;
+	*lexemePtr = ASSIGN; // TIP 282
 	return 1;
-
+	
     case '!':
 	if ((numBytes > 1) && (start[1] == '=')) {
 	    *lexemePtr = NEQ;
@@ -2358,6 +2456,9 @@ CompileExprTree(
 		numWords = 2;	/* Command plus one argument */
 		break;
 	    }
+		case NULL_FUNC:
+			funcObjv++;
+		break;
 	    case QUESTION:
 		newJump = (JumpList *)TclStackAlloc(interp, sizeof(JumpList));
 		newJump->next = jumpPtr;
@@ -2384,6 +2485,10 @@ CompileExprTree(
 		TclEmitForwardJump(envPtr, (nodePtr->lexeme == AND)
 			?  TCL_FALSE_JUMP : TCL_TRUE_JUMP, &jumpPtr->jump);
 		break;
+		case SEPARATOR :
+			TclEmitOpcode(INST_POP, envPtr);
+			break;
+	    }
 	    }
 	} else {
 	    int pc1, pc2, target;
@@ -2395,10 +2500,16 @@ CompileExprTree(
 		    TclEmitOpcode(INST_TRY_CVT_TO_NUMERIC, envPtr);
 		}
 		break;
+		case ASSIGN:
+			TclEmitOpcode(INST_STORE_STK, envPtr);
+			break;
+	    case NULL_FUNC:
 	    case OPEN_PAREN:
-
 		/* do nothing */
-		break;
+			break;
+		case SEPARATOR:
+			convert = 0; 
+			break;
 	    case FUNCTION:
 		/*
 		 * Use the numWords count we've kept to invoke the function
@@ -2416,7 +2527,11 @@ CompileExprTree(
 		 */
 
 		numWords = nodePtr->left;
-		convert = 1;
+		if (nodePtr - 1 == rootPtr ) {
+		    convert = 0;
+		} else {
+		    convert = 1;
+		}
 		break;
 	    case COMMA:
 		/*
@@ -2492,7 +2607,9 @@ CompileExprTree(
 	case OT_LITERAL: {
 	    Tcl_Obj *const *litObjv = *litObjvPtr;
 	    Tcl_Obj *literal = *litObjv;
-
+		if ( nodePtr->lexeme == NUMBER) {
+		    convert =0;
+	    }
 	    if (optimize) {
 		Tcl_Size length;
 		const char *bytes = TclGetStringFromObj(literal, &length);
