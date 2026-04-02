@@ -276,7 +276,7 @@ enum LexemeCodes {
     STR_GT = BINARY | 29,
     STR_LEQ = BINARY | 30,
     STR_GEQ = BINARY | 31,
-    END = BINARY, | 32		/* This lexeme represents the end of the
+    END = BINARY | 32,		/* This lexeme represents the end of the
 				 * string being parsed. Treating it as a
 				 * binary operator follows the same logic as
 				 * the CLOSE_PAREN lexeme and END pairs with
