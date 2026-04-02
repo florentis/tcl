@@ -829,41 +829,41 @@ TclSetByteCodeFromAny(
 	* The script begin with a '(' and finish with a ')' ?
 	* compile it as expression ! */
     if (stringPtr[0] == '(' && stringPtr[length-1] == ')') {
-       TclCompileExpr(interp, &stringPtr[1], length-2, &compEnv, 0);
+       	TclCompileExpr(interp, &stringPtr[1], length-2, &compEnv, 0);
+		TclEmitOpcode(INST_DONE, &compEnv);
      } else {
 	    TclCompileScript(interp, stringPtr, length, &compEnv);
-	 }
+	     /*
+     	* Compilation succeeded. Add a "done" instruction at the end.
+     	*/
 
-    /*
-     * Compilation succeeded. Add a "done" instruction at the end.
-     */
+    	TclEmitOpcode(INST_DONE, &compEnv);
 
-    TclEmitOpcode(INST_DONE, &compEnv);
+    	/*
+     	* Check for optimizations!
+     	*
+     	* If the generated code is free of most hazards, recompile with generation
+     	* of INST_START_CMD disabled to produce code that more compact in many
+     	* cases, and also sometimes more performant.
+     	*/
 
-    /*
-     * Check for optimizations!
-     *
-     * If the generated code is free of most hazards, recompile with generation
-     * of INST_START_CMD disabled to produce code that more compact in many
-     * cases, and also sometimes more performant.
-     */
-
-    if (Tcl_GetParent(interp) == NULL &&
-	    !Tcl_LimitTypeEnabled(interp, TCL_LIMIT_COMMANDS|TCL_LIMIT_TIME)
-	    && IsCompactibleCompileEnv(&compEnv)) {
-	TclFreeCompileEnv(&compEnv);
-	iPtr->compiledProcPtr = procPtr;
-	TclInitCompileEnv(interp, &compEnv, stringPtr, length,
-		iPtr->invokeCmdFramePtr, iPtr->invokeWord);
-	if (clLocPtr) {
-	    compEnv.clNext = &clLocPtr->loc[0];
+    	if (Tcl_GetParent(interp) == NULL &&
+	    	!Tcl_LimitTypeEnabled(interp, TCL_LIMIT_COMMANDS|TCL_LIMIT_TIME)
+	    	&& IsCompactibleCompileEnv(&compEnv)) {
+		TclFreeCompileEnv(&compEnv);
+		iPtr->compiledProcPtr = procPtr;
+		TclInitCompileEnv(interp, &compEnv, stringPtr, length,
+			iPtr->invokeCmdFramePtr, iPtr->invokeWord);
+		if (clLocPtr) {
+	    	compEnv.clNext = &clLocPtr->loc[0];
+		}
+		compEnv.atCmdStart = 2;		/* The disabling magic. */
+		TclCompileScript(interp, stringPtr, length, &compEnv);
+		assert (compEnv.atCmdStart > 1);
+		TclEmitOpcode(INST_DONE, &compEnv);
+		assert (compEnv.atCmdStart > 1);
+    	}
 	}
-	compEnv.atCmdStart = 2;		/* The disabling magic. */
-	TclCompileScript(interp, stringPtr, length, &compEnv);
-	assert (compEnv.atCmdStart > 1);
-	TclEmitOpcode(INST_DONE, &compEnv);
-	assert (compEnv.atCmdStart > 1);
-    }
 
     /*
      * Apply some peephole optimizations that can cross specific/generic
