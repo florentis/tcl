@@ -2,29 +2,105 @@
     try 1
     --------------------------------
     Results : 
-0 : 1.848697 fib-SH3 Script shorthand on for init
-1 : 1.890166 fib-SH2 TIP282 before loop
-2 : 1.930623 fib-SH1 Script shorthand on then clause in if
-3 : 1.980294 fib-SH1+2+3 Shorthand on then clause, on for init, TIP282 before loop
-4 : 2.446283 fib-SH5-b Script shorthand on for loop (with nested equal)
-5 : 2.473914 fib-Orig Original version from tcl_lib
-6 : 2.555895 fib-SH4-a Script shorthand on for step in braces
-7 : 2.626178 fib-SH1+2+3+5b script shorthand on then clause, for init, on for loop, tip282 before for
-8 : 2.668036 fib-SH6 TIP 282 in for loop
-9 : 2.799382 fib-SH5-a Script shorthand on for loop
-10 : 15.8245 fib-SH4-b Script shorthand on for step (no braces, var backslashed)
-11 : 115.911 fib-recurs recursive version with inline shorthand and script shorthand
+0 : 2.935992 fib-SH1+2+3 Shorthand on then clause, on for init, TIP282 before loop
+1 : 2.938359 fib-SH3 Script shorthand on for init
+2 : 2.953081 fib-SH1 Script shorthand on then clause in if
+3 : 2.963736 fib-SH2-a TIP282 before loop
+4 : 3.382055 fib-SH2-b Native list before loop
+5 : 3.854348 fib-SH4-a Script shorthand on for step in braces
+6 : 4.115913 fib-SH5-a Script shorthand on for loop
+7 : 4.178257 fib-SH1+2+3+5b script shorthand on then clause, for init, on for loop, tip282 before for
+8 : 4.265831 fib-SH5-b Script shorthand on for loop (with nested equal)
+9 : 4.280599 fib-SH6 TIP 282 in for loop
+10 : 4.383975 fib-Orig Original version from tcl_lib
+11 : 25.1968 fib-SH4-b Script shorthand on for step (no braces, var backslashed)
+12 : 6574.88 fib-recurs recursive version with inline shorthand and script shorthand
+---------------------------------
+fib-SH1+2+3 : Shorthand on then clause, on for init, TIP282 before loop
+2.935992 µs/# 340600 # 340600 #/sec 999.999 net-ms
+Length of the body : 197 chars
+returned result : 6765
+-----
+ByteCode 0x1487d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 173
+  Cmds 8, src 197, inst 65, litObjs 6, aux 0, stkDepth 2, code/src 0.00
+  Proc 0x38e9e20, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "tmp"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "f0"
+      slot 4, scalar, "i"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 32-45, continue 47, break 58
+      1: level 0, loop, pc 47-49, continue -1, break 58
+  Commands 8:
+      1: pc 0-63, src 5-195        2: pc 11-22, src 39-56
+      3: pc 23-60, src 66-170        4: pc 32-36, src 102-112
+      5: pc 37-41, src 126-136        6: pc 42-45, src 150-160
+      7: pc 47-49, src 87-92        8: pc 61-63, src 180-189
+  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +6 	# pc 11
+    (7) push1 0 	# "0"
+    (9) jump1 +55 	# pc 64
+  Command 2: "expr {f0=0 ; f1=1}..."
+    (11) push1 1 	# "f0"
+    (13) push1 0 	# "0"
+    (15) storeStk 
+    (16) pop 
+    (17) push1 2 	# "f1"
+    (19) push1 3 	# "1"
+    (21) storeStk 
+    (22) pop 
+  Command 3: "for (i=1) {$i < $n} {incr i} {\n\t    set tmp $f1\n    ..."
+    (23) push1 4 	# "i"
+    (25) push1 3 	# "1"
+    (27) storeStk 
+    (28) tryCvtToNumeric 
+    (29) pop 
+    (30) jump1 +21 	# pc 51
+  Command 4: "set tmp $f1..."
+    (32) loadScalar1 %v2 	# var "f1"
+    (34) storeScalar1 %v1 	# var "tmp"
+    (36) pop 
+  Command 5: "incr f1 $f0..."
+    (37) loadScalar1 %v3 	# var "f0"
+    (39) incrScalar1 %v2 	# var "f1"
+    (41) pop 
+  Command 6: "set f0 $tmp..."
+    (42) loadScalar1 %v1 	# var "tmp"
+    (44) storeScalar1 %v3 	# var "f0"
+    (46) pop 
+  Command 7: "incr i..."
+    (47) incrScalar1Imm %v4 +1 	# var "i"
+    (50) pop 
+    (51) loadScalar1 %v4 	# var "i"
+    (53) loadScalar1 %v0 	# var "n"
+    (55) lt 
+    (56) jumpTrue1 -24 	# pc 32
+    (58) nop 
+    (59) nop 
+    (60) nop 
+  Command 8: "return $f1..."
+    (61) loadScalar1 %v2 	# var "f1"
+    (63) done 
+    (64) done 
+
+----------------------------------
 ---------------------------------
 fib-SH3 : Script shorthand on for init
+2.938359 µs/# 340325 # 340326 #/sec 999.997 net-ms
 Length of the body : 232 chars
+returned result : 6765
 -----
-1.848697 µs/# 540921 # 540921 #/sec 999.999 net-ms
------
-ByteCode 0x38cea30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38cee30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 64
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 79
   Cmds 10, src 232, inst 64, litObjs 4, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38db6e0, refCt 1, args 1, compiled locals 5
+  Proc 0x38ea420, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -93,16 +169,90 @@ ByteCode 0x38cea30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH2 : TIP282 before loop
+fib-SH1 : Script shorthand on then clause in if
+2.953081 µs/# 338629 # 338629 #/sec 999.999 net-ms
+Length of the body : 215 chars
+returned result : 6765
+-----
+ByteCode 0x38b1560, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } (0) else {\n        set f0 0\n    ..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 38
+  Cmds 10, src 215, inst 61, litObjs 3, aux 0, stkDepth 2, code/src 0.00
+  Proc 0x1475170, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f0"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "i"
+      slot 4, scalar, "tmp"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 28-41, continue 43, break 54
+      1: level 0, loop, pc 43-45, continue -1, break 54
+  Commands 10:
+      1: pc 0-59, src 5-213        2: pc 11-15, src 39-46
+      3: pc 16-20, src 56-63        4: pc 21-56, src 73-188
+      5: pc 21-24, src 78-84        6: pc 28-32, src 120-130
+      7: pc 33-37, src 144-154        8: pc 38-41, src 168-178
+      9: pc 43-45, src 98-103       10: pc 57-59, src 198-207
+  Command 1: "if { $n == 0 } (0) else {\n        set f0 0\n        se..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +6 	# pc 11
+    (7) push1 0 	# "0"
+    (9) jump1 +51 	# pc 60
+  Command 2: "set f0 0..."
+    (11) push1 0 	# "0"
+    (13) storeScalar1 %v1 	# var "f0"
+    (15) pop 
+  Command 3: "set f1 1..."
+    (16) push1 1 	# "1"
+    (18) storeScalar1 %v2 	# var "f1"
+    (20) pop 
+  Command 4: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
+  Command 5: "set i 1..."
+    (21) push1 1 	# "1"
+    (23) storeScalar1 %v3 	# var "i"
+    (25) pop 
+    (26) jump1 +21 	# pc 47
+  Command 6: "set tmp $f1..."
+    (28) loadScalar1 %v2 	# var "f1"
+    (30) storeScalar1 %v4 	# var "tmp"
+    (32) pop 
+  Command 7: "incr f1 $f0..."
+    (33) loadScalar1 %v1 	# var "f0"
+    (35) incrScalar1 %v2 	# var "f1"
+    (37) pop 
+  Command 8: "set f0 $tmp..."
+    (38) loadScalar1 %v4 	# var "tmp"
+    (40) storeScalar1 %v1 	# var "f0"
+    (42) pop 
+  Command 9: "incr i..."
+    (43) incrScalar1Imm %v3 +1 	# var "i"
+    (46) pop 
+    (47) loadScalar1 %v3 	# var "i"
+    (49) loadScalar1 %v0 	# var "n"
+    (51) lt 
+    (52) jumpTrue1 -24 	# pc 28
+    (54) nop 
+    (55) nop 
+    (56) nop 
+  Command 10: "return $f1..."
+    (57) loadScalar1 %v2 	# var "f1"
+    (59) done 
+    (60) done 
+
+----------------------------------
+---------------------------------
+fib-SH2-a : TIP282 before loop
+2.963736 µs/# 337411 # 337412 #/sec 999.997 net-ms
 Length of the body : 229 chars
+returned result : 6765
 -----
-1.890166 µs/# 529053 # 529054 #/sec 999.998 net-ms
------
-ByteCode 0x38cd830, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x1486d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 50
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 51
   Cmds 10, src 229, inst 64, litObjs 5, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e9d20, refCt 1, args 1, compiled locals 5
+  Proc 0x38e9f20, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "i"
       slot 2, scalar, "tmp"
@@ -171,319 +321,101 @@ ByteCode 0x38cd830, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH1 : Script shorthand on then clause in if
-Length of the body : 215 chars
+fib-SH2-b : Native list before loop
+3.382055 µs/# 295677 # 295678 #/sec 999.996 net-ms
+Length of the body : 231 chars
+returned result : 6765
 -----
-1.930623 µs/# 517967 # 517967 #/sec 999.999 net-ms
------
-ByteCode 0x38ce030, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } (0) else {\n        set f0 0\n    ..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 37
-  Cmds 10, src 215, inst 61, litObjs 3, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e1a00, refCt 1, args 1, compiled locals 5
+ByteCode 0x38df470, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 65
+  Cmds 10, src 231, inst 139, litObjs 6, aux 0, stkDepth 4, code/src 0.00
+  Proc 0x1474af0, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "i"
-      slot 4, scalar, "tmp"
+      slot 1, scalar, "i"
+      slot 2, scalar, "tmp"
+      slot 3, scalar, "f1"
+      slot 4, scalar, "f0"
   Exception ranges 2, depth 1:
-      0: level 0, loop, pc 28-41, continue 43, break 54
-      1: level 0, loop, pc 43-45, continue -1, break 54
+      0: level 0, loop, pc 61-101, continue 103, break 123
+      1: level 0, loop, pc 103-114, continue -1, break 123
   Commands 10:
-      1: pc 0-59, src 5-213        2: pc 11-15, src 39-46
-      3: pc 16-20, src 56-63        4: pc 21-56, src 73-188
-      5: pc 21-24, src 78-84        6: pc 28-32, src 120-130
-      7: pc 33-37, src 144-154        8: pc 38-41, src 168-178
-      9: pc 43-45, src 98-103       10: pc 57-59, src 198-207
-  Command 1: "if { $n == 0 } (0) else {\n        set f0 0\n        se..."
+      1: pc 0-137, src 5-229        2: pc 7-18, src 30-37
+      3: pc 21-44, src 60-79        4: pc 45-125, src 89-204
+      5: pc 54-57, src 94-100        6: pc 61-74, src 136-146
+      7: pc 75-88, src 160-170        8: pc 89-101, src 184-194
+      9: pc 103-114, src 114-119       10: pc 126-137, src 214-223
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
     (0) loadScalar1 %v0 	# var "n"
     (2) push1 0 	# "0"
     (4) eq 
-    (5) jumpFalse1 +6 	# pc 11
-    (7) push1 0 	# "0"
-    (9) jump1 +51 	# pc 60
-  Command 2: "set f0 0..."
-    (11) push1 0 	# "0"
-    (13) storeScalar1 %v1 	# var "f0"
-    (15) pop 
-  Command 3: "set f1 1..."
-    (16) push1 1 	# "1"
-    (18) storeScalar1 %v2 	# var "f1"
-    (20) pop 
+    (5) jumpFalse1 +16 	# pc 21
+  Command 2: "return 0..."
+    (7) startCommand +12 1 	# next cmd at pc 19, 1 cmds start here
+    (16) push1 0 	# "0"
+    (18) done 
+    (19) jump1 +119 	# pc 138
+  Command 3: "expr {(f0=0 , f1=1)}..."
+    (21) startCommand +23 1 	# next cmd at pc 44, 1 cmds start here
+    (30) push1 1 	# "tcl::mathfunc::list"
+    (32) push1 2 	# "f0"
+    (34) push1 0 	# "0"
+    (36) storeStk 
+    (37) push1 3 	# "f1"
+    (39) push1 4 	# "1"
+    (41) storeStk 
+    (42) invokeStk1 3 
+    (44) pop 
   Command 4: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
+    (45) startCommand +80 2 	# next cmd at pc 125, 2 cmds start here
   Command 5: "set i 1..."
-    (21) push1 1 	# "1"
-    (23) storeScalar1 %v3 	# var "i"
-    (25) pop 
-    (26) jump1 +21 	# pc 47
+    (54) push1 4 	# "1"
+    (56) storeScalar1 %v1 	# var "i"
+    (58) pop 
+    (59) jump1 +57 	# pc 116
   Command 6: "set tmp $f1..."
-    (28) loadScalar1 %v2 	# var "f1"
-    (30) storeScalar1 %v4 	# var "tmp"
-    (32) pop 
+    (61) startCommand +13 1 	# next cmd at pc 74, 1 cmds start here
+    (70) loadScalar1 %v3 	# var "f1"
+    (72) storeScalar1 %v2 	# var "tmp"
+    (74) pop 
   Command 7: "incr f1 $f0..."
-    (33) loadScalar1 %v1 	# var "f0"
-    (35) incrScalar1 %v2 	# var "f1"
-    (37) pop 
+    (75) startCommand +13 1 	# next cmd at pc 88, 1 cmds start here
+    (84) loadScalar1 %v4 	# var "f0"
+    (86) incrScalar1 %v3 	# var "f1"
+    (88) pop 
   Command 8: "set f0 $tmp..."
-    (38) loadScalar1 %v4 	# var "tmp"
-    (40) storeScalar1 %v1 	# var "f0"
-    (42) pop 
+    (89) startCommand +13 1 	# next cmd at pc 102, 1 cmds start here
+    (98) loadScalar1 %v2 	# var "tmp"
+    (100) storeScalar1 %v4 	# var "f0"
+    (102) pop 
   Command 9: "incr i..."
-    (43) incrScalar1Imm %v3 +1 	# var "i"
-    (46) pop 
-    (47) loadScalar1 %v3 	# var "i"
-    (49) loadScalar1 %v0 	# var "n"
-    (51) lt 
-    (52) jumpTrue1 -24 	# pc 28
-    (54) nop 
-    (55) nop 
-    (56) nop 
+    (103) startCommand +12 1 	# next cmd at pc 115, 1 cmds start here
+    (112) incrScalar1Imm %v1 +1 	# var "i"
+    (115) pop 
+    (116) loadScalar1 %v1 	# var "i"
+    (118) loadScalar1 %v0 	# var "n"
+    (120) lt 
+    (121) jumpTrue1 -60 	# pc 61
+    (123) push1 5 	# ""
+    (125) pop 
   Command 10: "return $f1..."
-    (57) loadScalar1 %v2 	# var "f1"
-    (59) done 
-    (60) done 
-
-----------------------------------
----------------------------------
-fib-SH1+2+3 : Shorthand on then clause, on for init, TIP282 before loop
-Length of the body : 197 chars
------
-1.980294 µs/# 504975 # 504975 #/sec 999.999 net-ms
------
-ByteCode 0x1486d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 158
-  Cmds 8, src 197, inst 65, litObjs 6, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e1e80, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "tmp"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "f0"
-      slot 4, scalar, "i"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 32-45, continue 47, break 58
-      1: level 0, loop, pc 47-49, continue -1, break 58
-  Commands 8:
-      1: pc 0-63, src 5-195        2: pc 11-22, src 39-56
-      3: pc 23-60, src 66-170        4: pc 32-36, src 102-112
-      5: pc 37-41, src 126-136        6: pc 42-45, src 150-160
-      7: pc 47-49, src 87-92        8: pc 61-63, src 180-189
-  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +6 	# pc 11
-    (7) push1 0 	# "0"
-    (9) jump1 +55 	# pc 64
-  Command 2: "expr {f0=0 ; f1=1}..."
-    (11) push1 1 	# "f0"
-    (13) push1 0 	# "0"
-    (15) storeStk 
-    (16) pop 
-    (17) push1 2 	# "f1"
-    (19) push1 3 	# "1"
-    (21) storeStk 
-    (22) pop 
-  Command 3: "for (i=1) {$i < $n} {incr i} {\n\t    set tmp $f1\n    ..."
-    (23) push1 4 	# "i"
-    (25) push1 3 	# "1"
-    (27) storeStk 
-    (28) tryCvtToNumeric 
-    (29) pop 
-    (30) jump1 +21 	# pc 51
-  Command 4: "set tmp $f1..."
-    (32) loadScalar1 %v2 	# var "f1"
-    (34) storeScalar1 %v1 	# var "tmp"
-    (36) pop 
-  Command 5: "incr f1 $f0..."
-    (37) loadScalar1 %v3 	# var "f0"
-    (39) incrScalar1 %v2 	# var "f1"
-    (41) pop 
-  Command 6: "set f0 $tmp..."
-    (42) loadScalar1 %v1 	# var "tmp"
-    (44) storeScalar1 %v3 	# var "f0"
-    (46) pop 
-  Command 7: "incr i..."
-    (47) incrScalar1Imm %v4 +1 	# var "i"
-    (50) pop 
-    (51) loadScalar1 %v4 	# var "i"
-    (53) loadScalar1 %v0 	# var "n"
-    (55) lt 
-    (56) jumpTrue1 -24 	# pc 32
-    (58) nop 
-    (59) nop 
-    (60) nop 
-  Command 8: "return $f1..."
-    (61) loadScalar1 %v2 	# var "f1"
-    (63) done 
-    (64) done 
-
-----------------------------------
----------------------------------
-fib-SH5-b : Script shorthand on for loop (with nested equal)
-Length of the body : 216 chars
------
-2.446283 µs/# 408783 # 408783 #/sec 999.999 net-ms
------
-ByteCode 0x38b1560, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 126
-  Cmds 8, src 216, inst 65, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38ea0a0, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "i"
-      slot 4, scalar, "tmp"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 29-45, continue 47, break 58
-      1: level 0, loop, pc 47-49, continue -1, break 58
-  Commands 8:
-      1: pc 0-63, src 5-214        2: pc 7-9, src 30-37
-      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
-      5: pc 22-60, src 94-189        6: pc 22-25, src 99-105
-      7: pc 47-49, src 119-124        8: pc 61-63, src 199-208
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +7 	# pc 12
-  Command 2: "return 0..."
-    (7) push1 0 	# "0"
-    (9) done 
-    (10) nop 
-    (11) nop 
-  Command 3: "set f0 0..."
-    (12) push1 0 	# "0"
-    (14) storeScalar1 %v1 	# var "f0"
-    (16) pop 
-  Command 4: "set f1 1..."
-    (17) push1 1 	# "1"
-    (19) storeScalar1 %v2 	# var "f1"
-    (21) pop 
-  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            f1=(tm..."
-  Command 6: "set i 1..."
-    (22) push1 1 	# "1"
-    (24) storeScalar1 %v3 	# var "i"
-    (26) pop 
-    (27) jump1 +24 	# pc 51
-    (29) push1 2 	# "f1"
-    (31) push1 3 	# "tmp"
-    (33) loadScalar1 %v2 	# var "f1"
-    (35) storeStk 
-    (36) loadScalar1 %v1 	# var "f0"
-    (38) add 
-    (39) storeStk 
-    (40) pop 
-    (41) push1 4 	# "f0"
-    (43) loadScalar1 %v4 	# var "tmp"
-    (45) storeStk 
-    (46) pop 
-  Command 7: "incr i..."
-    (47) incrScalar1Imm %v3 +1 	# var "i"
-    (50) pop 
-    (51) loadScalar1 %v3 	# var "i"
-    (53) loadScalar1 %v0 	# var "n"
-    (55) lt 
-    (56) jumpTrue1 -27 	# pc 29
-    (58) nop 
-    (59) nop 
-    (60) nop 
-  Command 8: "return $f1..."
-    (61) loadScalar1 %v2 	# var "f1"
-    (63) done 
-    (64) done 
-
-----------------------------------
----------------------------------
-fib-Orig : Original version from tcl_lib
-Length of the body : 236 chars
------
-2.473914 µs/# 404217 # 404217 #/sec 999.998 net-ms
------
-ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 21
-  Cmds 11, src 236, inst 62, litObjs 3, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38bfaa0, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "i"
-      slot 4, scalar, "tmp"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 29-42, continue 44, break 55
-      1: level 0, loop, pc 44-46, continue -1, break 55
-  Commands 11:
-      1: pc 0-60, src 5-234        2: pc 7-9, src 30-37
-      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
-      5: pc 22-57, src 94-209        6: pc 22-25, src 99-105
-      7: pc 29-33, src 141-151        8: pc 34-38, src 165-175
-      9: pc 39-42, src 189-199       10: pc 44-46, src 119-124
-     11: pc 58-60, src 219-228
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +7 	# pc 12
-  Command 2: "return 0..."
-    (7) push1 0 	# "0"
-    (9) done 
-    (10) nop 
-    (11) nop 
-  Command 3: "set f0 0..."
-    (12) push1 0 	# "0"
-    (14) storeScalar1 %v1 	# var "f0"
-    (16) pop 
-  Command 4: "set f1 1..."
-    (17) push1 1 	# "1"
-    (19) storeScalar1 %v2 	# var "f1"
-    (21) pop 
-  Command 5: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
-  Command 6: "set i 1..."
-    (22) push1 1 	# "1"
-    (24) storeScalar1 %v3 	# var "i"
-    (26) pop 
-    (27) jump1 +21 	# pc 48
-  Command 7: "set tmp $f1..."
-    (29) loadScalar1 %v2 	# var "f1"
-    (31) storeScalar1 %v4 	# var "tmp"
-    (33) pop 
-  Command 8: "incr f1 $f0..."
-    (34) loadScalar1 %v1 	# var "f0"
-    (36) incrScalar1 %v2 	# var "f1"
-    (38) pop 
-  Command 9: "set f0 $tmp..."
-    (39) loadScalar1 %v4 	# var "tmp"
-    (41) storeScalar1 %v1 	# var "f0"
-    (43) pop 
-  Command 10: "incr i..."
-    (44) incrScalar1Imm %v3 +1 	# var "i"
-    (47) pop 
-    (48) loadScalar1 %v3 	# var "i"
-    (50) loadScalar1 %v0 	# var "n"
-    (52) lt 
-    (53) jumpTrue1 -24 	# pc 29
-    (55) nop 
-    (56) nop 
-    (57) nop 
-  Command 11: "return $f1..."
-    (58) loadScalar1 %v2 	# var "f1"
-    (60) done 
-    (61) done 
+    (126) startCommand +12 1 	# next cmd at pc 138, 1 cmds start here
+    (135) loadScalar1 %v3 	# var "f1"
+    (137) done 
+    (138) done 
 
 ----------------------------------
 ---------------------------------
 fib-SH4-a : Script shorthand on for step in braces
+3.854348 µs/# 259447 # 259447 #/sec 999.999 net-ms
 Length of the body : 238 chars
+returned result : 6765
 -----
-2.555895 µs/# 391252 # 391252 #/sec 999.999 net-ms
------
-ByteCode 0x38d4840, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 79
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 94
   Cmds 10, src 238, inst 67, litObjs 4, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38db7e0, refCt 1, args 1, compiled locals 5
+  Proc 0x3903780, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -554,16 +486,94 @@ ByteCode 0x38d4840, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
+fib-SH5-a : Script shorthand on for loop
+4.115913 µs/# 242959 # 242959 #/sec 999.998 net-ms
+Length of the body : 231 chars
+returned result : 6765
+-----
+ByteCode 0x38d5240, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 126
+  Cmds 8, src 231, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
+  Proc 0x38e3600, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f0"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "i"
+      slot 4, scalar, "tmp"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 29-48, continue 50, break 61
+      1: level 0, loop, pc 50-52, continue -1, break 61
+  Commands 8:
+      1: pc 0-66, src 5-229        2: pc 7-9, src 30-37
+      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
+      5: pc 22-63, src 94-204        6: pc 22-25, src 99-105
+      7: pc 50-52, src 119-124        8: pc 64-66, src 214-223
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +7 	# pc 12
+  Command 2: "return 0..."
+    (7) push1 0 	# "0"
+    (9) done 
+    (10) nop 
+    (11) nop 
+  Command 3: "set f0 0..."
+    (12) push1 0 	# "0"
+    (14) storeScalar1 %v1 	# var "f0"
+    (16) pop 
+  Command 4: "set f1 1..."
+    (17) push1 1 	# "1"
+    (19) storeScalar1 %v2 	# var "f1"
+    (21) pop 
+  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            tmp=$f..."
+  Command 6: "set i 1..."
+    (22) push1 1 	# "1"
+    (24) storeScalar1 %v3 	# var "i"
+    (26) pop 
+    (27) jump1 +27 	# pc 54
+    (29) push1 2 	# "tmp"
+    (31) loadScalar1 %v2 	# var "f1"
+    (33) storeStk 
+    (34) pop 
+    (35) push1 3 	# "f1"
+    (37) loadScalar1 %v2 	# var "f1"
+    (39) loadScalar1 %v1 	# var "f0"
+    (41) add 
+    (42) storeStk 
+    (43) pop 
+    (44) push1 4 	# "f0"
+    (46) loadScalar1 %v4 	# var "tmp"
+    (48) storeStk 
+    (49) pop 
+  Command 7: "incr i..."
+    (50) incrScalar1Imm %v3 +1 	# var "i"
+    (53) pop 
+    (54) loadScalar1 %v3 	# var "i"
+    (56) loadScalar1 %v0 	# var "n"
+    (58) lt 
+    (59) jumpTrue1 -30 	# pc 29
+    (61) nop 
+    (62) nop 
+    (63) nop 
+  Command 8: "return $f1..."
+    (64) loadScalar1 %v2 	# var "f1"
+    (66) done 
+    (67) done 
+
+----------------------------------
+---------------------------------
 fib-SH1+2+3+5b : script shorthand on then clause, for init, on for loop, tip282 before for
+4.178257 µs/# 239334 # 239334 #/sec 999.999 net-ms
 Length of the body : 176 chars
+returned result : 6765
 -----
-2.626178 µs/# 380780 # 380781 #/sec 999.996 net-ms
------
-ByteCode 0x387cdd0, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38d5640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 171
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 186
   Cmds 5, src 176, inst 68, litObjs 7, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38e1f80, refCt 1, args 1, compiled locals 5
+  Proc 0x38e2180, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f1"
       slot 2, scalar, "f0"
@@ -628,16 +638,92 @@ ByteCode 0x387cdd0, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH6 : TIP 282 in for loop
-Length of the body : 226 chars
+fib-SH5-b : Script shorthand on for loop (with nested equal)
+4.265831 µs/# 234420 # 234420 #/sec 999.996 net-ms
+Length of the body : 216 chars
+returned result : 6765
 -----
-2.668036 µs/# 374806 # 374807 #/sec 999.996 net-ms
------
-ByteCode 0x38b1760, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38d3c40, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
   File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 141
+  Cmds 8, src 216, inst 65, litObjs 6, aux 0, stkDepth 3, code/src 0.00
+  Proc 0x38daa60, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f0"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "i"
+      slot 4, scalar, "tmp"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 29-45, continue 47, break 58
+      1: level 0, loop, pc 47-49, continue -1, break 58
+  Commands 8:
+      1: pc 0-63, src 5-214        2: pc 7-9, src 30-37
+      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
+      5: pc 22-60, src 94-189        6: pc 22-25, src 99-105
+      7: pc 47-49, src 119-124        8: pc 61-63, src 199-208
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +7 	# pc 12
+  Command 2: "return 0..."
+    (7) push1 0 	# "0"
+    (9) done 
+    (10) nop 
+    (11) nop 
+  Command 3: "set f0 0..."
+    (12) push1 0 	# "0"
+    (14) storeScalar1 %v1 	# var "f0"
+    (16) pop 
+  Command 4: "set f1 1..."
+    (17) push1 1 	# "1"
+    (19) storeScalar1 %v2 	# var "f1"
+    (21) pop 
+  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            f1=(tm..."
+  Command 6: "set i 1..."
+    (22) push1 1 	# "1"
+    (24) storeScalar1 %v3 	# var "i"
+    (26) pop 
+    (27) jump1 +24 	# pc 51
+    (29) push1 2 	# "f1"
+    (31) push1 3 	# "tmp"
+    (33) loadScalar1 %v2 	# var "f1"
+    (35) storeStk 
+    (36) loadScalar1 %v1 	# var "f0"
+    (38) add 
+    (39) storeStk 
+    (40) pop 
+    (41) push1 4 	# "f0"
+    (43) loadScalar1 %v4 	# var "tmp"
+    (45) storeStk 
+    (46) pop 
+  Command 7: "incr i..."
+    (47) incrScalar1Imm %v3 +1 	# var "i"
+    (50) pop 
+    (51) loadScalar1 %v3 	# var "i"
+    (53) loadScalar1 %v0 	# var "n"
+    (55) lt 
+    (56) jumpTrue1 -27 	# pc 29
+    (58) nop 
+    (59) nop 
+    (60) nop 
+  Command 8: "return $f1..."
+    (61) loadScalar1 %v2 	# var "f1"
+    (63) done 
+    (64) done 
+
+----------------------------------
+---------------------------------
+fib-SH6 : TIP 282 in for loop
+4.280599 µs/# 233611 # 233612 #/sec 999.995 net-ms
+Length of the body : 226 chars
+returned result : 6765
+-----
+ByteCode 0x38cdc30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 156
   Cmds 9, src 226, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38e3080, refCt 1, args 1, compiled locals 5
+  Proc 0x38da960, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -708,29 +794,31 @@ ByteCode 0x38b1760, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH5-a : Script shorthand on for loop
-Length of the body : 231 chars
+fib-Orig : Original version from tcl_lib
+4.383975 µs/# 228387 # 228103 #/sec 1001.243 net-ms
+Length of the body : 236 chars
+returned result : 6765
 -----
-2.799382 µs/# 357221 # 357221 #/sec 999.998 net-ms
------
-ByteCode 0x38d4640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x1487530, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 111
-  Cmds 8, src 231, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38ea3a0, refCt 1, args 1, compiled locals 5
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 22
+  Cmds 11, src 236, inst 62, litObjs 3, aux 0, stkDepth 2, code/src 0.00
+  Proc 0x38dabe0, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
       slot 3, scalar, "i"
       slot 4, scalar, "tmp"
   Exception ranges 2, depth 1:
-      0: level 0, loop, pc 29-48, continue 50, break 61
-      1: level 0, loop, pc 50-52, continue -1, break 61
-  Commands 8:
-      1: pc 0-66, src 5-229        2: pc 7-9, src 30-37
+      0: level 0, loop, pc 29-42, continue 44, break 55
+      1: level 0, loop, pc 44-46, continue -1, break 55
+  Commands 11:
+      1: pc 0-60, src 5-234        2: pc 7-9, src 30-37
       3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
-      5: pc 22-63, src 94-204        6: pc 22-25, src 99-105
-      7: pc 50-52, src 119-124        8: pc 64-66, src 214-223
+      5: pc 22-57, src 94-209        6: pc 22-25, src 99-105
+      7: pc 29-33, src 141-151        8: pc 34-38, src 165-175
+      9: pc 39-42, src 189-199       10: pc 44-46, src 119-124
+     11: pc 58-60, src 219-228
   Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
     (0) loadScalar1 %v0 	# var "n"
     (2) push1 0 	# "0"
@@ -749,106 +837,59 @@ ByteCode 0x38d4640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
     (17) push1 1 	# "1"
     (19) storeScalar1 %v2 	# var "f1"
     (21) pop 
-  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            tmp=$f..."
+  Command 5: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
   Command 6: "set i 1..."
     (22) push1 1 	# "1"
     (24) storeScalar1 %v3 	# var "i"
     (26) pop 
-    (27) jump1 +27 	# pc 54
-    (29) push1 2 	# "tmp"
-    (31) loadScalar1 %v2 	# var "f1"
-    (33) storeStk 
-    (34) pop 
-    (35) push1 3 	# "f1"
-    (37) loadScalar1 %v2 	# var "f1"
-    (39) loadScalar1 %v1 	# var "f0"
-    (41) add 
-    (42) storeStk 
+    (27) jump1 +21 	# pc 48
+  Command 7: "set tmp $f1..."
+    (29) loadScalar1 %v2 	# var "f1"
+    (31) storeScalar1 %v4 	# var "tmp"
+    (33) pop 
+  Command 8: "incr f1 $f0..."
+    (34) loadScalar1 %v1 	# var "f0"
+    (36) incrScalar1 %v2 	# var "f1"
+    (38) pop 
+  Command 9: "set f0 $tmp..."
+    (39) loadScalar1 %v4 	# var "tmp"
+    (41) storeScalar1 %v1 	# var "f0"
     (43) pop 
-    (44) push1 4 	# "f0"
-    (46) loadScalar1 %v4 	# var "tmp"
-    (48) storeStk 
-    (49) pop 
-  Command 7: "incr i..."
-    (50) incrScalar1Imm %v3 +1 	# var "i"
-    (53) pop 
-    (54) loadScalar1 %v3 	# var "i"
-    (56) loadScalar1 %v0 	# var "n"
-    (58) lt 
-    (59) jumpTrue1 -30 	# pc 29
-    (61) nop 
-    (62) nop 
-    (63) nop 
-  Command 8: "return $f1..."
-    (64) loadScalar1 %v2 	# var "f1"
-    (66) done 
-    (67) done 
+  Command 10: "incr i..."
+    (44) incrScalar1Imm %v3 +1 	# var "i"
+    (47) pop 
+    (48) loadScalar1 %v3 	# var "i"
+    (50) loadScalar1 %v0 	# var "n"
+    (52) lt 
+    (53) jumpTrue1 -24 	# pc 29
+    (55) nop 
+    (56) nop 
+    (57) nop 
+  Command 11: "return $f1..."
+    (58) loadScalar1 %v2 	# var "f1"
+    (60) done 
+    (61) done 
 
 ----------------------------------
 ---------------------------------
 fib-SH4-b : Script shorthand on for step (no braces, var backslashed)
+25.1968 µs/# 39687 # 39687.6 #/sec 999.986 net-ms
 Length of the body : 237 chars
+returned result : 6765
 -----
-15.8245 µs/# 63193 # 63193.3 #/sec 999.995 net-ms
------
-ByteCode 0x38d3c40, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 95
-  Cmds 6, src 237, inst 75, litObjs 7, aux 0, stkDepth 5, code/src 0.00
-  Proc 0x38e3100, refCt 1, args 1, compiled locals 3
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-  Commands 6:
-      1: pc 0-73, src 5-235        2: pc 7-18, src 30-37
-      3: pc 21-34, src 60-67        4: pc 35-48, src 77-84
-      5: pc 49-61, src 94-210        6: pc 62-73, src 220-229
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +16 	# pc 21
-  Command 2: "return 0..."
-    (7) startCommand +12 1 	# next cmd at pc 19, 1 cmds start here
-    (16) push1 0 	# "0"
-    (18) done 
-    (19) jump1 +55 	# pc 74
-  Command 3: "set f0 0..."
-    (21) startCommand +13 1 	# next cmd at pc 34, 1 cmds start here
-    (30) push1 0 	# "0"
-    (32) storeScalar1 %v1 	# var "f0"
-    (34) pop 
-  Command 4: "set f1 1..."
-    (35) startCommand +13 1 	# next cmd at pc 48, 1 cmds start here
-    (44) push1 1 	# "1"
-    (46) storeScalar1 %v2 	# var "f1"
-    (48) pop 
-  Command 5: "for {set i 1} {$i < $n} (i=\$i+1) {\n            set tm..."
-    (49) push1 2 	# "for"
-    (51) push1 3 	# "set i 1"
-    (53) push1 4 	# "$i < $n"
-    (55) push1 5 	# "(i=$i+1)"
-    (57) push1 6 	# "\n            set tmp $f1\n            i..."
-    (59) invokeStk1 5 
-    (61) pop 
-  Command 6: "return $f1..."
-    (62) startCommand +12 1 	# next cmd at pc 74, 1 cmds start here
-    (71) loadScalar1 %v2 	# var "f1"
-    (73) done 
-    (74) done 
-
+bug in disassembling fib-SH4-b
 ----------------------------------
 ---------------------------------
 fib-recurs : recursive version with inline shorthand and script shorthand
+6574.88 µs/# 152 # 152.09 #/sec 999.382 net-ms
 Length of the body : 55 chars
+returned result : 6765
 -----
-115.911 µs/# 8627 # 8627.3 #/sec 999.968 net-ms
------
-ByteCode 0x38cee30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38d4640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "(\n    $n <3 ? 1 : [fib [($n-1)]] + [fib [($n-2)]]\n   ..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 17
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 18
   Cmds 2, src 55, inst 31, litObjs 5, aux 0, stkDepth 4, code/src 0.00
-  Proc 0x38e2480, refCt 1, args 1, compiled locals 1
+  Proc 0x1474cf0, refCt 1, args 1, compiled locals 1
       slot 0, scalar, arg, "n"
   Commands 2:
       1: pc 11-19, src 19-30        2: pc 20-28, src 36-47
@@ -878,107 +919,30 @@ ByteCode 0x38cee30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
     try 2
     --------------------------------
     Results : 
-0 : 1.912905 fib-SH3 Script shorthand on for init
-1 : 1.957581 fib-Orig Original version from tcl_lib
-2 : 2.002718 fib-SH2 TIP282 before loop
-3 : 2.020790 fib-SH1+2+3 Shorthand on then clause, on for init, TIP282 before loop
-4 : 2.026494 fib-SH1 Script shorthand on then clause in if
-5 : 2.511586 fib-SH4-a Script shorthand on for step in braces
-6 : 2.663484 fib-SH5-b Script shorthand on for loop (with nested equal)
-7 : 2.690510 fib-SH5-a Script shorthand on for loop
-8 : 2.719561 fib-SH6 TIP 282 in for loop
-9 : 2.879996 fib-SH1+2+3+5b script shorthand on then clause, for init, on for loop, tip282 before for
-10 : 15.7480 fib-SH4-b Script shorthand on for step (no braces, var backslashed)
-11 : 112.056 fib-recurs recursive version with inline shorthand and script shorthand
----------------------------------
-fib-SH3 : Script shorthand on for init
-Length of the body : 232 chars
------
-1.912905 µs/# 522764 # 522765 #/sec 999.998 net-ms
------
-ByteCode 0x38cea30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 64
-  Cmds 10, src 232, inst 64, litObjs 4, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38db6e0, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "tmp"
-      slot 4, scalar, "i"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 31-44, continue 46, break 57
-      1: level 0, loop, pc 46-48, continue -1, break 57
-  Commands 10:
-      1: pc 0-62, src 5-230        2: pc 7-9, src 30-37
-      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
-      5: pc 22-59, src 94-205        6: pc 31-35, src 137-147
-      7: pc 36-40, src 161-171        8: pc 41-44, src 185-195
-      9: pc 46-48, src 115-120       10: pc 60-62, src 215-224
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +7 	# pc 12
-  Command 2: "return 0..."
-    (7) push1 0 	# "0"
-    (9) done 
-    (10) nop 
-    (11) nop 
-  Command 3: "set f0 0..."
-    (12) push1 0 	# "0"
-    (14) storeScalar1 %v1 	# var "f0"
-    (16) pop 
-  Command 4: "set f1 1..."
-    (17) push1 1 	# "1"
-    (19) storeScalar1 %v2 	# var "f1"
-    (21) pop 
-  Command 5: "for (i=1) {$i < $n} {incr i} {\n            set tmp $f1..."
-    (22) push1 2 	# "i"
-    (24) push1 1 	# "1"
-    (26) storeStk 
-    (27) tryCvtToNumeric 
-    (28) pop 
-    (29) jump1 +21 	# pc 50
-  Command 6: "set tmp $f1..."
-    (31) loadScalar1 %v2 	# var "f1"
-    (33) storeScalar1 %v3 	# var "tmp"
-    (35) pop 
-  Command 7: "incr f1 $f0..."
-    (36) loadScalar1 %v1 	# var "f0"
-    (38) incrScalar1 %v2 	# var "f1"
-    (40) pop 
-  Command 8: "set f0 $tmp..."
-    (41) loadScalar1 %v3 	# var "tmp"
-    (43) storeScalar1 %v1 	# var "f0"
-    (45) pop 
-  Command 9: "incr i..."
-    (46) incrScalar1Imm %v4 +1 	# var "i"
-    (49) pop 
-    (50) loadScalar1 %v4 	# var "i"
-    (52) loadScalar1 %v0 	# var "n"
-    (54) lt 
-    (55) jumpTrue1 -24 	# pc 31
-    (57) nop 
-    (58) nop 
-    (59) nop 
-  Command 10: "return $f1..."
-    (60) loadScalar1 %v2 	# var "f1"
-    (62) done 
-    (63) done 
-
-----------------------------------
+0 : 2.853273 fib-Orig Original version from tcl_lib
+1 : 2.921181 fib-SH1 Script shorthand on then clause in if
+2 : 3.032472 fib-SH1+2+3 Shorthand on then clause, on for init, TIP282 before loop
+3 : 3.064420 fib-SH3 Script shorthand on for init
+4 : 3.081604 fib-SH2-a TIP282 before loop
+5 : 3.482954 fib-SH2-b Native list before loop
+6 : 3.879235 fib-SH5-b Script shorthand on for loop (with nested equal)
+7 : 4.013175 fib-SH5-a Script shorthand on for loop
+8 : 4.175357 fib-SH1+2+3+5b script shorthand on then clause, for init, on for loop, tip282 before for
+9 : 4.243587 fib-SH4-a Script shorthand on for step in braces
+10 : 4.253071 fib-SH6 TIP 282 in for loop
+11 : 26.1817 fib-SH4-b Script shorthand on for step (no braces, var backslashed)
+12 : 5116.71 fib-recurs recursive version with inline shorthand and script shorthand
 ---------------------------------
 fib-Orig : Original version from tcl_lib
+2.853273 µs/# 350474 # 350474 #/sec 999.998 net-ms
 Length of the body : 236 chars
+returned result : 6765
 -----
-1.957581 µs/# 510834 # 510834 #/sec 999.999 net-ms
------
-ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x1487530, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 21
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 22
   Cmds 11, src 236, inst 62, litObjs 3, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38bfaa0, refCt 1, args 1, compiled locals 5
+  Proc 0x38dabe0, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -1047,16 +1011,243 @@ ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH2 : TIP282 before loop
-Length of the body : 229 chars
+fib-SH1 : Script shorthand on then clause in if
+2.921181 µs/# 342327 # 342327 #/sec 999.999 net-ms
+Length of the body : 215 chars
+returned result : 6765
 -----
-2.002718 µs/# 499321 # 499321 #/sec 999.999 net-ms
+ByteCode 0x38b1560, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } (0) else {\n        set f0 0\n    ..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 38
+  Cmds 10, src 215, inst 61, litObjs 3, aux 0, stkDepth 2, code/src 0.00
+  Proc 0x1475170, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f0"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "i"
+      slot 4, scalar, "tmp"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 28-41, continue 43, break 54
+      1: level 0, loop, pc 43-45, continue -1, break 54
+  Commands 10:
+      1: pc 0-59, src 5-213        2: pc 11-15, src 39-46
+      3: pc 16-20, src 56-63        4: pc 21-56, src 73-188
+      5: pc 21-24, src 78-84        6: pc 28-32, src 120-130
+      7: pc 33-37, src 144-154        8: pc 38-41, src 168-178
+      9: pc 43-45, src 98-103       10: pc 57-59, src 198-207
+  Command 1: "if { $n == 0 } (0) else {\n        set f0 0\n        se..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +6 	# pc 11
+    (7) push1 0 	# "0"
+    (9) jump1 +51 	# pc 60
+  Command 2: "set f0 0..."
+    (11) push1 0 	# "0"
+    (13) storeScalar1 %v1 	# var "f0"
+    (15) pop 
+  Command 3: "set f1 1..."
+    (16) push1 1 	# "1"
+    (18) storeScalar1 %v2 	# var "f1"
+    (20) pop 
+  Command 4: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
+  Command 5: "set i 1..."
+    (21) push1 1 	# "1"
+    (23) storeScalar1 %v3 	# var "i"
+    (25) pop 
+    (26) jump1 +21 	# pc 47
+  Command 6: "set tmp $f1..."
+    (28) loadScalar1 %v2 	# var "f1"
+    (30) storeScalar1 %v4 	# var "tmp"
+    (32) pop 
+  Command 7: "incr f1 $f0..."
+    (33) loadScalar1 %v1 	# var "f0"
+    (35) incrScalar1 %v2 	# var "f1"
+    (37) pop 
+  Command 8: "set f0 $tmp..."
+    (38) loadScalar1 %v4 	# var "tmp"
+    (40) storeScalar1 %v1 	# var "f0"
+    (42) pop 
+  Command 9: "incr i..."
+    (43) incrScalar1Imm %v3 +1 	# var "i"
+    (46) pop 
+    (47) loadScalar1 %v3 	# var "i"
+    (49) loadScalar1 %v0 	# var "n"
+    (51) lt 
+    (52) jumpTrue1 -24 	# pc 28
+    (54) nop 
+    (55) nop 
+    (56) nop 
+  Command 10: "return $f1..."
+    (57) loadScalar1 %v2 	# var "f1"
+    (59) done 
+    (60) done 
+
+----------------------------------
+---------------------------------
+fib-SH1+2+3 : Shorthand on then clause, on for init, TIP282 before loop
+3.032472 µs/# 329763 # 329763 #/sec 999.997 net-ms
+Length of the body : 197 chars
+returned result : 6765
 -----
-ByteCode 0x38cd830, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x1487d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 173
+  Cmds 8, src 197, inst 65, litObjs 6, aux 0, stkDepth 2, code/src 0.00
+  Proc 0x38e9e20, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "tmp"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "f0"
+      slot 4, scalar, "i"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 32-45, continue 47, break 58
+      1: level 0, loop, pc 47-49, continue -1, break 58
+  Commands 8:
+      1: pc 0-63, src 5-195        2: pc 11-22, src 39-56
+      3: pc 23-60, src 66-170        4: pc 32-36, src 102-112
+      5: pc 37-41, src 126-136        6: pc 42-45, src 150-160
+      7: pc 47-49, src 87-92        8: pc 61-63, src 180-189
+  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +6 	# pc 11
+    (7) push1 0 	# "0"
+    (9) jump1 +55 	# pc 64
+  Command 2: "expr {f0=0 ; f1=1}..."
+    (11) push1 1 	# "f0"
+    (13) push1 0 	# "0"
+    (15) storeStk 
+    (16) pop 
+    (17) push1 2 	# "f1"
+    (19) push1 3 	# "1"
+    (21) storeStk 
+    (22) pop 
+  Command 3: "for (i=1) {$i < $n} {incr i} {\n\t    set tmp $f1\n    ..."
+    (23) push1 4 	# "i"
+    (25) push1 3 	# "1"
+    (27) storeStk 
+    (28) tryCvtToNumeric 
+    (29) pop 
+    (30) jump1 +21 	# pc 51
+  Command 4: "set tmp $f1..."
+    (32) loadScalar1 %v2 	# var "f1"
+    (34) storeScalar1 %v1 	# var "tmp"
+    (36) pop 
+  Command 5: "incr f1 $f0..."
+    (37) loadScalar1 %v3 	# var "f0"
+    (39) incrScalar1 %v2 	# var "f1"
+    (41) pop 
+  Command 6: "set f0 $tmp..."
+    (42) loadScalar1 %v1 	# var "tmp"
+    (44) storeScalar1 %v3 	# var "f0"
+    (46) pop 
+  Command 7: "incr i..."
+    (47) incrScalar1Imm %v4 +1 	# var "i"
+    (50) pop 
+    (51) loadScalar1 %v4 	# var "i"
+    (53) loadScalar1 %v0 	# var "n"
+    (55) lt 
+    (56) jumpTrue1 -24 	# pc 32
+    (58) nop 
+    (59) nop 
+    (60) nop 
+  Command 8: "return $f1..."
+    (61) loadScalar1 %v2 	# var "f1"
+    (63) done 
+    (64) done 
+
+----------------------------------
+---------------------------------
+fib-SH3 : Script shorthand on for init
+3.064420 µs/# 326325 # 326325 #/sec 999.997 net-ms
+Length of the body : 232 chars
+returned result : 6765
+-----
+ByteCode 0x38cee30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 50
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 79
+  Cmds 10, src 232, inst 64, litObjs 4, aux 0, stkDepth 2, code/src 0.00
+  Proc 0x38ea420, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f0"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "tmp"
+      slot 4, scalar, "i"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 31-44, continue 46, break 57
+      1: level 0, loop, pc 46-48, continue -1, break 57
+  Commands 10:
+      1: pc 0-62, src 5-230        2: pc 7-9, src 30-37
+      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
+      5: pc 22-59, src 94-205        6: pc 31-35, src 137-147
+      7: pc 36-40, src 161-171        8: pc 41-44, src 185-195
+      9: pc 46-48, src 115-120       10: pc 60-62, src 215-224
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +7 	# pc 12
+  Command 2: "return 0..."
+    (7) push1 0 	# "0"
+    (9) done 
+    (10) nop 
+    (11) nop 
+  Command 3: "set f0 0..."
+    (12) push1 0 	# "0"
+    (14) storeScalar1 %v1 	# var "f0"
+    (16) pop 
+  Command 4: "set f1 1..."
+    (17) push1 1 	# "1"
+    (19) storeScalar1 %v2 	# var "f1"
+    (21) pop 
+  Command 5: "for (i=1) {$i < $n} {incr i} {\n            set tmp $f1..."
+    (22) push1 2 	# "i"
+    (24) push1 1 	# "1"
+    (26) storeStk 
+    (27) tryCvtToNumeric 
+    (28) pop 
+    (29) jump1 +21 	# pc 50
+  Command 6: "set tmp $f1..."
+    (31) loadScalar1 %v2 	# var "f1"
+    (33) storeScalar1 %v3 	# var "tmp"
+    (35) pop 
+  Command 7: "incr f1 $f0..."
+    (36) loadScalar1 %v1 	# var "f0"
+    (38) incrScalar1 %v2 	# var "f1"
+    (40) pop 
+  Command 8: "set f0 $tmp..."
+    (41) loadScalar1 %v3 	# var "tmp"
+    (43) storeScalar1 %v1 	# var "f0"
+    (45) pop 
+  Command 9: "incr i..."
+    (46) incrScalar1Imm %v4 +1 	# var "i"
+    (49) pop 
+    (50) loadScalar1 %v4 	# var "i"
+    (52) loadScalar1 %v0 	# var "n"
+    (54) lt 
+    (55) jumpTrue1 -24 	# pc 31
+    (57) nop 
+    (58) nop 
+    (59) nop 
+  Command 10: "return $f1..."
+    (60) loadScalar1 %v2 	# var "f1"
+    (62) done 
+    (63) done 
+
+----------------------------------
+---------------------------------
+fib-SH2-a : TIP282 before loop
+3.081604 µs/# 324506 # 324506 #/sec 999.999 net-ms
+Length of the body : 229 chars
+returned result : 6765
+-----
+ByteCode 0x1486d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 51
   Cmds 10, src 229, inst 64, litObjs 5, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e9d20, refCt 1, args 1, compiled locals 5
+  Proc 0x38e9f20, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "i"
       slot 2, scalar, "tmp"
@@ -1125,71 +1316,157 @@ ByteCode 0x38cd830, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH1+2+3 : Shorthand on then clause, on for init, TIP282 before loop
-Length of the body : 197 chars
+fib-SH2-b : Native list before loop
+3.482954 µs/# 287112 # 287112 #/sec 999.998 net-ms
+Length of the body : 231 chars
+returned result : 6765
 -----
-2.020790 µs/# 494903 # 494855 #/sec 1000.095 net-ms
------
-ByteCode 0x1486d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 158
-  Cmds 8, src 197, inst 65, litObjs 6, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e1e80, refCt 1, args 1, compiled locals 5
+ByteCode 0x38df470, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 65
+  Cmds 10, src 231, inst 139, litObjs 6, aux 0, stkDepth 4, code/src 0.00
+  Proc 0x1474af0, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
-      slot 1, scalar, "tmp"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "f0"
-      slot 4, scalar, "i"
+      slot 1, scalar, "i"
+      slot 2, scalar, "tmp"
+      slot 3, scalar, "f1"
+      slot 4, scalar, "f0"
   Exception ranges 2, depth 1:
-      0: level 0, loop, pc 32-45, continue 47, break 58
-      1: level 0, loop, pc 47-49, continue -1, break 58
-  Commands 8:
-      1: pc 0-63, src 5-195        2: pc 11-22, src 39-56
-      3: pc 23-60, src 66-170        4: pc 32-36, src 102-112
-      5: pc 37-41, src 126-136        6: pc 42-45, src 150-160
-      7: pc 47-49, src 87-92        8: pc 61-63, src 180-189
-  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
+      0: level 0, loop, pc 61-101, continue 103, break 123
+      1: level 0, loop, pc 103-114, continue -1, break 123
+  Commands 10:
+      1: pc 0-137, src 5-229        2: pc 7-18, src 30-37
+      3: pc 21-44, src 60-79        4: pc 45-125, src 89-204
+      5: pc 54-57, src 94-100        6: pc 61-74, src 136-146
+      7: pc 75-88, src 160-170        8: pc 89-101, src 184-194
+      9: pc 103-114, src 114-119       10: pc 126-137, src 214-223
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
     (0) loadScalar1 %v0 	# var "n"
     (2) push1 0 	# "0"
     (4) eq 
-    (5) jumpFalse1 +6 	# pc 11
+    (5) jumpFalse1 +16 	# pc 21
+  Command 2: "return 0..."
+    (7) startCommand +12 1 	# next cmd at pc 19, 1 cmds start here
+    (16) push1 0 	# "0"
+    (18) done 
+    (19) jump1 +119 	# pc 138
+  Command 3: "expr {(f0=0 , f1=1)}..."
+    (21) startCommand +23 1 	# next cmd at pc 44, 1 cmds start here
+    (30) push1 1 	# "tcl::mathfunc::list"
+    (32) push1 2 	# "f0"
+    (34) push1 0 	# "0"
+    (36) storeStk 
+    (37) push1 3 	# "f1"
+    (39) push1 4 	# "1"
+    (41) storeStk 
+    (42) invokeStk1 3 
+    (44) pop 
+  Command 4: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
+    (45) startCommand +80 2 	# next cmd at pc 125, 2 cmds start here
+  Command 5: "set i 1..."
+    (54) push1 4 	# "1"
+    (56) storeScalar1 %v1 	# var "i"
+    (58) pop 
+    (59) jump1 +57 	# pc 116
+  Command 6: "set tmp $f1..."
+    (61) startCommand +13 1 	# next cmd at pc 74, 1 cmds start here
+    (70) loadScalar1 %v3 	# var "f1"
+    (72) storeScalar1 %v2 	# var "tmp"
+    (74) pop 
+  Command 7: "incr f1 $f0..."
+    (75) startCommand +13 1 	# next cmd at pc 88, 1 cmds start here
+    (84) loadScalar1 %v4 	# var "f0"
+    (86) incrScalar1 %v3 	# var "f1"
+    (88) pop 
+  Command 8: "set f0 $tmp..."
+    (89) startCommand +13 1 	# next cmd at pc 102, 1 cmds start here
+    (98) loadScalar1 %v2 	# var "tmp"
+    (100) storeScalar1 %v4 	# var "f0"
+    (102) pop 
+  Command 9: "incr i..."
+    (103) startCommand +12 1 	# next cmd at pc 115, 1 cmds start here
+    (112) incrScalar1Imm %v1 +1 	# var "i"
+    (115) pop 
+    (116) loadScalar1 %v1 	# var "i"
+    (118) loadScalar1 %v0 	# var "n"
+    (120) lt 
+    (121) jumpTrue1 -60 	# pc 61
+    (123) push1 5 	# ""
+    (125) pop 
+  Command 10: "return $f1..."
+    (126) startCommand +12 1 	# next cmd at pc 138, 1 cmds start here
+    (135) loadScalar1 %v3 	# var "f1"
+    (137) done 
+    (138) done 
+
+----------------------------------
+---------------------------------
+fib-SH5-b : Script shorthand on for loop (with nested equal)
+3.879235 µs/# 257782 # 257782 #/sec 999.997 net-ms
+Length of the body : 216 chars
+returned result : 6765
+-----
+ByteCode 0x38d3c40, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 141
+  Cmds 8, src 216, inst 65, litObjs 6, aux 0, stkDepth 3, code/src 0.00
+  Proc 0x38daa60, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f0"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "i"
+      slot 4, scalar, "tmp"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 29-45, continue 47, break 58
+      1: level 0, loop, pc 47-49, continue -1, break 58
+  Commands 8:
+      1: pc 0-63, src 5-214        2: pc 7-9, src 30-37
+      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
+      5: pc 22-60, src 94-189        6: pc 22-25, src 99-105
+      7: pc 47-49, src 119-124        8: pc 61-63, src 199-208
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +7 	# pc 12
+  Command 2: "return 0..."
     (7) push1 0 	# "0"
-    (9) jump1 +55 	# pc 64
-  Command 2: "expr {f0=0 ; f1=1}..."
-    (11) push1 1 	# "f0"
-    (13) push1 0 	# "0"
-    (15) storeStk 
+    (9) done 
+    (10) nop 
+    (11) nop 
+  Command 3: "set f0 0..."
+    (12) push1 0 	# "0"
+    (14) storeScalar1 %v1 	# var "f0"
     (16) pop 
-    (17) push1 2 	# "f1"
-    (19) push1 3 	# "1"
-    (21) storeStk 
-    (22) pop 
-  Command 3: "for (i=1) {$i < $n} {incr i} {\n\t    set tmp $f1\n    ..."
-    (23) push1 4 	# "i"
-    (25) push1 3 	# "1"
-    (27) storeStk 
-    (28) tryCvtToNumeric 
-    (29) pop 
-    (30) jump1 +21 	# pc 51
-  Command 4: "set tmp $f1..."
-    (32) loadScalar1 %v2 	# var "f1"
-    (34) storeScalar1 %v1 	# var "tmp"
-    (36) pop 
-  Command 5: "incr f1 $f0..."
-    (37) loadScalar1 %v3 	# var "f0"
-    (39) incrScalar1 %v2 	# var "f1"
-    (41) pop 
-  Command 6: "set f0 $tmp..."
-    (42) loadScalar1 %v1 	# var "tmp"
-    (44) storeScalar1 %v3 	# var "f0"
+  Command 4: "set f1 1..."
+    (17) push1 1 	# "1"
+    (19) storeScalar1 %v2 	# var "f1"
+    (21) pop 
+  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            f1=(tm..."
+  Command 6: "set i 1..."
+    (22) push1 1 	# "1"
+    (24) storeScalar1 %v3 	# var "i"
+    (26) pop 
+    (27) jump1 +24 	# pc 51
+    (29) push1 2 	# "f1"
+    (31) push1 3 	# "tmp"
+    (33) loadScalar1 %v2 	# var "f1"
+    (35) storeStk 
+    (36) loadScalar1 %v1 	# var "f0"
+    (38) add 
+    (39) storeStk 
+    (40) pop 
+    (41) push1 4 	# "f0"
+    (43) loadScalar1 %v4 	# var "tmp"
+    (45) storeStk 
     (46) pop 
   Command 7: "incr i..."
-    (47) incrScalar1Imm %v4 +1 	# var "i"
+    (47) incrScalar1Imm %v3 +1 	# var "i"
     (50) pop 
-    (51) loadScalar1 %v4 	# var "i"
+    (51) loadScalar1 %v3 	# var "i"
     (53) loadScalar1 %v0 	# var "n"
     (55) lt 
-    (56) jumpTrue1 -24 	# pc 32
+    (56) jumpTrue1 -27 	# pc 29
     (58) nop 
     (59) nop 
     (60) nop 
@@ -1200,90 +1477,168 @@ ByteCode 0x1486d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH1 : Script shorthand on then clause in if
-Length of the body : 215 chars
+fib-SH5-a : Script shorthand on for loop
+4.013175 µs/# 249179 # 249179 #/sec 999.999 net-ms
+Length of the body : 231 chars
+returned result : 6765
 -----
-2.026494 µs/# 493462 # 493462 #/sec 999.998 net-ms
------
-ByteCode 0x38ce030, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } (0) else {\n        set f0 0\n    ..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 37
-  Cmds 10, src 215, inst 61, litObjs 3, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e1a00, refCt 1, args 1, compiled locals 5
+ByteCode 0x38d5240, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 126
+  Cmds 8, src 231, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
+  Proc 0x38e3600, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
       slot 3, scalar, "i"
       slot 4, scalar, "tmp"
   Exception ranges 2, depth 1:
-      0: level 0, loop, pc 28-41, continue 43, break 54
-      1: level 0, loop, pc 43-45, continue -1, break 54
-  Commands 10:
-      1: pc 0-59, src 5-213        2: pc 11-15, src 39-46
-      3: pc 16-20, src 56-63        4: pc 21-56, src 73-188
-      5: pc 21-24, src 78-84        6: pc 28-32, src 120-130
-      7: pc 33-37, src 144-154        8: pc 38-41, src 168-178
-      9: pc 43-45, src 98-103       10: pc 57-59, src 198-207
-  Command 1: "if { $n == 0 } (0) else {\n        set f0 0\n        se..."
+      0: level 0, loop, pc 29-48, continue 50, break 61
+      1: level 0, loop, pc 50-52, continue -1, break 61
+  Commands 8:
+      1: pc 0-66, src 5-229        2: pc 7-9, src 30-37
+      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
+      5: pc 22-63, src 94-204        6: pc 22-25, src 99-105
+      7: pc 50-52, src 119-124        8: pc 64-66, src 214-223
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +7 	# pc 12
+  Command 2: "return 0..."
+    (7) push1 0 	# "0"
+    (9) done 
+    (10) nop 
+    (11) nop 
+  Command 3: "set f0 0..."
+    (12) push1 0 	# "0"
+    (14) storeScalar1 %v1 	# var "f0"
+    (16) pop 
+  Command 4: "set f1 1..."
+    (17) push1 1 	# "1"
+    (19) storeScalar1 %v2 	# var "f1"
+    (21) pop 
+  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            tmp=$f..."
+  Command 6: "set i 1..."
+    (22) push1 1 	# "1"
+    (24) storeScalar1 %v3 	# var "i"
+    (26) pop 
+    (27) jump1 +27 	# pc 54
+    (29) push1 2 	# "tmp"
+    (31) loadScalar1 %v2 	# var "f1"
+    (33) storeStk 
+    (34) pop 
+    (35) push1 3 	# "f1"
+    (37) loadScalar1 %v2 	# var "f1"
+    (39) loadScalar1 %v1 	# var "f0"
+    (41) add 
+    (42) storeStk 
+    (43) pop 
+    (44) push1 4 	# "f0"
+    (46) loadScalar1 %v4 	# var "tmp"
+    (48) storeStk 
+    (49) pop 
+  Command 7: "incr i..."
+    (50) incrScalar1Imm %v3 +1 	# var "i"
+    (53) pop 
+    (54) loadScalar1 %v3 	# var "i"
+    (56) loadScalar1 %v0 	# var "n"
+    (58) lt 
+    (59) jumpTrue1 -30 	# pc 29
+    (61) nop 
+    (62) nop 
+    (63) nop 
+  Command 8: "return $f1..."
+    (64) loadScalar1 %v2 	# var "f1"
+    (66) done 
+    (67) done 
+
+----------------------------------
+---------------------------------
+fib-SH1+2+3+5b : script shorthand on then clause, for init, on for loop, tip282 before for
+4.175357 µs/# 239500 # 239500 #/sec 999.998 net-ms
+Length of the body : 176 chars
+returned result : 6765
+-----
+ByteCode 0x38d5640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 186
+  Cmds 5, src 176, inst 68, litObjs 7, aux 0, stkDepth 3, code/src 0.00
+  Proc 0x38e2180, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f1"
+      slot 2, scalar, "f0"
+      slot 3, scalar, "tmp"
+      slot 4, scalar, "i"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 32-48, continue 50, break 61
+      1: level 0, loop, pc 50-52, continue -1, break 61
+  Commands 5:
+      1: pc 0-66, src 5-174        2: pc 11-22, src 39-56
+      3: pc 23-63, src 66-149        4: pc 50-52, src 87-92
+      5: pc 64-66, src 159-168
+  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
     (0) loadScalar1 %v0 	# var "n"
     (2) push1 0 	# "0"
     (4) eq 
     (5) jumpFalse1 +6 	# pc 11
     (7) push1 0 	# "0"
-    (9) jump1 +51 	# pc 60
-  Command 2: "set f0 0..."
-    (11) push1 0 	# "0"
-    (13) storeScalar1 %v1 	# var "f0"
-    (15) pop 
-  Command 3: "set f1 1..."
-    (16) push1 1 	# "1"
-    (18) storeScalar1 %v2 	# var "f1"
-    (20) pop 
-  Command 4: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
-  Command 5: "set i 1..."
-    (21) push1 1 	# "1"
-    (23) storeScalar1 %v3 	# var "i"
-    (25) pop 
-    (26) jump1 +21 	# pc 47
-  Command 6: "set tmp $f1..."
-    (28) loadScalar1 %v2 	# var "f1"
-    (30) storeScalar1 %v4 	# var "tmp"
-    (32) pop 
-  Command 7: "incr f1 $f0..."
-    (33) loadScalar1 %v1 	# var "f0"
-    (35) incrScalar1 %v2 	# var "f1"
-    (37) pop 
-  Command 8: "set f0 $tmp..."
-    (38) loadScalar1 %v4 	# var "tmp"
-    (40) storeScalar1 %v1 	# var "f0"
-    (42) pop 
-  Command 9: "incr i..."
-    (43) incrScalar1Imm %v3 +1 	# var "i"
-    (46) pop 
-    (47) loadScalar1 %v3 	# var "i"
-    (49) loadScalar1 %v0 	# var "n"
-    (51) lt 
-    (52) jumpTrue1 -24 	# pc 28
-    (54) nop 
-    (55) nop 
-    (56) nop 
-  Command 10: "return $f1..."
-    (57) loadScalar1 %v2 	# var "f1"
-    (59) done 
-    (60) done 
+    (9) jump1 +58 	# pc 67
+  Command 2: "expr {f0=0 ; f1=1}..."
+    (11) push1 1 	# "f0"
+    (13) push1 0 	# "0"
+    (15) storeStk 
+    (16) pop 
+    (17) push1 2 	# "f1"
+    (19) push1 3 	# "1"
+    (21) storeStk 
+    (22) pop 
+  Command 3: "for (i=1) {$i < $n} {incr i} {(\n\t    f1 = (tmp=$f1) +..."
+    (23) push1 4 	# "i"
+    (25) push1 3 	# "1"
+    (27) storeStk 
+    (28) tryCvtToNumeric 
+    (29) pop 
+    (30) jump1 +24 	# pc 54
+    (32) push1 2 	# "f1"
+    (34) push1 5 	# "tmp"
+    (36) loadScalar1 %v1 	# var "f1"
+    (38) storeStk 
+    (39) loadScalar1 %v2 	# var "f0"
+    (41) add 
+    (42) storeStk 
+    (43) pop 
+    (44) push1 1 	# "f0"
+    (46) loadScalar1 %v3 	# var "tmp"
+    (48) storeStk 
+    (49) pop 
+  Command 4: "incr i..."
+    (50) incrScalar1Imm %v4 +1 	# var "i"
+    (53) pop 
+    (54) loadScalar1 %v4 	# var "i"
+    (56) loadScalar1 %v0 	# var "n"
+    (58) lt 
+    (59) jumpTrue1 -27 	# pc 32
+    (61) nop 
+    (62) nop 
+    (63) nop 
+  Command 5: "return $f1..."
+    (64) loadScalar1 %v1 	# var "f1"
+    (66) done 
+    (67) done 
 
 ----------------------------------
 ---------------------------------
 fib-SH4-a : Script shorthand on for step in braces
+4.243587 µs/# 235649 # 235649 #/sec 999.997 net-ms
 Length of the body : 238 chars
+returned result : 6765
 -----
-2.511586 µs/# 398154 # 398154 #/sec 999.998 net-ms
------
-ByteCode 0x38d4840, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 79
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 94
   Cmds 10, src 238, inst 67, litObjs 4, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38db7e0, refCt 1, args 1, compiled locals 5
+  Proc 0x3903780, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -1354,170 +1709,16 @@ ByteCode 0x38d4840, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH5-b : Script shorthand on for loop (with nested equal)
-Length of the body : 216 chars
------
-2.663484 µs/# 375447 # 375448 #/sec 999.997 net-ms
------
-ByteCode 0x38b1560, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 126
-  Cmds 8, src 216, inst 65, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38ea0a0, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "i"
-      slot 4, scalar, "tmp"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 29-45, continue 47, break 58
-      1: level 0, loop, pc 47-49, continue -1, break 58
-  Commands 8:
-      1: pc 0-63, src 5-214        2: pc 7-9, src 30-37
-      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
-      5: pc 22-60, src 94-189        6: pc 22-25, src 99-105
-      7: pc 47-49, src 119-124        8: pc 61-63, src 199-208
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +7 	# pc 12
-  Command 2: "return 0..."
-    (7) push1 0 	# "0"
-    (9) done 
-    (10) nop 
-    (11) nop 
-  Command 3: "set f0 0..."
-    (12) push1 0 	# "0"
-    (14) storeScalar1 %v1 	# var "f0"
-    (16) pop 
-  Command 4: "set f1 1..."
-    (17) push1 1 	# "1"
-    (19) storeScalar1 %v2 	# var "f1"
-    (21) pop 
-  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            f1=(tm..."
-  Command 6: "set i 1..."
-    (22) push1 1 	# "1"
-    (24) storeScalar1 %v3 	# var "i"
-    (26) pop 
-    (27) jump1 +24 	# pc 51
-    (29) push1 2 	# "f1"
-    (31) push1 3 	# "tmp"
-    (33) loadScalar1 %v2 	# var "f1"
-    (35) storeStk 
-    (36) loadScalar1 %v1 	# var "f0"
-    (38) add 
-    (39) storeStk 
-    (40) pop 
-    (41) push1 4 	# "f0"
-    (43) loadScalar1 %v4 	# var "tmp"
-    (45) storeStk 
-    (46) pop 
-  Command 7: "incr i..."
-    (47) incrScalar1Imm %v3 +1 	# var "i"
-    (50) pop 
-    (51) loadScalar1 %v3 	# var "i"
-    (53) loadScalar1 %v0 	# var "n"
-    (55) lt 
-    (56) jumpTrue1 -27 	# pc 29
-    (58) nop 
-    (59) nop 
-    (60) nop 
-  Command 8: "return $f1..."
-    (61) loadScalar1 %v2 	# var "f1"
-    (63) done 
-    (64) done 
-
-----------------------------------
----------------------------------
-fib-SH5-a : Script shorthand on for loop
-Length of the body : 231 chars
------
-2.690510 µs/# 371676 # 371676 #/sec 999.998 net-ms
------
-ByteCode 0x38d4640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 111
-  Cmds 8, src 231, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38ea3a0, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "i"
-      slot 4, scalar, "tmp"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 29-48, continue 50, break 61
-      1: level 0, loop, pc 50-52, continue -1, break 61
-  Commands 8:
-      1: pc 0-66, src 5-229        2: pc 7-9, src 30-37
-      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
-      5: pc 22-63, src 94-204        6: pc 22-25, src 99-105
-      7: pc 50-52, src 119-124        8: pc 64-66, src 214-223
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +7 	# pc 12
-  Command 2: "return 0..."
-    (7) push1 0 	# "0"
-    (9) done 
-    (10) nop 
-    (11) nop 
-  Command 3: "set f0 0..."
-    (12) push1 0 	# "0"
-    (14) storeScalar1 %v1 	# var "f0"
-    (16) pop 
-  Command 4: "set f1 1..."
-    (17) push1 1 	# "1"
-    (19) storeScalar1 %v2 	# var "f1"
-    (21) pop 
-  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            tmp=$f..."
-  Command 6: "set i 1..."
-    (22) push1 1 	# "1"
-    (24) storeScalar1 %v3 	# var "i"
-    (26) pop 
-    (27) jump1 +27 	# pc 54
-    (29) push1 2 	# "tmp"
-    (31) loadScalar1 %v2 	# var "f1"
-    (33) storeStk 
-    (34) pop 
-    (35) push1 3 	# "f1"
-    (37) loadScalar1 %v2 	# var "f1"
-    (39) loadScalar1 %v1 	# var "f0"
-    (41) add 
-    (42) storeStk 
-    (43) pop 
-    (44) push1 4 	# "f0"
-    (46) loadScalar1 %v4 	# var "tmp"
-    (48) storeStk 
-    (49) pop 
-  Command 7: "incr i..."
-    (50) incrScalar1Imm %v3 +1 	# var "i"
-    (53) pop 
-    (54) loadScalar1 %v3 	# var "i"
-    (56) loadScalar1 %v0 	# var "n"
-    (58) lt 
-    (59) jumpTrue1 -30 	# pc 29
-    (61) nop 
-    (62) nop 
-    (63) nop 
-  Command 8: "return $f1..."
-    (64) loadScalar1 %v2 	# var "f1"
-    (66) done 
-    (67) done 
-
-----------------------------------
----------------------------------
 fib-SH6 : TIP 282 in for loop
+4.253071 µs/# 235124 # 235124 #/sec 999.999 net-ms
 Length of the body : 226 chars
+returned result : 6765
 -----
-2.719561 µs/# 367706 # 367706 #/sec 999.999 net-ms
------
-ByteCode 0x38b1760, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38cdc30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 141
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 156
   Cmds 9, src 226, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38e3080, refCt 1, args 1, compiled locals 5
+  Proc 0x38da960, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -1588,143 +1789,24 @@ ByteCode 0x38b1760, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH1+2+3+5b : script shorthand on then clause, for init, on for loop, tip282 before for
-Length of the body : 176 chars
------
-2.879996 µs/# 347222 # 347222 #/sec 999.998 net-ms
------
-ByteCode 0x387cdd0, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 171
-  Cmds 5, src 176, inst 68, litObjs 7, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38e1f80, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f1"
-      slot 2, scalar, "f0"
-      slot 3, scalar, "tmp"
-      slot 4, scalar, "i"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 32-48, continue 50, break 61
-      1: level 0, loop, pc 50-52, continue -1, break 61
-  Commands 5:
-      1: pc 0-66, src 5-174        2: pc 11-22, src 39-56
-      3: pc 23-63, src 66-149        4: pc 50-52, src 87-92
-      5: pc 64-66, src 159-168
-  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +6 	# pc 11
-    (7) push1 0 	# "0"
-    (9) jump1 +58 	# pc 67
-  Command 2: "expr {f0=0 ; f1=1}..."
-    (11) push1 1 	# "f0"
-    (13) push1 0 	# "0"
-    (15) storeStk 
-    (16) pop 
-    (17) push1 2 	# "f1"
-    (19) push1 3 	# "1"
-    (21) storeStk 
-    (22) pop 
-  Command 3: "for (i=1) {$i < $n} {incr i} {(\n\t    f1 = (tmp=$f1) +..."
-    (23) push1 4 	# "i"
-    (25) push1 3 	# "1"
-    (27) storeStk 
-    (28) tryCvtToNumeric 
-    (29) pop 
-    (30) jump1 +24 	# pc 54
-    (32) push1 2 	# "f1"
-    (34) push1 5 	# "tmp"
-    (36) loadScalar1 %v1 	# var "f1"
-    (38) storeStk 
-    (39) loadScalar1 %v2 	# var "f0"
-    (41) add 
-    (42) storeStk 
-    (43) pop 
-    (44) push1 1 	# "f0"
-    (46) loadScalar1 %v3 	# var "tmp"
-    (48) storeStk 
-    (49) pop 
-  Command 4: "incr i..."
-    (50) incrScalar1Imm %v4 +1 	# var "i"
-    (53) pop 
-    (54) loadScalar1 %v4 	# var "i"
-    (56) loadScalar1 %v0 	# var "n"
-    (58) lt 
-    (59) jumpTrue1 -27 	# pc 32
-    (61) nop 
-    (62) nop 
-    (63) nop 
-  Command 5: "return $f1..."
-    (64) loadScalar1 %v1 	# var "f1"
-    (66) done 
-    (67) done 
-
-----------------------------------
----------------------------------
 fib-SH4-b : Script shorthand on for step (no braces, var backslashed)
+26.1817 µs/# 38194 # 38194.6 #/sec 999.984 net-ms
 Length of the body : 237 chars
+returned result : 6765
 -----
-15.7480 µs/# 63500 # 63500.3 #/sec 999.995 net-ms
------
-ByteCode 0x38d3c40, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 95
-  Cmds 6, src 237, inst 75, litObjs 7, aux 0, stkDepth 5, code/src 0.00
-  Proc 0x38e3100, refCt 1, args 1, compiled locals 3
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-  Commands 6:
-      1: pc 0-73, src 5-235        2: pc 7-18, src 30-37
-      3: pc 21-34, src 60-67        4: pc 35-48, src 77-84
-      5: pc 49-61, src 94-210        6: pc 62-73, src 220-229
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +16 	# pc 21
-  Command 2: "return 0..."
-    (7) startCommand +12 1 	# next cmd at pc 19, 1 cmds start here
-    (16) push1 0 	# "0"
-    (18) done 
-    (19) jump1 +55 	# pc 74
-  Command 3: "set f0 0..."
-    (21) startCommand +13 1 	# next cmd at pc 34, 1 cmds start here
-    (30) push1 0 	# "0"
-    (32) storeScalar1 %v1 	# var "f0"
-    (34) pop 
-  Command 4: "set f1 1..."
-    (35) startCommand +13 1 	# next cmd at pc 48, 1 cmds start here
-    (44) push1 1 	# "1"
-    (46) storeScalar1 %v2 	# var "f1"
-    (48) pop 
-  Command 5: "for {set i 1} {$i < $n} (i=\$i+1) {\n            set tm..."
-    (49) push1 2 	# "for"
-    (51) push1 3 	# "set i 1"
-    (53) push1 4 	# "$i < $n"
-    (55) push1 5 	# "(i=$i+1)"
-    (57) push1 6 	# "\n            set tmp $f1\n            i..."
-    (59) invokeStk1 5 
-    (61) pop 
-  Command 6: "return $f1..."
-    (62) startCommand +12 1 	# next cmd at pc 74, 1 cmds start here
-    (71) loadScalar1 %v2 	# var "f1"
-    (73) done 
-    (74) done 
-
+bug in disassembling fib-SH4-b
 ----------------------------------
 ---------------------------------
 fib-recurs : recursive version with inline shorthand and script shorthand
+5116.71 µs/# 195 # 195.44 #/sec 997.758 net-ms
 Length of the body : 55 chars
+returned result : 6765
 -----
-112.056 µs/# 8924 # 8924.1 #/sec 999.984 net-ms
------
-ByteCode 0x38cee30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38d4640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "(\n    $n <3 ? 1 : [fib [($n-1)]] + [fib [($n-2)]]\n   ..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 17
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 18
   Cmds 2, src 55, inst 31, litObjs 5, aux 0, stkDepth 4, code/src 0.00
-  Proc 0x38e2480, refCt 1, args 1, compiled locals 1
+  Proc 0x1474cf0, refCt 1, args 1, compiled locals 1
       slot 0, scalar, arg, "n"
   Commands 2:
       1: pc 11-19, src 19-30        2: pc 20-28, src 36-47
@@ -1754,104 +1836,30 @@ ByteCode 0x38cee30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
     try 3
     --------------------------------
     Results : 
-0 : 1.951475 fib-SH1+2+3 Shorthand on then clause, on for init, TIP282 before loop
-1 : 1.980255 fib-SH1 Script shorthand on then clause in if
-2 : 1.983918 fib-Orig Original version from tcl_lib
-3 : 1.995869 fib-SH2 TIP282 before loop
-4 : 2.040650 fib-SH3 Script shorthand on for init
-5 : 2.482718 fib-SH5-b Script shorthand on for loop (with nested equal)
-6 : 2.676002 fib-SH4-a Script shorthand on for step in braces
-7 : 2.698113 fib-SH6 TIP 282 in for loop
-8 : 2.726593 fib-SH5-a Script shorthand on for loop
-9 : 2.824473 fib-SH1+2+3+5b script shorthand on then clause, for init, on for loop, tip282 before for
-10 : 15.4979 fib-SH4-b Script shorthand on for step (no braces, var backslashed)
-11 : 112.254 fib-recurs recursive version with inline shorthand and script shorthand
----------------------------------
-fib-SH1+2+3 : Shorthand on then clause, on for init, TIP282 before loop
-Length of the body : 197 chars
------
-1.951475 µs/# 512432 # 512433 #/sec 999.998 net-ms
------
-ByteCode 0x1486d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 158
-  Cmds 8, src 197, inst 65, litObjs 6, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e1e80, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "tmp"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "f0"
-      slot 4, scalar, "i"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 32-45, continue 47, break 58
-      1: level 0, loop, pc 47-49, continue -1, break 58
-  Commands 8:
-      1: pc 0-63, src 5-195        2: pc 11-22, src 39-56
-      3: pc 23-60, src 66-170        4: pc 32-36, src 102-112
-      5: pc 37-41, src 126-136        6: pc 42-45, src 150-160
-      7: pc 47-49, src 87-92        8: pc 61-63, src 180-189
-  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +6 	# pc 11
-    (7) push1 0 	# "0"
-    (9) jump1 +55 	# pc 64
-  Command 2: "expr {f0=0 ; f1=1}..."
-    (11) push1 1 	# "f0"
-    (13) push1 0 	# "0"
-    (15) storeStk 
-    (16) pop 
-    (17) push1 2 	# "f1"
-    (19) push1 3 	# "1"
-    (21) storeStk 
-    (22) pop 
-  Command 3: "for (i=1) {$i < $n} {incr i} {\n\t    set tmp $f1\n    ..."
-    (23) push1 4 	# "i"
-    (25) push1 3 	# "1"
-    (27) storeStk 
-    (28) tryCvtToNumeric 
-    (29) pop 
-    (30) jump1 +21 	# pc 51
-  Command 4: "set tmp $f1..."
-    (32) loadScalar1 %v2 	# var "f1"
-    (34) storeScalar1 %v1 	# var "tmp"
-    (36) pop 
-  Command 5: "incr f1 $f0..."
-    (37) loadScalar1 %v3 	# var "f0"
-    (39) incrScalar1 %v2 	# var "f1"
-    (41) pop 
-  Command 6: "set f0 $tmp..."
-    (42) loadScalar1 %v1 	# var "tmp"
-    (44) storeScalar1 %v3 	# var "f0"
-    (46) pop 
-  Command 7: "incr i..."
-    (47) incrScalar1Imm %v4 +1 	# var "i"
-    (50) pop 
-    (51) loadScalar1 %v4 	# var "i"
-    (53) loadScalar1 %v0 	# var "n"
-    (55) lt 
-    (56) jumpTrue1 -24 	# pc 32
-    (58) nop 
-    (59) nop 
-    (60) nop 
-  Command 8: "return $f1..."
-    (61) loadScalar1 %v2 	# var "f1"
-    (63) done 
-    (64) done 
-
-----------------------------------
+0 : 2.701911 fib-SH1 Script shorthand on then clause in if
+1 : 2.858940 fib-Orig Original version from tcl_lib
+2 : 2.924156 fib-SH2-a TIP282 before loop
+3 : 3.071068 fib-SH3 Script shorthand on for init
+4 : 3.073654 fib-SH1+2+3 Shorthand on then clause, on for init, TIP282 before loop
+5 : 3.316461 fib-SH2-b Native list before loop
+6 : 4.190917 fib-SH5-b Script shorthand on for loop (with nested equal)
+7 : 4.250762 fib-SH4-a Script shorthand on for step in braces
+8 : 4.266226 fib-SH1+2+3+5b script shorthand on then clause, for init, on for loop, tip282 before for
+9 : 4.343023 fib-SH5-a Script shorthand on for loop
+10 : 4.580554 fib-SH6 TIP 282 in for loop
+11 : 27.4405 fib-SH4-b Script shorthand on for step (no braces, var backslashed)
+12 : 5482.08 fib-recurs recursive version with inline shorthand and script shorthand
 ---------------------------------
 fib-SH1 : Script shorthand on then clause in if
+2.701911 µs/# 370107 # 370108 #/sec 999.996 net-ms
 Length of the body : 215 chars
+returned result : 6765
 -----
-1.980255 µs/# 504985 # 504985 #/sec 999.999 net-ms
------
-ByteCode 0x38ce030, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38b1560, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } (0) else {\n        set f0 0\n    ..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 37
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 38
   Cmds 10, src 215, inst 61, litObjs 3, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e1a00, refCt 1, args 1, compiled locals 5
+  Proc 0x1475170, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -1917,15 +1925,15 @@ ByteCode 0x38ce030, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 ----------------------------------
 ---------------------------------
 fib-Orig : Original version from tcl_lib
+2.858940 µs/# 349779 # 349780 #/sec 999.997 net-ms
 Length of the body : 236 chars
+returned result : 6765
 -----
-1.983918 µs/# 504053 # 504053 #/sec 1000.000 net-ms
------
-ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x1487530, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 21
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 22
   Cmds 11, src 236, inst 62, litObjs 3, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38bfaa0, refCt 1, args 1, compiled locals 5
+  Proc 0x38dabe0, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -1994,16 +2002,16 @@ ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH2 : TIP282 before loop
+fib-SH2-a : TIP282 before loop
+2.924156 µs/# 341978 # 341979 #/sec 999.997 net-ms
 Length of the body : 229 chars
+returned result : 6765
 -----
-1.995869 µs/# 501034 # 501035 #/sec 999.998 net-ms
------
-ByteCode 0x38cd830, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x1486d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 50
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 51
   Cmds 10, src 229, inst 64, litObjs 5, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38e9d20, refCt 1, args 1, compiled locals 5
+  Proc 0x38e9f20, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "i"
       slot 2, scalar, "tmp"
@@ -2073,15 +2081,15 @@ ByteCode 0x38cd830, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 ----------------------------------
 ---------------------------------
 fib-SH3 : Script shorthand on for init
+3.071068 µs/# 325619 # 325619 #/sec 999.998 net-ms
 Length of the body : 232 chars
+returned result : 6765
 -----
-2.040650 µs/# 490039 # 490039 #/sec 999.998 net-ms
------
-ByteCode 0x38cea30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38cee30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 64
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 79
   Cmds 10, src 232, inst 64, litObjs 4, aux 0, stkDepth 2, code/src 0.00
-  Proc 0x38db6e0, refCt 1, args 1, compiled locals 5
+  Proc 0x38ea420, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -2150,16 +2158,176 @@ ByteCode 0x38cea30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH5-b : Script shorthand on for loop (with nested equal)
-Length of the body : 216 chars
+fib-SH1+2+3 : Shorthand on then clause, on for init, TIP282 before loop
+3.073654 µs/# 325345 # 325345 #/sec 999.998 net-ms
+Length of the body : 197 chars
+returned result : 6765
 -----
-2.482718 µs/# 402784 # 402784 #/sec 999.999 net-ms
+ByteCode 0x1487d30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 173
+  Cmds 8, src 197, inst 65, litObjs 6, aux 0, stkDepth 2, code/src 0.00
+  Proc 0x38e9e20, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "tmp"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "f0"
+      slot 4, scalar, "i"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 32-45, continue 47, break 58
+      1: level 0, loop, pc 47-49, continue -1, break 58
+  Commands 8:
+      1: pc 0-63, src 5-195        2: pc 11-22, src 39-56
+      3: pc 23-60, src 66-170        4: pc 32-36, src 102-112
+      5: pc 37-41, src 126-136        6: pc 42-45, src 150-160
+      7: pc 47-49, src 87-92        8: pc 61-63, src 180-189
+  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +6 	# pc 11
+    (7) push1 0 	# "0"
+    (9) jump1 +55 	# pc 64
+  Command 2: "expr {f0=0 ; f1=1}..."
+    (11) push1 1 	# "f0"
+    (13) push1 0 	# "0"
+    (15) storeStk 
+    (16) pop 
+    (17) push1 2 	# "f1"
+    (19) push1 3 	# "1"
+    (21) storeStk 
+    (22) pop 
+  Command 3: "for (i=1) {$i < $n} {incr i} {\n\t    set tmp $f1\n    ..."
+    (23) push1 4 	# "i"
+    (25) push1 3 	# "1"
+    (27) storeStk 
+    (28) tryCvtToNumeric 
+    (29) pop 
+    (30) jump1 +21 	# pc 51
+  Command 4: "set tmp $f1..."
+    (32) loadScalar1 %v2 	# var "f1"
+    (34) storeScalar1 %v1 	# var "tmp"
+    (36) pop 
+  Command 5: "incr f1 $f0..."
+    (37) loadScalar1 %v3 	# var "f0"
+    (39) incrScalar1 %v2 	# var "f1"
+    (41) pop 
+  Command 6: "set f0 $tmp..."
+    (42) loadScalar1 %v1 	# var "tmp"
+    (44) storeScalar1 %v3 	# var "f0"
+    (46) pop 
+  Command 7: "incr i..."
+    (47) incrScalar1Imm %v4 +1 	# var "i"
+    (50) pop 
+    (51) loadScalar1 %v4 	# var "i"
+    (53) loadScalar1 %v0 	# var "n"
+    (55) lt 
+    (56) jumpTrue1 -24 	# pc 32
+    (58) nop 
+    (59) nop 
+    (60) nop 
+  Command 8: "return $f1..."
+    (61) loadScalar1 %v2 	# var "f1"
+    (63) done 
+    (64) done 
+
+----------------------------------
+---------------------------------
+fib-SH2-b : Native list before loop
+3.316461 µs/# 301525 # 301526 #/sec 999.996 net-ms
+Length of the body : 231 chars
+returned result : 6765
 -----
-ByteCode 0x38b1560, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38df470, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 126
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 65
+  Cmds 10, src 231, inst 139, litObjs 6, aux 0, stkDepth 4, code/src 0.00
+  Proc 0x1474af0, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "i"
+      slot 2, scalar, "tmp"
+      slot 3, scalar, "f1"
+      slot 4, scalar, "f0"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 61-101, continue 103, break 123
+      1: level 0, loop, pc 103-114, continue -1, break 123
+  Commands 10:
+      1: pc 0-137, src 5-229        2: pc 7-18, src 30-37
+      3: pc 21-44, src 60-79        4: pc 45-125, src 89-204
+      5: pc 54-57, src 94-100        6: pc 61-74, src 136-146
+      7: pc 75-88, src 160-170        8: pc 89-101, src 184-194
+      9: pc 103-114, src 114-119       10: pc 126-137, src 214-223
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +16 	# pc 21
+  Command 2: "return 0..."
+    (7) startCommand +12 1 	# next cmd at pc 19, 1 cmds start here
+    (16) push1 0 	# "0"
+    (18) done 
+    (19) jump1 +119 	# pc 138
+  Command 3: "expr {(f0=0 , f1=1)}..."
+    (21) startCommand +23 1 	# next cmd at pc 44, 1 cmds start here
+    (30) push1 1 	# "tcl::mathfunc::list"
+    (32) push1 2 	# "f0"
+    (34) push1 0 	# "0"
+    (36) storeStk 
+    (37) push1 3 	# "f1"
+    (39) push1 4 	# "1"
+    (41) storeStk 
+    (42) invokeStk1 3 
+    (44) pop 
+  Command 4: "for {set i 1} {$i < $n} {incr i} {\n            set tmp..."
+    (45) startCommand +80 2 	# next cmd at pc 125, 2 cmds start here
+  Command 5: "set i 1..."
+    (54) push1 4 	# "1"
+    (56) storeScalar1 %v1 	# var "i"
+    (58) pop 
+    (59) jump1 +57 	# pc 116
+  Command 6: "set tmp $f1..."
+    (61) startCommand +13 1 	# next cmd at pc 74, 1 cmds start here
+    (70) loadScalar1 %v3 	# var "f1"
+    (72) storeScalar1 %v2 	# var "tmp"
+    (74) pop 
+  Command 7: "incr f1 $f0..."
+    (75) startCommand +13 1 	# next cmd at pc 88, 1 cmds start here
+    (84) loadScalar1 %v4 	# var "f0"
+    (86) incrScalar1 %v3 	# var "f1"
+    (88) pop 
+  Command 8: "set f0 $tmp..."
+    (89) startCommand +13 1 	# next cmd at pc 102, 1 cmds start here
+    (98) loadScalar1 %v2 	# var "tmp"
+    (100) storeScalar1 %v4 	# var "f0"
+    (102) pop 
+  Command 9: "incr i..."
+    (103) startCommand +12 1 	# next cmd at pc 115, 1 cmds start here
+    (112) incrScalar1Imm %v1 +1 	# var "i"
+    (115) pop 
+    (116) loadScalar1 %v1 	# var "i"
+    (118) loadScalar1 %v0 	# var "n"
+    (120) lt 
+    (121) jumpTrue1 -60 	# pc 61
+    (123) push1 5 	# ""
+    (125) pop 
+  Command 10: "return $f1..."
+    (126) startCommand +12 1 	# next cmd at pc 138, 1 cmds start here
+    (135) loadScalar1 %v3 	# var "f1"
+    (137) done 
+    (138) done 
+
+----------------------------------
+---------------------------------
+fib-SH5-b : Script shorthand on for loop (with nested equal)
+4.190917 µs/# 238611 # 238611 #/sec 999.999 net-ms
+Length of the body : 216 chars
+returned result : 6765
+-----
+ByteCode 0x38d3c40, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 141
   Cmds 8, src 216, inst 65, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38ea0a0, refCt 1, args 1, compiled locals 5
+  Proc 0x38daa60, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -2227,15 +2395,15 @@ ByteCode 0x38b1560, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 ----------------------------------
 ---------------------------------
 fib-SH4-a : Script shorthand on for step in braces
+4.250762 µs/# 235251 # 235251 #/sec 999.996 net-ms
 Length of the body : 238 chars
+returned result : 6765
 -----
-2.676002 µs/# 373691 # 373691 #/sec 999.998 net-ms
------
-ByteCode 0x38d4840, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38cf630, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 79
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 94
   Cmds 10, src 238, inst 67, litObjs 4, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38db7e0, refCt 1, args 1, compiled locals 5
+  Proc 0x3903780, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -2306,16 +2474,168 @@ ByteCode 0x38d4840, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH6 : TIP 282 in for loop
-Length of the body : 226 chars
+fib-SH1+2+3+5b : script shorthand on then clause, for init, on for loop, tip282 before for
+4.266226 µs/# 234399 # 234399 #/sec 999.999 net-ms
+Length of the body : 176 chars
+returned result : 6765
 -----
-2.698113 µs/# 370629 # 370629 #/sec 999.999 net-ms
+ByteCode 0x38d5640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 186
+  Cmds 5, src 176, inst 68, litObjs 7, aux 0, stkDepth 3, code/src 0.00
+  Proc 0x38e2180, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f1"
+      slot 2, scalar, "f0"
+      slot 3, scalar, "tmp"
+      slot 4, scalar, "i"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 32-48, continue 50, break 61
+      1: level 0, loop, pc 50-52, continue -1, break 61
+  Commands 5:
+      1: pc 0-66, src 5-174        2: pc 11-22, src 39-56
+      3: pc 23-63, src 66-149        4: pc 50-52, src 87-92
+      5: pc 64-66, src 159-168
+  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +6 	# pc 11
+    (7) push1 0 	# "0"
+    (9) jump1 +58 	# pc 67
+  Command 2: "expr {f0=0 ; f1=1}..."
+    (11) push1 1 	# "f0"
+    (13) push1 0 	# "0"
+    (15) storeStk 
+    (16) pop 
+    (17) push1 2 	# "f1"
+    (19) push1 3 	# "1"
+    (21) storeStk 
+    (22) pop 
+  Command 3: "for (i=1) {$i < $n} {incr i} {(\n\t    f1 = (tmp=$f1) +..."
+    (23) push1 4 	# "i"
+    (25) push1 3 	# "1"
+    (27) storeStk 
+    (28) tryCvtToNumeric 
+    (29) pop 
+    (30) jump1 +24 	# pc 54
+    (32) push1 2 	# "f1"
+    (34) push1 5 	# "tmp"
+    (36) loadScalar1 %v1 	# var "f1"
+    (38) storeStk 
+    (39) loadScalar1 %v2 	# var "f0"
+    (41) add 
+    (42) storeStk 
+    (43) pop 
+    (44) push1 1 	# "f0"
+    (46) loadScalar1 %v3 	# var "tmp"
+    (48) storeStk 
+    (49) pop 
+  Command 4: "incr i..."
+    (50) incrScalar1Imm %v4 +1 	# var "i"
+    (53) pop 
+    (54) loadScalar1 %v4 	# var "i"
+    (56) loadScalar1 %v0 	# var "n"
+    (58) lt 
+    (59) jumpTrue1 -27 	# pc 32
+    (61) nop 
+    (62) nop 
+    (63) nop 
+  Command 5: "return $f1..."
+    (64) loadScalar1 %v1 	# var "f1"
+    (66) done 
+    (67) done 
+
+----------------------------------
+---------------------------------
+fib-SH5-a : Script shorthand on for loop
+4.343023 µs/# 230253 # 230254 #/sec 999.994 net-ms
+Length of the body : 231 chars
+returned result : 6765
 -----
-ByteCode 0x38b1760, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+ByteCode 0x38d5240, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
   Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 141
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 126
+  Cmds 8, src 231, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
+  Proc 0x38e3600, refCt 1, args 1, compiled locals 5
+      slot 0, scalar, arg, "n"
+      slot 1, scalar, "f0"
+      slot 2, scalar, "f1"
+      slot 3, scalar, "i"
+      slot 4, scalar, "tmp"
+  Exception ranges 2, depth 1:
+      0: level 0, loop, pc 29-48, continue 50, break 61
+      1: level 0, loop, pc 50-52, continue -1, break 61
+  Commands 8:
+      1: pc 0-66, src 5-229        2: pc 7-9, src 30-37
+      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
+      5: pc 22-63, src 94-204        6: pc 22-25, src 99-105
+      7: pc 50-52, src 119-124        8: pc 64-66, src 214-223
+  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+    (0) loadScalar1 %v0 	# var "n"
+    (2) push1 0 	# "0"
+    (4) eq 
+    (5) jumpFalse1 +7 	# pc 12
+  Command 2: "return 0..."
+    (7) push1 0 	# "0"
+    (9) done 
+    (10) nop 
+    (11) nop 
+  Command 3: "set f0 0..."
+    (12) push1 0 	# "0"
+    (14) storeScalar1 %v1 	# var "f0"
+    (16) pop 
+  Command 4: "set f1 1..."
+    (17) push1 1 	# "1"
+    (19) storeScalar1 %v2 	# var "f1"
+    (21) pop 
+  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            tmp=$f..."
+  Command 6: "set i 1..."
+    (22) push1 1 	# "1"
+    (24) storeScalar1 %v3 	# var "i"
+    (26) pop 
+    (27) jump1 +27 	# pc 54
+    (29) push1 2 	# "tmp"
+    (31) loadScalar1 %v2 	# var "f1"
+    (33) storeStk 
+    (34) pop 
+    (35) push1 3 	# "f1"
+    (37) loadScalar1 %v2 	# var "f1"
+    (39) loadScalar1 %v1 	# var "f0"
+    (41) add 
+    (42) storeStk 
+    (43) pop 
+    (44) push1 4 	# "f0"
+    (46) loadScalar1 %v4 	# var "tmp"
+    (48) storeStk 
+    (49) pop 
+  Command 7: "incr i..."
+    (50) incrScalar1Imm %v3 +1 	# var "i"
+    (53) pop 
+    (54) loadScalar1 %v3 	# var "i"
+    (56) loadScalar1 %v0 	# var "n"
+    (58) lt 
+    (59) jumpTrue1 -30 	# pc 29
+    (61) nop 
+    (62) nop 
+    (63) nop 
+  Command 8: "return $f1..."
+    (64) loadScalar1 %v2 	# var "f1"
+    (66) done 
+    (67) done 
+
+----------------------------------
+---------------------------------
+fib-SH6 : TIP 282 in for loop
+4.580554 µs/# 218314 # 218314 #/sec 999.999 net-ms
+Length of the body : 226 chars
+returned result : 6765
+-----
+ByteCode 0x38cdc30, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
+  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 156
   Cmds 9, src 226, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38e3080, refCt 1, args 1, compiled locals 5
+  Proc 0x38da960, refCt 1, args 1, compiled locals 5
       slot 0, scalar, arg, "n"
       slot 1, scalar, "f0"
       slot 2, scalar, "f1"
@@ -2386,173 +2706,150 @@ ByteCode 0x38b1760, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
 
 ----------------------------------
 ---------------------------------
-fib-SH5-a : Script shorthand on for loop
-Length of the body : 231 chars
+fib-SH4-b : Script shorthand on for step (no braces, var backslashed)
+27.4405 µs/# 36442 # 36442.4 #/sec 999.988 net-ms
+Length of the body : 237 chars
+returned result : 6765
 -----
-2.726593 µs/# 366757 # 366758 #/sec 999.997 net-ms
+bug in disassembling fib-SH4-b
+----------------------------------
+---------------------------------
+fib-recurs : recursive version with inline shorthand and script shorthand
+5482.08 µs/# 182 # 182.41 #/sec 997.739 net-ms
+Length of the body : 55 chars
+returned result : 6765
 -----
 ByteCode 0x38d4640, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 111
-  Cmds 8, src 231, inst 68, litObjs 6, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38ea3a0, refCt 1, args 1, compiled locals 5
+  Source "(\n    $n <3 ? 1 : [fib [($n-1)]] + [fib [($n-2)]]\n   ..."
+  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 18
+  Cmds 2, src 55, inst 31, litObjs 5, aux 0, stkDepth 4, code/src 0.00
+  Proc 0x1474cf0, refCt 1, args 1, compiled locals 1
       slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-      slot 3, scalar, "i"
-      slot 4, scalar, "tmp"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 29-48, continue 50, break 61
-      1: level 0, loop, pc 50-52, continue -1, break 61
-  Commands 8:
-      1: pc 0-66, src 5-229        2: pc 7-9, src 30-37
-      3: pc 12-16, src 60-67        4: pc 17-21, src 77-84
-      5: pc 22-63, src 94-204        6: pc 22-25, src 99-105
-      7: pc 50-52, src 119-124        8: pc 64-66, src 214-223
-  Command 1: "if { $n == 0 } {\n        return 0\n    } else {\n     ..."
+  Commands 2:
+      1: pc 11-19, src 19-30        2: pc 20-28, src 36-47
     (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
-    (5) jumpFalse1 +7 	# pc 12
-  Command 2: "return 0..."
-    (7) push1 0 	# "0"
-    (9) done 
-    (10) nop 
-    (11) nop 
-  Command 3: "set f0 0..."
-    (12) push1 0 	# "0"
-    (14) storeScalar1 %v1 	# var "f0"
-    (16) pop 
-  Command 4: "set f1 1..."
-    (17) push1 1 	# "1"
-    (19) storeScalar1 %v2 	# var "f1"
-    (21) pop 
-  Command 5: "for {set i 1} {$i < $n} {incr i} {(\n            tmp=$f..."
-  Command 6: "set i 1..."
-    (22) push1 1 	# "1"
-    (24) storeScalar1 %v3 	# var "i"
-    (26) pop 
-    (27) jump1 +27 	# pc 54
-    (29) push1 2 	# "tmp"
-    (31) loadScalar1 %v2 	# var "f1"
-    (33) storeStk 
-    (34) pop 
-    (35) push1 3 	# "f1"
-    (37) loadScalar1 %v2 	# var "f1"
-    (39) loadScalar1 %v1 	# var "f0"
-    (41) add 
-    (42) storeStk 
-    (43) pop 
-    (44) push1 4 	# "f0"
-    (46) loadScalar1 %v4 	# var "tmp"
-    (48) storeStk 
-    (49) pop 
-  Command 7: "incr i..."
-    (50) incrScalar1Imm %v3 +1 	# var "i"
-    (53) pop 
-    (54) loadScalar1 %v3 	# var "i"
-    (56) loadScalar1 %v0 	# var "n"
-    (58) lt 
-    (59) jumpTrue1 -30 	# pc 29
-    (61) nop 
-    (62) nop 
-    (63) nop 
-  Command 8: "return $f1..."
-    (64) loadScalar1 %v2 	# var "f1"
-    (66) done 
-    (67) done 
-
-----------------------------------
----------------------------------
-fib-SH1+2+3+5b : script shorthand on then clause, for init, on for loop, tip282 before for
-Length of the body : 176 chars
------
-2.824473 µs/# 354048 # 354048 #/sec 999.999 net-ms
------
-ByteCode 0x387cdd0, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } (0) else {\n        expr {f0=0 ; f..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 171
-  Cmds 5, src 176, inst 68, litObjs 7, aux 0, stkDepth 3, code/src 0.00
-  Proc 0x38e1f80, refCt 1, args 1, compiled locals 5
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f1"
-      slot 2, scalar, "f0"
-      slot 3, scalar, "tmp"
-      slot 4, scalar, "i"
-  Exception ranges 2, depth 1:
-      0: level 0, loop, pc 32-48, continue 50, break 61
-      1: level 0, loop, pc 50-52, continue -1, break 61
-  Commands 5:
-      1: pc 0-66, src 5-174        2: pc 11-22, src 39-56
-      3: pc 23-63, src 66-149        4: pc 50-52, src 87-92
-      5: pc 64-66, src 159-168
-  Command 1: "if { $n == 0 } (0) else {\n        expr {f0=0 ; f1=1}\n..."
-    (0) loadScalar1 %v0 	# var "n"
-    (2) push1 0 	# "0"
-    (4) eq 
+    (2) push1 0 	# "3"
+    (4) lt 
     (5) jumpFalse1 +6 	# pc 11
-    (7) push1 0 	# "0"
-    (9) jump1 +58 	# pc 67
-  Command 2: "expr {f0=0 ; f1=1}..."
-    (11) push1 1 	# "f0"
-    (13) push1 0 	# "0"
-    (15) storeStk 
-    (16) pop 
-    (17) push1 2 	# "f1"
-    (19) push1 3 	# "1"
-    (21) storeStk 
-    (22) pop 
-  Command 3: "for (i=1) {$i < $n} {incr i} {(\n\t    f1 = (tmp=$f1) +..."
-    (23) push1 4 	# "i"
-    (25) push1 3 	# "1"
-    (27) storeStk 
-    (28) tryCvtToNumeric 
-    (29) pop 
-    (30) jump1 +24 	# pc 54
-    (32) push1 2 	# "f1"
-    (34) push1 5 	# "tmp"
-    (36) loadScalar1 %v1 	# var "f1"
-    (38) storeStk 
-    (39) loadScalar1 %v2 	# var "f0"
-    (41) add 
-    (42) storeStk 
-    (43) pop 
-    (44) push1 1 	# "f0"
-    (46) loadScalar1 %v3 	# var "tmp"
-    (48) storeStk 
-    (49) pop 
-  Command 4: "incr i..."
-    (50) incrScalar1Imm %v4 +1 	# var "i"
-    (53) pop 
-    (54) loadScalar1 %v4 	# var "i"
-    (56) loadScalar1 %v0 	# var "n"
-    (58) lt 
-    (59) jumpTrue1 -27 	# pc 32
-    (61) nop 
-    (62) nop 
-    (63) nop 
-  Command 5: "return $f1..."
-    (64) loadScalar1 %v1 	# var "f1"
-    (66) done 
-    (67) done 
+    (7) push1 1 	# "1"
+    (9) jump1 +21 	# pc 30
+  Command 1: "fib [($n-1)]..."
+    (11) push1 2 	# "fib"
+    (13) loadScalar1 %v0 	# var "n"
+    (15) push1 3 	# "1"
+    (17) sub 
+    (18) invokeStk1 2 
+  Command 2: "fib [($n-2)]..."
+    (20) push1 2 	# "fib"
+    (22) loadScalar1 %v0 	# var "n"
+    (24) push1 4 	# "2"
+    (26) sub 
+    (27) invokeStk1 2 
+    (29) add 
+    (30) done 
 
 ----------------------------------
----------------------------------
-fib-SH4-b : Script shorthand on for step (no braces, var backslashed)
-Length of the body : 237 chars
------
-15.4979 µs/# 64524 # 64524.9 #/sec 999.986 net-ms
------
-ByteCode 0x38d3c40, refCt 1, epoch 21, interp 0x13f0e40 (epoch 21)
-  Source "\n    if { $n == 0 } {\n        return 0\n    } else {\n..."
-  File "C:/Tcl/src/install_SH/bin/tests/fibonacci.tcl" Line 95
-  Cmds 6, src 237, inst 75, litObjs 7, aux 0, stkDepth 5, code/src 0.00
-  Proc 0x38e3100, refCt 1, args 1, compiled locals 3
-      slot 0, scalar, arg, "n"
-      slot 1, scalar, "f0"
-      slot 2, scalar, "f1"
-  Commands 6:
-      1: pc 0-73, src 5-235        2: pc 7-18, src 30-37
-      3: pc 21-34, src 60-67        4: pc 35-48, src 77-84
-      5: pc 49-61, src 94-210        6: pc 62-73, src 220-229
-  Com
+Synthesis : from fastest to slowest
+1 : proc fib-SH1, mean speed : 2.8587243333333334, length : 215
+Was : Script shorthand on then clause in if
+
+    if { $n == 0 } (0) else {
+        set f0 0
+        set f1 1
+        for {set i 1} {$i < $n} {incr i} {
+            set tmp $f1
+            incr f1 $f0
+            set f0 $tmp
+        }
+        return $f1
+    }
+
+2 : proc fib-SH2-a, mean speed : 2.989832, length : 229
+Was : TIP282 before loop
+
+    if { $n == 0 } {
+        return 0
+    } else {
+        expr {f0=0 ; f1=1}
+        for {set i 1} {$i < $n} {incr i} {
+            set tmp $f1
+            incr f1 $f0
+            set f0 $tmp
+        }
+        return $f1
+    }
+
+3 : proc fib-SH1+2+3, mean speed : 3.0140393333333333, length : 197
+Was : Shorthand on then clause, on for init, TIP282 before loop
+
+    if { $n == 0 } (0) else {
+        expr {f0=0 ; f1=1}
+        for (i=1) {$i < $n} {incr i} {
+	    set tmp $f1
+            incr f1 $f0
+            set f0 $tmp
+        }
+        return $f1
+    }
+
+4 : proc fib-SH3, mean speed : 3.024615666666667, length : 232
+Was : Script shorthand on for init
+
+    if { $n == 0 } {
+        return 0
+    } else {
+        set f0 0
+        set f1 1
+        for (i=1) {$i < $n} {incr i} {
+            set tmp $f1
+            incr f1 $f0
+            set f0 $tmp
+        }
+        return $f1
+    }
+
+5 : proc fib-Orig, mean speed : 3.3653960000000005, length : 236
+Was : Original version from tcl_lib
+
+    if { $n == 0 } {
+        return 0
+    } else {
+        set f0 0
+        set f1 1
+        for {set i 1} {$i < $n} {incr i} {
+            set tmp $f1
+            incr f1 $f0
+            set f0 $tmp
+        }
+        return $f1
+    }
+
+6 : proc fib-SH2-b, mean speed : 3.393823333333333, length : 231
+Was : Native list before loop
+
+    if { $n == 0 } {
+        return 0
+    } else {
+        expr {(f0=0 , f1=1)}
+        for {set i 1} {$i < $n} {incr i} {
+            set tmp $f1
+            incr f1 $f0
+            set f0 $tmp
+        }
+        return $f1
+    }
+
+7 : proc fib-SH5-b, mean speed : 4.111994333333333, length : 216
+Was : Script shorthand on for loop (with nested equal)
+8 : proc fib-SH4-a, mean speed : 4.1162323333333335, length : 238
+Was : Script shorthand on for step in braces
+9 : proc fib-SH5-a, mean speed : 4.157370333333333, length : 231
+Was : Script shorthand on for loop
+10 : proc fib-SH1+2+3+5b, mean speed : 4.206613333333333, length : 176
+Was : script shorthand on then clause, for init, on for loop, tip282 before for
+11 : proc fib-SH6, mean speed : 4.371408, length : 226
+Was : TIP 282 in for loop
+12 : proc fib-SH4-b, mean speed : 26.273, length : 237
+Was : Script shorthand on for step (no braces, var backslashed)
+13 : proc fib-recurs, mean speed : 5724.556666666666, length : 55
+Was : recursive version with inline shorthand and script shorthand

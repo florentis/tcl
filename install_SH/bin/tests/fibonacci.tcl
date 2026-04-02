@@ -1,10 +1,11 @@
 # https://wiki.tcl-lang.org/page/Fibonacci+numbers
 
-set D [dict create \
+set COMMENTS [dict create \
 	   fib-recurs {recursive version with inline shorthand and script shorthand}\
 	   fib-Orig {Original version from tcl_lib}\
 	   fib-SH1 {Script shorthand on then clause in if}\
-	   fib-SH2 {TIP282 before loop}\
+	   fib-SH2-a {TIP282 before loop}\
+	   fib-SH2-b {Native list before loop}\
 	   fib-SH3 {Script shorthand on for init}\
 	   fib-SH4-a {Script shorthand on for step in braces}\
 	   fib-SH4-b {Script shorthand on for step (no braces, var backslashed)}\
@@ -47,11 +48,25 @@ proc fib-SH1 {n} {
     }
 }
 # TIP282 before loop
-proc fib-SH2 {n} {
+proc fib-SH2-a {n} {
     if { $n == 0 } {
         return 0
     } else {
         expr {f0=0 ; f1=1}
+        for {set i 1} {$i < $n} {incr i} {
+            set tmp $f1
+            incr f1 $f0
+            set f0 $tmp
+        }
+        return $f1
+    }
+}
+# native list before loop
+proc fib-SH2-b {n} {
+    if { $n == 0 } {
+        return 0
+    } else {
+        expr {(f0=0 , f1=1)}
         for {set i 1} {$i < $n} {incr i} {
             set tmp $f1
             incr f1 $f0
@@ -214,15 +229,17 @@ proc fib n {( $n <3 ? 1 : [fib [($n-1)]] + [fib [($n-2)]] )}
 
 puts "let's compare the speed of proc variants"
 set chan [open ./tests/fibonacci.log w]
+set Synthesis [dict create]
 
 for (j=1) {$j <= 3} {incr j} {
     puts "try $j" 
     set Result [dict create]
 
-    foreach proc [dict keys $D] {
+    foreach proc [dict keys $COMMENTS] {
 	puts "measurement of $proc" 
-	set data [timerate [list $proc 12]]
+	set data [timerate [list $proc 20]]
 	set speed [lindex $data 0]
+	dict lappend Synthesis $proc $speed
 	dict set Result $speed [list $proc $data]
     }
     puts $chan "-----------------------------
@@ -232,20 +249,48 @@ for (j=1) {$j <= 3} {incr j} {
     set L {}
     set i 0
     foreach k [lsort -real [dict keys $Result]] {
-	puts $chan "$i : $k [lindex [dict get $Result $k] 0] [dict get $D [lindex [dict get $Result $k] 0]]"
+	puts $chan "$i : $k [lindex [dict get $Result $k] 0] [dict get $COMMENTS [lindex [dict get $Result $k] 0]]"
 	incr i
     }
-
+    set k 0
     foreach s [lsort -real [dict keys $Result]] {
 	lassign [dict get $Result $s] proc data
 	puts $chan ---------------------------------
-	puts $chan "$proc : [dict get $D $proc]"
+	puts $chan "$proc : [dict get $COMMENTS $proc]"
+	puts $chan $data
 	puts $chan "Length of the body : [string length [info body $proc]] chars"
-	puts $chan -----
-	puts $chan "$data"
-	puts $chan -----
-	puts $chan [tcl::unsupported::disassemble proc $proc]
-	puts $chan ----------------------------------
+	puts $chan "returned result : [$proc 20]"
+	if {$proc ne "fib-SH4-b"} {
+	    # bug in disassembling fib-SH4-b
+	    puts $chan -----    
+	    puts $chan [tcl::unsupported::disassemble proc $proc]
+	    puts $chan ----------------------------------
+	} else {
+	    puts $chan -----    
+	    puts $chan "bug in disassembling fib-SH4-b"
+	    puts $chan ----------------------------------
+	}
+	incr k
     }
 }
+set L [dict keys $Synthesis]
+set Mean [dict create]
+foreach p $L {
+    lassign [dict get $Synthesis $p]  a b c
+    set mean [(($a+$b+$c)/3)]
+    dict set Mean $mean $p
+}
+
+puts $chan "Synthesis : from fastest to slowest"
+set i 1
+foreach speed [lsort -real [dict keys $Mean]] {
+    set proc [dict get $Mean $speed]
+    puts $chan "$i : proc $proc, mean speed : $speed, length : [string length [info body $proc]]"
+    puts $chan "Was : [dict get $COMMENTS $proc]"
+    if {$i <= 6} {
+	puts $chan [info body $proc]
+    }
+    incr i 
+}
+close $chan
 puts "Finished ! Read file fibonacci.log to get the details"
