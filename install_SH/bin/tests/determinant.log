@@ -1,0 +1,302 @@
+Results
+Original Proc : speed = 285.3283333333334
+Original Proc : result : -88
+SH1 Proc : speed = 312.8806666666667
+SH1 Proc : result = -88
+-------------------------------------------------------------------------
+Bytecodes
+-------------------------------------------------------------------------
+1.Orig, length=583
+ByteCode 0x6d60798, refCt 1, epoch 21, interp 0xe020c8 (epoch 21)
+  Source "\n    if {[llength $matrix] != [llength [lindex $matrix..."
+  File "C:/Tcl/src/install_SH/bin/tests/determinant.tcl" Line 3
+  Cmds 21, src 583, inst 289, litObjs 6, aux 4, stkDepth 12, code/src 1.52
+  Code 888 = header 208+inst 289+litObj 48+exc 168+aux 64+cmdMap 104
+  Proc 0x6c76c98, refCt 1, args 1, compiled locals 14
+      slot 0, scalar, arg, "matrix"
+      slot 1, scalar, "Map"
+      slot 2, scalar, "map"
+      slot 3, scalar, "row"
+      slot 4, scalar, "var"
+      slot 5, scalar, "val"
+      slot 6, scalar, "a"
+      slot 7, scalar, "d"
+      slot 8, scalar, "b"
+      slot 9, scalar, "c"
+      slot 10, scalar, "i"
+      slot 11, scalar, "mat2"
+      slot 12, scalar, "res"
+      slot 13, scalar, "element"
+  Exception ranges 3, depth 2:
+      0: level 0, loop, pc 109-148, continue 150, break 151
+      1: level 1, loop, pc 132-145, continue 147, break 148
+      2: level 0, loop, pc 250-270, continue 272, break 273
+  Commands 21:
+      1: pc 0-49, src 5-99        2: pc 0-2, src 10-24
+      3: pc 3-19, src 31-56        4: pc 12-18, src 40-55
+      5: pc 23-44, src 69-93        6: pc 50-287, src 105-580
+      7: pc 59-61, src 113-127        8: pc 72-85, src 142-162
+      9: pc 86-152, src 169-253       10: pc 109-148, src 199-246
+     11: pc 132-145, src 230-242       12: pc 153-172, src 260-279
+     13: pc 178-191, src 299-305       14: pc 192-214, src 312-342
+     15: pc 201-211, src 322-341       16: pc 215-228, src 349-357
+     17: pc 229-276, src 364-557       18: pc 238-244, src 381-396
+     19: pc 250-258, src 403-541       20: pc 259-270, src 545-550
+     21: pc 277-287, src 564-571
+  Command 1: "if {[llength $matrix] != [llength [lindex $matrix 0]]} ..."
+  Command 2: "llength $matrix..."
+    (0) loadScalar1 %v0 	# var "matrix"
+    (2) listLength 
+  Command 3: "llength [lindex $matrix 0]..."
+    (3) startCommand +17 2 	# next cmd at pc 20, 2 cmds start here
+  Command 4: "lindex $matrix 0..."
+    (12) loadScalar1 %v0 	# var "matrix"
+    (14) listIndexImm 0 
+    (19) listLength 
+    (20) neq 
+    (21) jumpFalse1 +26 	# pc 47
+  Command 5: "error \"non-square matrix..."
+    (23) startCommand +22 1 	# next cmd at pc 45, 1 cmds start here
+    (32) push1 0 	# "non-square matrix"
+    (34) push1 1 	# ""
+    (36) returnImm +1 0 
+    (45) jump1 +4 	# pc 49
+    (47) push1 1 	# ""
+    (49) pop 
+  Command 6: "switch [llength $matrix] {\n\t2 {\n\t    set Map {{a b}..."
+    (50) startCommand +238 2 	# next cmd at pc 288, 2 cmds start here
+  Command 7: "llength $matrix..."
+    (59) loadScalar1 %v0 	# var "matrix"
+    (61) listLength 
+    (62) jumpTable 0 
+		["2"->pc 72]
+    (67) jump4 +111 	# pc 178
+  Command 8: "set Map {{a b} {c d}}..."
+    (72) startCommand +13 1 	# next cmd at pc 85, 1 cmds start here
+    (81) push1 2 	# "{a b} {c d}"
+    (83) storeScalar1 %v1 	# var "Map"
+    (85) pop 
+  Command 9: "lmap map $Map row $matrix {\n\t\tlmap var $map val $row..."
+    (86) startCommand +66 1 	# next cmd at pc 152, 1 cmds start here
+    (95) list 0 
+    (100) loadScalar1 %v1 	# var "Map"
+    (102) loadScalar1 %v0 	# var "matrix"
+    (104) foreach_start 1 
+		[jumpOffset=-41, vars=[%v2],[%v3]]
+  Command 10: "lmap var $map val $row {\n\t\t    set $var $val\n..."
+    (109) startCommand +40 1 	# next cmd at pc 149, 1 cmds start here
+    (118) list 0 
+    (123) loadScalar1 %v2 	# var "map"
+    (125) loadScalar1 %v3 	# var "row"
+    (127) foreach_start 2 
+		[jumpOffset=-15, vars=[%v4],[%v5]]
+  Command 11: "set $var $val..."
+    (132) startCommand +14 1 	# next cmd at pc 146, 1 cmds start here
+    (141) loadScalar1 %v4 	# var "var"
+    (143) loadScalar1 %v5 	# var "val"
+    (145) storeStk 
+    (146) lmap_collect 
+    (147) foreach_step 
+    (148) foreach_end 
+    (149) lmap_collect 
+    (150) foreach_step 
+    (151) foreach_end 
+    (152) pop 
+  Command 12: "expr {$a*$d - $b*$c}..."
+    (153) startCommand +20 1 	# next cmd at pc 173, 1 cmds start here
+    (162) loadScalar1 %v6 	# var "a"
+    (164) loadScalar1 %v7 	# var "d"
+    (166) mult 
+    (167) loadScalar1 %v8 	# var "b"
+    (169) loadScalar1 %v9 	# var "c"
+    (171) mult 
+    (172) sub 
+    (173) jump4 +115 	# pc 288
+  Command 13: "set i 0..."
+    (178) startCommand +13 1 	# next cmd at pc 191, 1 cmds start here
+    (187) push1 3 	# "0"
+    (189) storeScalar1 %v10 	# var "i"
+    (191) pop 
+  Command 14: "set mat2 [lrange $matrix 1 end]..."
+    (192) startCommand +22 2 	# next cmd at pc 214, 2 cmds start here
+  Command 15: "lrange $matrix 1 end..."
+    (201) loadScalar1 %v0 	# var "matrix"
+    (203) listRangeImm 1 end 
+    (212) storeScalar1 %v11 	# var "mat2"
+    (214) pop 
+  Command 16: "set res 0..."
+    (215) startCommand +13 1 	# next cmd at pc 228, 1 cmds start here
+    (224) push1 3 	# "0"
+    (226) storeScalar1 %v12 	# var "res"
+    (228) pop 
+  Command 17: "foreach element [lindex $matrix 0] {\n\t\tif $element {..."
+    (229) startCommand +47 2 	# next cmd at pc 276, 2 cmds start here
+  Command 18: "lindex $matrix 0..."
+    (238) loadScalar1 %v0 	# var "matrix"
+    (240) listIndexImm 0 
+    (245) foreach_start 3 
+		[jumpOffset=-22, vars=[%v13]]
+  Command 19: "if $element {\n\t\t    set sign [expr {$i%2? -1: 1}]\n\t..."
+    (250) push1 4 	# "if"
+    (252) loadScalar1 %v13 	# var "element"
+    (254) push1 5 	# "\n\t\t    set sign [expr {$i%2? -1: 1}]\n..."
+    (256) invokeStk1 3 
+    (258) pop 
+  Command 20: "incr i..."
+    (259) startCommand +12 1 	# next cmd at pc 271, 1 cmds start here
+    (268) incrScalar1Imm %v10 +1 	# var "i"
+    (271) pop 
+    (272) foreach_step 
+    (273) foreach_end 
+    (274) push1 1 	# ""
+    (276) pop 
+  Command 21: "set res ..."
+    (277) startCommand +11 1 	# next cmd at pc 288, 1 cmds start here
+    (286) loadScalar1 %v12 	# var "res"
+    (288) done 
+
+-------------------------------------------------------------------------
+1.SH1, length=545
+ByteCode 0x68f54f8, refCt 1, epoch 21, interp 0xe020c8 (epoch 21)
+  Source "\n    if {[llength $matrix] != [llength [lindex $matrix..."
+  File "C:/Tcl/src/install_SH/bin/tests/determinant.tcl" Line 40
+  Cmds 18, src 545, inst 273, litObjs 9, aux 4, stkDepth 12, code/src 1.61
+  Code 876 = header 208+inst 273+litObj 72+exc 168+aux 64+cmdMap 84
+  Proc 0x6c76ed8, refCt 1, args 1, compiled locals 13
+      slot 0, scalar, arg, "matrix"
+      slot 1, scalar, "Map"
+      slot 2, scalar, "map"
+      slot 3, scalar, "row"
+      slot 4, scalar, "var"
+      slot 5, scalar, "val"
+      slot 6, scalar, "a"
+      slot 7, scalar, "d"
+      slot 8, scalar, "b"
+      slot 9, scalar, "c"
+      slot 10, scalar, "element"
+      slot 11, scalar, "i"
+      slot 12, scalar, "res"
+  Exception ranges 3, depth 2:
+      0: level 0, loop, pc 109-140, continue 142, break 143
+      1: level 1, loop, pc 132-137, continue 139, break 140
+      2: level 0, loop, pc 234-254, continue 256, break 257
+  Commands 18:
+      1: pc 0-49, src 5-93        2: pc 0-2, src 10-24
+      3: pc 3-19, src 31-56        4: pc 12-18, src 40-55
+      5: pc 23-44, src 63-87        6: pc 50-271, src 99-543
+      7: pc 59-61, src 107-121        8: pc 72-85, src 136-156
+      9: pc 86-144, src 163-235       10: pc 109-140, src 193-228
+     11: pc 145-165, src 242-265       12: pc 171-212, src 285-332
+     13: pc 191-210, src 311-330       14: pc 213-260, src 339-515
+     15: pc 222-228, src 356-371       16: pc 234-242, src 378-499
+     17: pc 243-254, src 503-508       18: pc 261-271, src 522-534
+  Command 1: "if {[llength $matrix] != [llength [lindex $matrix 0]]} ..."
+  Command 2: "llength $matrix..."
+    (0) loadScalar1 %v0 	# var "matrix"
+    (2) listLength 
+  Command 3: "llength [lindex $matrix 0]..."
+    (3) startCommand +17 2 	# next cmd at pc 20, 2 cmds start here
+  Command 4: "lindex $matrix 0..."
+    (12) loadScalar1 %v0 	# var "matrix"
+    (14) listIndexImm 0 
+    (19) listLength 
+    (20) neq 
+    (21) jumpFalse1 +26 	# pc 47
+  Command 5: "error \"non-square matrix..."
+    (23) startCommand +22 1 	# next cmd at pc 45, 1 cmds start here
+    (32) push1 0 	# "non-square matrix"
+    (34) push1 1 	# ""
+    (36) returnImm +1 0 
+    (45) jump1 +4 	# pc 49
+    (47) push1 1 	# ""
+    (49) pop 
+  Command 6: "switch [llength $matrix] {\n\t2 {\n\t    set Map {{a b}..."
+    (50) startCommand +222 2 	# next cmd at pc 272, 2 cmds start here
+  Command 7: "llength $matrix..."
+    (59) loadScalar1 %v0 	# var "matrix"
+    (61) listLength 
+    (62) jumpTable 0 
+		["2"->pc 72]
+    (67) jump4 +104 	# pc 171
+  Command 8: "set Map {{a b} {c d}}..."
+    (72) startCommand +13 1 	# next cmd at pc 85, 1 cmds start here
+    (81) push1 2 	# "{a b} {c d}"
+    (83) storeScalar1 %v1 	# var "Map"
+    (85) pop 
+  Command 9: "lmap map $Map row $matrix {\n\t\tlmap var $map val $row..."
+    (86) startCommand +58 1 	# next cmd at pc 144, 1 cmds start here
+    (95) list 0 
+    (100) loadScalar1 %v1 	# var "Map"
+    (102) loadScalar1 %v0 	# var "matrix"
+    (104) foreach_start 1 
+		[jumpOffset=-33, vars=[%v2],[%v3]]
+  Command 10: "lmap var $map val $row {($var=$val)}..."
+    (109) startCommand +32 1 	# next cmd at pc 141, 1 cmds start here
+    (118) list 0 
+    (123) loadScalar1 %v2 	# var "map"
+    (125) loadScalar1 %v3 	# var "row"
+    (127) foreach_start 2 
+		[jumpOffset=-7, vars=[%v4],[%v5]]
+    (132) loadScalar1 %v4 	# var "var"
+    (134) loadScalar1 %v5 	# var "val"
+    (136) storeStk 
+    (137) tryCvtToNumeric 
+    (138) lmap_collect 
+    (139) foreach_step 
+    (140) foreach_end 
+    (141) lmap_collect 
+    (142) foreach_step 
+    (143) foreach_end 
+    (144) pop 
+  Command 11: "return [($a*$d - $b*$c)]..."
+    (145) startCommand +21 1 	# next cmd at pc 166, 1 cmds start here
+    (154) loadScalar1 %v6 	# var "a"
+    (156) loadScalar1 %v7 	# var "d"
+    (158) mult 
+    (159) loadScalar1 %v8 	# var "b"
+    (161) loadScalar1 %v9 	# var "c"
+    (163) mult 
+    (164) sub 
+    (165) done 
+    (166) jump4 +106 	# pc 272
+  Command 12: "expr { i = res = 0; mat2=[lrange $matrix 1 end]}..."
+    (171) startCommand +41 1 	# next cmd at pc 212, 1 cmds start here
+    (180) push1 3 	# "i"
+    (182) push1 4 	# "res"
+    (184) push1 5 	# "0"
+    (186) storeStk 
+    (187) storeStk 
+    (188) pop 
+    (189) push1 6 	# "mat2"
+  Command 13: "lrange $matrix 1 end..."
+    (191) startCommand +20 1 	# next cmd at pc 211, 1 cmds start here
+    (200) loadScalar1 %v0 	# var "matrix"
+    (202) listRangeImm 1 end 
+    (211) storeStk 
+    (212) pop 
+  Command 14: "foreach element [lindex $matrix 0] {\n\t\tif $element {..."
+    (213) startCommand +47 2 	# next cmd at pc 260, 2 cmds start here
+  Command 15: "lindex $matrix 0..."
+    (222) loadScalar1 %v0 	# var "matrix"
+    (224) listIndexImm 0 
+    (229) foreach_start 3 
+		[jumpOffset=-22, vars=[%v10]]
+  Command 16: "if $element {(\n\t\t    sign = $i%2? -1: 1;\n\t\t    re..."
+    (234) push1 7 	# "if"
+    (236) loadScalar1 %v10 	# var "element"
+    (238) push1 8 	# "(\n\t\t    sign = $i%2? -1: 1;\n\t\t    ..."
+    (240) invokeStk1 3 
+    (242) pop 
+  Command 17: "incr i..."
+    (243) startCommand +12 1 	# next cmd at pc 255, 1 cmds start here
+    (252) incrScalar1Imm %v11 +1 	# var "i"
+    (255) pop 
+    (256) foreach_step 
+    (257) foreach_end 
+    (258) push1 1 	# ""
+    (260) pop 
+  Command 18: "set res \t   ..."
+    (261) startCommand +11 1 	# next cmd at pc 272, 1 cmds start here
+    (270) loadScalar1 %v12 	# var "res"
+    (272) done 
+
