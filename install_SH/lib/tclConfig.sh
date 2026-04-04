@@ -21,7 +21,7 @@ TCL_PATCH_LEVEL='.4'
 TCL_CC='gcc'
 
 # -D flags for use with the C compiler.
-TCL_DEFS='-DPACKAGE_NAME=\"tcl\" -DPACKAGE_TARNAME=\"tcl\" -DPACKAGE_VERSION=\"9.0\" -DPACKAGE_STRING=\"tcl\ 9.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DTCL_CFGVAL_ENCODING=\"utf-8\" -DMODULE_SCOPE=extern -DTCL_CFG_DO64BIT=1 -DHAVE_NO_SEH=1 -DHAVE_CAST_TO_UNION=1 -DTCL_WITH_EXTERNAL_TOMMATH=1 -DMP_64BIT=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DZIPFS_BUILD=1 -DHAVE_INTRIN_H=1 -DHAVE_CPUID_H=1 -DHAVE_WSPIAPI_H=1 -DNDEBUG=1 -DTCL_CFG_OPTIMIZED=1'
+TCL_DEFS='-DPACKAGE_NAME=\"tcl\" -DPACKAGE_TARNAME=\"tcl\" -DPACKAGE_VERSION=\"9.0\" -DPACKAGE_STRING=\"tcl\ 9.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DTCL_CFGVAL_ENCODING=\"utf-8\" -DSTATIC_BUILD=1 -DMODULE_SCOPE=extern -DTCL_CFG_DO64BIT=1 -DHAVE_NO_SEH=1 -DHAVE_CAST_TO_UNION=1 -DTCL_WITH_INTERNAL_ZLIB=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DHAVE_INTRIN_H=1 -DHAVE_CPUID_H=1 -DHAVE_WSPIAPI_H=1 -DTCL_MEM_DEBUG=1 -DTCL_COMPILE_DEBUG=1 -DTCL_COMPILE_STATS=1'
 
 # Default flags used in an optimized and debuggable build, respectively.
 TCL_CFLAGS_DEBUG='-g'
@@ -32,13 +32,13 @@ TCL_LDFLAGS_DEBUG=''
 TCL_LDFLAGS_OPTIMIZE=''
 
 # Flag, 1: we built a shared lib, 0 we didn't
-TCL_SHARED_BUILD=1
+TCL_SHARED_BUILD=0
 
 # The name of the Tcl library (may be either a .a file or a shared library):
-TCL_LIB_FILE='libtcl90.dll.a'
+TCL_LIB_FILE='libtcl90.a'
 
 # The name of a zip containing the /library and /encodings (may be either a .zip file or a shared library):
-TCL_ZIP_FILE='libtcl9.0.4.zip'
+TCL_ZIP_FILE=''
 
 # Flag to indicate whether shared libraries need export files.
 TCL_NEEDS_EXP_FILE=''
@@ -48,11 +48,11 @@ TCL_LIBS='-lnetapi32 -lkernel32 -luser32 -ladvapi32 -luserenv -lws2_32'
 
 # Top-level directory in which Tcl's platform-independent files are
 # installed.
-TCL_PREFIX='c:/Tcl/src/install_SH'
+TCL_PREFIX='c:/Tcl/src/Install_SH'
 
 # Top-level directory in which Tcl's platform-specific files (e.g.
 # executables) are installed.
-TCL_EXEC_PREFIX='c:/Tcl/src/install_SH'
+TCL_EXEC_PREFIX='c:/Tcl/src/Install_SH'
 
 # Flags to pass to cc when compiling the components of a shared library:
 TCL_SHLIB_CFLAGS=''
@@ -100,19 +100,19 @@ TCL_COMPAT_OBJS=''
 TCL_RANLIB='ranlib'
 
 # -l flag to pass to the linker to pick up the Tcl library
-TCL_LIB_FLAG='-ltcl90'
+TCL_LIB_FLAG='libtcl90.a'
 
 # String to pass to linker to pick up the Tcl library from its
 # build directory.
-TCL_BUILD_LIB_SPEC='-LC:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win -ltcl90'
+TCL_BUILD_LIB_SPEC='-LC:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win libtcl90.a'
 
 # String to pass to linker to pick up the Tcl library from its
 # installed directory.
-TCL_LIB_SPEC='-Lc:/Tcl/src/install_SH/lib -ltcl90'
+TCL_LIB_SPEC='-Lc:/Tcl/src/Install_SH/lib libtcl90.a'
 
 # String to pass to the compiler so that an extension can
 # find installed Tcl headers.
-TCL_INCLUDE_SPEC='-Ic:/Tcl/src/install_SH/include'
+TCL_INCLUDE_SPEC='-Ic:/Tcl/src/Install_SH/include'
 
 # Indicates whether a version numbers should be used in -l switches
 # ("ok" means it's safe to use switches like -ltcl7.5;  "nodots" means
@@ -139,12 +139,12 @@ TCL_UNSHARED_LIB_SUFFIX='${NODOT_VERSION}.a'
 # different place than the directory containing the source files, this
 # points to the location of the sources, not the location where Tcl was
 # compiled.
-TCL_SRC_DIR='C:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW'
+TCL_SRC_DIR='C:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW'
 
 # List of standard directories in which to look for packages during
 # "package require" commands.  Contains the "prefix" directory plus also
 # the "exec_prefix" directory, if it is different.
-TCL_PACKAGE_PATH='c:/Tcl/src/install_SH\lib'
+TCL_PACKAGE_PATH='c:/Tcl/src/Install_SH\lib'
 
 # Tcl supports stub.
 TCL_SUPPORTS_STUBS=1
@@ -157,20 +157,20 @@ TCL_STUB_LIB_FLAG='-ltclstub'
 
 # String to pass to linker to pick up the Tcl stub library from its
 # build directory.
-TCL_BUILD_STUB_LIB_SPEC='-LC:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win -ltclstub'
+TCL_BUILD_STUB_LIB_SPEC='-LC:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win -ltclstub'
 
 # String to pass to linker to pick up the Tcl stub library from its
 # installed directory.
-TCL_STUB_LIB_SPEC='-Lc:/Tcl/src/install_SH/lib -ltclstub'
+TCL_STUB_LIB_SPEC='-Lc:/Tcl/src/Install_SH/lib -ltclstub'
 
 # Path to the Tcl stub library in the build directory.
-TCL_BUILD_STUB_LIB_PATH='C:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win/libtclstub.a'
+TCL_BUILD_STUB_LIB_PATH='C:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win/libtclstub.a'
 
 # Path to the Tcl stub library in the install directory.
-TCL_STUB_LIB_PATH='c:/Tcl/src/install_SH/lib/libtclstub.a'
+TCL_STUB_LIB_PATH='c:/Tcl/src/Install_SH/lib/libtclstub.a'
 
 # Name of the zlib library that extensions should use
-TCL_ZLIB_LIB_NAME='libz.dll.a'
+TCL_ZLIB_LIB_NAME='zdll.lib'
 
 # Name of the tommath library that extensions should use
-TCL_TOMMATH_LIB_NAME='libtommath.dll.a'
+TCL_TOMMATH_LIB_NAME='tommath.lib'
