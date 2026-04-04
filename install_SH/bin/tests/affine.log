@@ -1,0 +1,638 @@
+Translation
+1 0 0 1 40 20
+Rotation
+0.8660254037844387 0.49999999999999994 -0.49999999999999994 0.8660254037844387 0 0
+Combine SH 289
+54.8827 µs/# 18220 # 18220.7 #/sec 999.962 net-ms
+
+    lassign $transform a b c d e f
+    foreach xform $args {
+        lassign $xform i j k l m n
+        lassign [(
+	      $a*$i+$c*$j,         $b*$i+$d*$j,
+	      $a*$k+$c*$l,        $b*$k+$d*$l,
+	      $e*$i+$f*$j+$m,  $e*$k+$f*$l+$n
+	    )] a b c d e f
+    }
+    list $a $b $c $d $e $f
+
+ByteCode 0x6e83418, refCt 1, epoch 21, interp 0x33d20c8 (epoch 21)
+  Source "\n    lassign $transform a b c d e f\n    foreach xform..."
+  File "C:/Tcl/src/install_SH/bin/tests/affine.tcl" Line 27
+  Cmds 5, src 289, inst 338, litObjs 2, aux 1, stkDepth 12, code/src 2.37
+  Code 684 = header 208+inst 338+litObj 16+exc 56+aux 16+cmdMap 44
+  Proc 0x73b6308, refCt 1, args 2, compiled locals 15
+      slot 0, scalar, arg, "transform"
+      slot 1, scalar, arg, "args"
+      slot 2, scalar, "a"
+      slot 3, scalar, "b"
+      slot 4, scalar, "c"
+      slot 5, scalar, "d"
+      slot 6, scalar, "e"
+      slot 7, scalar, "f"
+      slot 8, scalar, "xform"
+      slot 9, scalar, "i"
+      slot 10, scalar, "j"
+      slot 11, scalar, "k"
+      slot 12, scalar, "l"
+      slot 13, scalar, "m"
+      slot 14, scalar, "n"
+  Exception ranges 1, depth 1:
+      0: level 0, loop, pc 82-304, continue 306, break 307
+  Commands 5:
+      1: pc 0-65, src 5-34        2: pc 66-310, src 40-260
+      3: pc 82-156, src 70-95        4: pc 157-304, src 105-254
+      5: pc 311-336, src 266-287
+  Command 1: "lassign $transform a b c d e f..."
+    (0) loadScalar1 %v0 	# var "transform"
+    (2) dup 
+    (3) listIndexImm 0 
+    (8) storeScalar1 %v2 	# var "a"
+    (10) pop 
+    (11) dup 
+    (12) listIndexImm 1 
+    (17) storeScalar1 %v3 	# var "b"
+    (19) pop 
+    (20) dup 
+    (21) listIndexImm 2 
+    (26) storeScalar1 %v4 	# var "c"
+    (28) pop 
+    (29) dup 
+    (30) listIndexImm 3 
+    (35) storeScalar1 %v5 	# var "d"
+    (37) pop 
+    (38) dup 
+    (39) listIndexImm 4 
+    (44) storeScalar1 %v6 	# var "e"
+    (46) pop 
+    (47) dup 
+    (48) listIndexImm 5 
+    (53) storeScalar1 %v7 	# var "f"
+    (55) pop 
+    (56) listRangeImm 6 end 
+    (65) pop 
+  Command 2: "foreach xform $args {\n        lassign $xform i j k l m..."
+    (66) startCommand +244 1 	# next cmd at pc 310, 1 cmds start here
+    (75) loadScalar1 %v1 	# var "args"
+    (77) foreach_start 0 
+		[jumpOffset=-224, vars=[%v8]]
+  Command 3: "lassign $xform i j k l m n..."
+    (82) startCommand +74 1 	# next cmd at pc 156, 1 cmds start here
+    (91) loadScalar1 %v8 	# var "xform"
+    (93) dup 
+    (94) listIndexImm 0 
+    (99) storeScalar1 %v9 	# var "i"
+    (101) pop 
+    (102) dup 
+    (103) listIndexImm 1 
+    (108) storeScalar1 %v10 	# var "j"
+    (110) pop 
+    (111) dup 
+    (112) listIndexImm 2 
+    (117) storeScalar1 %v11 	# var "k"
+    (119) pop 
+    (120) dup 
+    (121) listIndexImm 3 
+    (126) storeScalar1 %v12 	# var "l"
+    (128) pop 
+    (129) dup 
+    (130) listIndexImm 4 
+    (135) storeScalar1 %v13 	# var "m"
+    (137) pop 
+    (138) dup 
+    (139) listIndexImm 5 
+    (144) storeScalar1 %v14 	# var "n"
+    (146) pop 
+    (147) listRangeImm 6 end 
+    (156) pop 
+  Command 4: "lassign [(\n\t      $a*$i+$c*$j,         $b*$i+$d*$j,\n..."
+    (157) startCommand +148 1 	# next cmd at pc 305, 1 cmds start here
+    (166) push1 0 	# "tcl::mathfunc::list"
+    (168) loadScalar1 %v2 	# var "a"
+    (170) loadScalar1 %v9 	# var "i"
+    (172) mult 
+    (173) loadScalar1 %v4 	# var "c"
+    (175) loadScalar1 %v10 	# var "j"
+    (177) mult 
+    (178) add 
+    (179) loadScalar1 %v3 	# var "b"
+    (181) loadScalar1 %v9 	# var "i"
+    (183) mult 
+    (184) loadScalar1 %v5 	# var "d"
+    (186) loadScalar1 %v10 	# var "j"
+    (188) mult 
+    (189) add 
+    (190) loadScalar1 %v2 	# var "a"
+    (192) loadScalar1 %v11 	# var "k"
+    (194) mult 
+    (195) loadScalar1 %v4 	# var "c"
+    (197) loadScalar1 %v12 	# var "l"
+    (199) mult 
+    (200) add 
+    (201) loadScalar1 %v3 	# var "b"
+    (203) loadScalar1 %v11 	# var "k"
+    (205) mult 
+    (206) loadScalar1 %v5 	# var "d"
+    (208) loadScalar1 %v12 	# var "l"
+    (210) mult 
+    (211) add 
+    (212) loadScalar1 %v6 	# var "e"
+    (214) loadScalar1 %v9 	# var "i"
+    (216) mult 
+    (217) loadScalar1 %v7 	# var "f"
+    (219) loadScalar1 %v10 	# var "j"
+    (221) mult 
+    (222) add 
+    (223) loadScalar1 %v13 	# var "m"
+    (225) add 
+    (226) loadScalar1 %v6 	# var "e"
+    (228) loadScalar1 %v11 	# var "k"
+    (230) mult 
+    (231) loadScalar1 %v7 	# var "f"
+    (233) loadScalar1 %v12 	# var "l"
+    (235) mult 
+    (236) add 
+    (237) loadScalar1 %v14 	# var "n"
+    (239) add 
+    (240) invokeStk1 7 
+    (242) dup 
+    (243) listIndexImm 0 
+    (248) storeScalar1 %v2 	# var "a"
+    (250) pop 
+    (251) dup 
+    (252) listIndexImm 1 
+    (257) storeScalar1 %v3 	# var "b"
+    (259) pop 
+    (260) dup 
+    (261) listIndexImm 2 
+    (266) storeScalar1 %v4 	# var "c"
+    (268) pop 
+    (269) dup 
+    (270) listIndexImm 3 
+    (275) storeScalar1 %v5 	# var "d"
+    (277) pop 
+    (278) dup 
+    (279) listIndexImm 4 
+    (284) storeScalar1 %v6 	# var "e"
+    (286) pop 
+    (287) dup 
+    (288) listIndexImm 5 
+    (293) storeScalar1 %v7 	# var "f"
+    (295) pop 
+    (296) listRangeImm 6 end 
+    (305) pop 
+    (306) foreach_step 
+    (307) foreach_end 
+    (308) push1 1 	# ""
+    (310) pop 
+  Command 5: "list $a $b $c $d $e $f..."
+    (311) startCommand +26 1 	# next cmd at pc 337, 1 cmds start here
+    (320) loadScalar1 %v2 	# var "a"
+    (322) loadScalar1 %v3 	# var "b"
+    (324) loadScalar1 %v4 	# var "c"
+    (326) loadScalar1 %v5 	# var "d"
+    (328) loadScalar1 %v6 	# var "e"
+    (330) loadScalar1 %v7 	# var "f"
+    (332) list 6 
+    (337) done 
+
+Combine Orig 359
+49.4874 µs/# 20207 # 20207.2 #/sec 999.992 net-ms
+
+    lassign $transform a b c d e f
+    foreach xform $args {
+        lassign $xform i j k l m n
+        # Next line does simultaneous assignment...
+        lassign [list  [expr {$a*$i+$c*$j}]    [expr {$b*$i+$d*$j}]  [expr {$a*$k+$c*$l}]    [expr {$b*$k+$d*$l}]  [expr {$e*$i+$f*$j+$m}] [expr {$e*$k+$f*$l+$n}]]  a b c d e f
+    }
+    list $a $b $c $d $e $f
+
+ByteCode 0x72f1038, refCt 1, epoch 21, interp 0x33d20c8 (epoch 21)
+  Source "\n    lassign $transform a b c d e f\n    foreach xform..."
+  File "C:/Tcl/src/install_SH/bin/tests/affine.tcl" Line 40
+  Cmds 12, src 359, inst 303, litObjs 1, aux 1, stkDepth 11, code/src 1.84
+  Code 660 = header 208+inst 303+litObj 8+exc 56+aux 16+cmdMap 68
+  Proc 0x73b76b8, refCt 1, args 2, compiled locals 15
+      slot 0, scalar, arg, "transform"
+      slot 1, scalar, arg, "args"
+      slot 2, scalar, "a"
+      slot 3, scalar, "b"
+      slot 4, scalar, "c"
+      slot 5, scalar, "d"
+      slot 6, scalar, "e"
+      slot 7, scalar, "f"
+      slot 8, scalar, "xform"
+      slot 9, scalar, "i"
+      slot 10, scalar, "j"
+      slot 11, scalar, "k"
+      slot 12, scalar, "l"
+      slot 13, scalar, "m"
+      slot 14, scalar, "n"
+  Exception ranges 1, depth 1:
+      0: level 0, loop, pc 73-278, continue 280, break 281
+  Commands 12:
+      1: pc 0-65, src 5-34        2: pc 66-284, src 40-330
+      3: pc 73-138, src 70-95        4: pc 139-278, src 157-324
+      5: pc 139-215, src 166-310        6: pc 139-149, src 173-190
+      7: pc 150-160, src 197-214        8: pc 161-171, src 219-236
+      9: pc 172-182, src 243-260       10: pc 183-196, src 265-285
+     11: pc 197-210, src 289-309       12: pc 285-301, src 336-357
+  Command 1: "lassign $transform a b c d e f..."
+    (0) loadScalar1 %v0 	# var "transform"
+    (2) dup 
+    (3) listIndexImm 0 
+    (8) storeScalar1 %v2 	# var "a"
+    (10) pop 
+    (11) dup 
+    (12) listIndexImm 1 
+    (17) storeScalar1 %v3 	# var "b"
+    (19) pop 
+    (20) dup 
+    (21) listIndexImm 2 
+    (26) storeScalar1 %v4 	# var "c"
+    (28) pop 
+    (29) dup 
+    (30) listIndexImm 3 
+    (35) storeScalar1 %v5 	# var "d"
+    (37) pop 
+    (38) dup 
+    (39) listIndexImm 4 
+    (44) storeScalar1 %v6 	# var "e"
+    (46) pop 
+    (47) dup 
+    (48) listIndexImm 5 
+    (53) storeScalar1 %v7 	# var "f"
+    (55) pop 
+    (56) listRangeImm 6 end 
+    (65) pop 
+  Command 2: "foreach xform $args {\n        lassign $xform i j k l m..."
+    (66) loadScalar1 %v1 	# var "args"
+    (68) foreach_start 0 
+		[jumpOffset=-207, vars=[%v8]]
+  Command 3: "lassign $xform i j k l m n..."
+    (73) loadScalar1 %v8 	# var "xform"
+    (75) dup 
+    (76) listIndexImm 0 
+    (81) storeScalar1 %v9 	# var "i"
+    (83) pop 
+    (84) dup 
+    (85) listIndexImm 1 
+    (90) storeScalar1 %v10 	# var "j"
+    (92) pop 
+    (93) dup 
+    (94) listIndexImm 2 
+    (99) storeScalar1 %v11 	# var "k"
+    (101) pop 
+    (102) dup 
+    (103) listIndexImm 3 
+    (108) storeScalar1 %v12 	# var "l"
+    (110) pop 
+    (111) dup 
+    (112) listIndexImm 4 
+    (117) storeScalar1 %v13 	# var "m"
+    (119) pop 
+    (120) dup 
+    (121) listIndexImm 5 
+    (126) storeScalar1 %v14 	# var "n"
+    (128) pop 
+    (129) listRangeImm 6 end 
+    (138) pop 
+  Command 4: "lassign [list  [expr {$a*$i+$c*$j}]    [expr {$b*$i+$d*..."
+  Command 5: "list  [expr {$a*$i+$c*$j}]    [expr {$b*$i+$d*$j}]  [ex..."
+  Command 6: "expr {$a*$i+$c*$j}..."
+    (139) loadScalar1 %v2 	# var "a"
+    (141) loadScalar1 %v9 	# var "i"
+    (143) mult 
+    (144) loadScalar1 %v4 	# var "c"
+    (146) loadScalar1 %v10 	# var "j"
+    (148) mult 
+    (149) add 
+  Command 7: "expr {$b*$i+$d*$j}..."
+    (150) loadScalar1 %v3 	# var "b"
+    (152) loadScalar1 %v9 	# var "i"
+    (154) mult 
+    (155) loadScalar1 %v5 	# var "d"
+    (157) loadScalar1 %v10 	# var "j"
+    (159) mult 
+    (160) add 
+  Command 8: "expr {$a*$k+$c*$l}..."
+    (161) loadScalar1 %v2 	# var "a"
+    (163) loadScalar1 %v11 	# var "k"
+    (165) mult 
+    (166) loadScalar1 %v4 	# var "c"
+    (168) loadScalar1 %v12 	# var "l"
+    (170) mult 
+    (171) add 
+  Command 9: "expr {$b*$k+$d*$l}..."
+    (172) loadScalar1 %v3 	# var "b"
+    (174) loadScalar1 %v11 	# var "k"
+    (176) mult 
+    (177) loadScalar1 %v5 	# var "d"
+    (179) loadScalar1 %v12 	# var "l"
+    (181) mult 
+    (182) add 
+  Command 10: "expr {$e*$i+$f*$j+$m}..."
+    (183) loadScalar1 %v6 	# var "e"
+    (185) loadScalar1 %v9 	# var "i"
+    (187) mult 
+    (188) loadScalar1 %v7 	# var "f"
+    (190) loadScalar1 %v10 	# var "j"
+    (192) mult 
+    (193) add 
+    (194) loadScalar1 %v13 	# var "m"
+    (196) add 
+  Command 11: "expr {$e*$k+$f*$l+$n}..."
+    (197) loadScalar1 %v6 	# var "e"
+    (199) loadScalar1 %v11 	# var "k"
+    (201) mult 
+    (202) loadScalar1 %v7 	# var "f"
+    (204) loadScalar1 %v12 	# var "l"
+    (206) mult 
+    (207) add 
+    (208) loadScalar1 %v14 	# var "n"
+    (210) add 
+    (211) list 6 
+    (216) dup 
+    (217) listIndexImm 0 
+    (222) storeScalar1 %v2 	# var "a"
+    (224) pop 
+    (225) dup 
+    (226) listIndexImm 1 
+    (231) storeScalar1 %v3 	# var "b"
+    (233) pop 
+    (234) dup 
+    (235) listIndexImm 2 
+    (240) storeScalar1 %v4 	# var "c"
+    (242) pop 
+    (243) dup 
+    (244) listIndexImm 3 
+    (249) storeScalar1 %v5 	# var "d"
+    (251) pop 
+    (252) dup 
+    (253) listIndexImm 4 
+    (258) storeScalar1 %v6 	# var "e"
+    (260) pop 
+    (261) dup 
+    (262) listIndexImm 5 
+    (267) storeScalar1 %v7 	# var "f"
+    (269) pop 
+    (270) listRangeImm 6 end 
+    (279) pop 
+    (280) foreach_step 
+    (281) foreach_end 
+    (282) nop 
+    (283) nop 
+    (284) nop 
+  Command 12: "list $a $b $c $d $e $f..."
+    (285) loadScalar1 %v2 	# var "a"
+    (287) loadScalar1 %v3 	# var "b"
+    (289) loadScalar1 %v4 	# var "c"
+    (291) loadScalar1 %v5 	# var "d"
+    (293) loadScalar1 %v6 	# var "e"
+    (295) loadScalar1 %v7 	# var "f"
+    (297) list 6 
+    (302) done 
+
+Apply SH, length 217
+29.4608 µs/# 33944 # 33943.4 #/sec 1000.017 net-ms
+ByteCode 0x7235bb8, refCt 1, epoch 21, interp 0x33d20c8 (epoch 21)
+  Source "\n    if {[llength $args]==1} {(args=[lindex $args 0])}..."
+  File "C:/Tcl/src/install_SH/bin/tests/affine.tcl" Line 17
+  Cmds 9, src 217, inst 149, litObjs 3, aux 1, stkDepth 7, code/src 2.27
+  Code 492 = header 208+inst 149+litObj 24+exc 56+aux 16+cmdMap 36
+  Proc 0x73b80d8, refCt 1, args 2, compiled locals 11
+      slot 0, scalar, arg, "transform"
+      slot 1, scalar, arg, "args"
+      slot 2, scalar, "result"
+      slot 3, scalar, "a"
+      slot 4, scalar, "b"
+      slot 5, scalar, "c"
+      slot 6, scalar, "d"
+      slot 7, scalar, "e"
+      slot 8, scalar, "f"
+      slot 9, scalar, "x"
+      slot 10, scalar, "y"
+  Exception ranges 1, depth 1:
+      0: level 0, loop, pc 102-139, continue 141, break 142
+  Commands 9:
+      1: pc 0-23, src 5-53        2: pc 0-2, src 10-22
+      3: pc 10-16, src 37-50        4: pc 24-28, src 59-75
+      5: pc 24-25, src 71-74        6: pc 29-94, src 81-110
+      7: pc 95-145, src 116-196        8: pc 102-139, src 139-190
+      9: pc 146-148, src 202-215
+  Command 1: "if {[llength $args]==1} {(args=[lindex $args 0])}..."
+  Command 2: "llength $args..."
+    (0) loadScalar1 %v1 	# var "args"
+    (2) listLength 
+    (3) push1 0 	# "1"
+    (5) eq 
+    (6) jumpFalse1 +15 	# pc 21
+    (8) push1 1 	# "args"
+  Command 3: "lindex $args 0..."
+    (10) loadScalar1 %v1 	# var "args"
+    (12) listIndexImm 0 
+    (17) storeStk 
+    (18) tryCvtToNumeric 
+    (19) jump1 +4 	# pc 23
+    (21) push1 2 	# ""
+    (23) pop 
+  Command 4: "set result [list]..."
+  Command 5: "list..."
+    (24) push1 2 	# ""
+    (26) storeScalar1 %v2 	# var "result"
+    (28) pop 
+  Command 6: "lassign $transform a b c d e f..."
+    (29) loadScalar1 %v0 	# var "transform"
+    (31) dup 
+    (32) listIndexImm 0 
+    (37) storeScalar1 %v3 	# var "a"
+    (39) pop 
+    (40) dup 
+    (41) listIndexImm 1 
+    (46) storeScalar1 %v4 	# var "b"
+    (48) pop 
+    (49) dup 
+    (50) listIndexImm 2 
+    (55) storeScalar1 %v5 	# var "c"
+    (57) pop 
+    (58) dup 
+    (59) listIndexImm 3 
+    (64) storeScalar1 %v6 	# var "d"
+    (66) pop 
+    (67) dup 
+    (68) listIndexImm 4 
+    (73) storeScalar1 %v7 	# var "e"
+    (75) pop 
+    (76) dup 
+    (77) listIndexImm 5 
+    (82) storeScalar1 %v8 	# var "f"
+    (84) pop 
+    (85) listRangeImm 6 end 
+    (94) pop 
+  Command 7: "foreach {x y} $args {\n\tlappend result [($a*$x+$b*$y+$..."
+    (95) loadScalar1 %v1 	# var "args"
+    (97) foreach_start 0 
+		[jumpOffset=-39, vars=[%v9,%v10]]
+  Command 8: "lappend result [($a*$x+$b*$y+$e)] [($c*$x+$d*$y+$f)]..."
+    (102) loadScalar1 %v3 	# var "a"
+    (104) loadScalar1 %v9 	# var "x"
+    (106) mult 
+    (107) loadScalar1 %v4 	# var "b"
+    (109) loadScalar1 %v10 	# var "y"
+    (111) mult 
+    (112) add 
+    (113) loadScalar1 %v7 	# var "e"
+    (115) add 
+    (116) loadScalar1 %v5 	# var "c"
+    (118) loadScalar1 %v9 	# var "x"
+    (120) mult 
+    (121) loadScalar1 %v6 	# var "d"
+    (123) loadScalar1 %v10 	# var "y"
+    (125) mult 
+    (126) add 
+    (127) loadScalar1 %v8 	# var "f"
+    (129) add 
+    (130) list 2 
+    (135) lappendList %v2 	# var "result"
+    (140) pop 
+    (141) foreach_step 
+    (142) foreach_end 
+    (143) nop 
+    (144) nop 
+    (145) nop 
+  Command 9: "return $result..."
+    (146) loadScalar1 %v2 	# var "result"
+    (148) done 
+
+
+    if {[llength $args]==1} {(args=[lindex $args 0])}
+    set result [list]
+    lassign $transform a b c d e f
+    foreach {x y} $args {
+	lappend result [($a*$x+$b*$y+$e)] [($c*$x+$d*$y+$f)]
+    }
+    return $result
+
+Apply Orig, length 236
+29.4369 µs/# 33970 # 33970.9 #/sec 999.973 net-ms
+
+    if {[llength $args]==1} {set args [lindex $args 0]}
+    set result [list]
+    lassign $transform a b c d e f
+    foreach {x y} $args {
+        lappend result [expr {$a*$x+$b*$y+$e}] [expr {$c*$x+$d*$y+$f}]
+    }
+    return $result
+
+ByteCode 0x754acf8, refCt 1, epoch 21, interp 0x33d20c8 (epoch 21)
+  Source "\n    if {[llength $args]==1} {set args [lindex $args 0..."
+  File "C:/Tcl/src/install_SH/bn/tests/affine.tcl" Line 7
+  Cmds 12, src 236, inst 147, litObjs 2, aux 1, stkDepth 7, code/src 2.10
+  Code 496 = header 208+inst 147+litObj 16+exc 56+aux 16+cmdMap 48
+  Proc 0x73b6f68, refCt 1, args 2, compiled locals 11
+      slot 0, scalar, arg, "transform"
+      slot 1, scalar, arg, "args"
+      slot 2, scalar, "result"
+      slot 3, scalar, "a"
+      slot 4, scalar, "b"
+      slot 5, scalar, "c"
+      slot 6, scalar, "d"
+      slot 7, scalar, "e"
+      slot 8, scalar, "f"
+      slot 9, scalar, "x"
+      slot 10, scalar, "y"
+  Exception ranges 1, depth 1:
+      0: level 0, loop, pc 100-137, continue 139, break 140
+  Commands 12:
+      1: pc 0-21, src 5-55        2: pc 0-2, src 10-22
+      3: pc 8-16, src 30-54        4: pc 8-14, src 40-53
+      5: pc 22-26, src 61-77        6: pc 22-23, src 73-76
+      7: pc 27-92, src 83-112        8: pc 93-143, src 118-215
+      9: pc 100-137, src 148-209       10: pc 100-113, src 164-184
+     11: pc 114-127, src 188-208       12: pc 144-146, src 221-234
+  Command 1: "if {[llength $args]==1} {set args [lindex $args 0]}..."
+  Command 2: "llength $args..."
+    (0) loadScalar1 %v1 	# var "args"
+    (2) listLength 
+    (3) push1 0 	# "1"
+    (5) eq 
+    (6) jumpFalse1 +13 	# pc 19
+  Command 3: "set args [lindex $args 0]..."
+  Command 4: "lindex $args 0..."
+    (8) loadScalar1 %v1 	# var "args"
+    (10) listIndexImm 0 
+    (15) storeScalar1 %v1 	# var "args"
+    (17) jump1 +4 	# pc 21
+    (19) push1 1 	# ""
+    (21) pop 
+  Command 5: "set result [list]..."
+  Command 6: "list..."
+    (22) push1 1 	# ""
+    (24) storeScalar1 %v2 	# var "result"
+    (26) pop 
+  Command 7: "lassign $transform a b c d e f..."
+    (27) loadScalar1 %v0 	# var "transform"
+    (29) dup 
+    (30) listIndexImm 0 
+    (35) storeScalar1 %v3 	# var "a"
+    (37) pop 
+    (38) dup 
+    (39) listIndexImm 1 
+    (44) storeScalar1 %v4 	# var "b"
+    (46) pop 
+    (47) dup 
+    (48) listIndexImm 2 
+    (53) storeScalar1 %v5 	# var "c"
+    (55) pop 
+    (56) dup 
+    (57) listIndexImm 3 
+    (62) storeScalar1 %v6 	# var "d"
+    (64) pop 
+    (65) dup 
+    (66) listIndexImm 4 
+    (71) storeScalar1 %v7 	# var "e"
+    (73) pop 
+    (74) dup 
+    (75) listIndexImm 5 
+    (80) storeScalar1 %v8 	# var "f"
+    (82) pop 
+    (83) listRangeImm 6 end 
+    (92) pop 
+  Command 8: "foreach {x y} $args {\n        lappend result [expr {$a..."
+    (93) loadScalar1 %v1 	# var "args"
+    (95) foreach_start 0 
+		[jumpOffset=-39, vars=[%v9,%v10]]
+  Command 9: "lappend result [expr {$a*$x+$b*$y+$e}] [expr {$c*$x+$d*..."
+  Command 10: "expr {$a*$x+$b*$y+$e}..."
+    (100) loadScalar1 %v3 	# var "a"
+    (102) loadScalar1 %v9 	# var "x"
+    (104) mult 
+    (105) loadScalar1 %v4 	# var "b"
+    (107) loadScalar1 %v10 	# var "y"
+    (109) mult 
+    (110) add 
+    (111) loadScalar1 %v7 	# var "e"
+    (113) add 
+  Command 11: "expr {$c*$x+$d*$y+$f}..."
+    (114) loadScalar1 %v5 	# var "c"
+    (116) loadScalar1 %v9 	# var "x"
+    (118) mult 
+    (119) loadScalar1 %v6 	# var "d"
+    (121) loadScalar1 %v10 	# var "y"
+    (123) mult 
+    (124) add 
+    (125) loadScalar1 %v8 	# var "f"
+    (127) add 
+    (128) list 2 
+    (133) lappendList %v2 	# var "result"
+    (138) pop 
+    (139) foreach_step 
+    (140) foreach_end 
+    (141) nop 
+    (142) nop 
+    (143) nop 
+  Command 12: "return $result..."
+    (144) loadScalar1 %v2 	# var "result"
+    (146) done 
+
+
