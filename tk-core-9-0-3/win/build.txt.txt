@@ -1,0 +1,57 @@
+build tcl
+
+#./configure --build=x86_64-w64-mingw32 --enable-zipfs=off --enable-symbols=on --prefix=c:/Tcl/src/Install_SH --exec_prefix=c:/Tcl/src/Install_SH
+./configure --build=x86_64-w64-mingw32 --enable-zipfs=off CFLAGS=-DTCL_NO_DEPRECATED=1 --enable-symbols --enable-symbols=mem --enable-symbols=all --disable-shared --prefix=c:/Tcl/src/Install_SH 
+make
+set prefix in makefile "C:/Tcl/src/install_SH"
+
+build tk
+./configure --build=x86_64-w64-mingw32 --with-tcl=../../tcl90-exprSH-core-9-0-branch-mingW/win --enable-zipfs=off --enable-symbols=mem --enable-symbols=all --disable-shared --prefix=c:/Tcl/src/Install_SH 
+
+Add in win/stubs.c 
+int
+TkpCmapStressed(Tk_Window tkwin, Colormap colormap)
+{
+    (void)tkwin;
+    (void)colormap;
+
+    /* dummy implementation, no need to do anything */
+    return 0;
+}
+void
+TkpSync(Display *display)
+{
+    (void)display;
+    /* dummy implementation, no need to do anything */
+}
+
+change in generic/tkWindow.c
+MODULE_SCOPE const TkStubs tkStubs;
+by
+const TkStubs tkStubs;
+
+make
+
+
+
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe
+: libtcl9tk90.a(tkGrab.o): in function `EatGrabEvents':
+C:/tcl/src/tk-core-9-0-3/generic/tkGrab.c:1275:(.text+0x1f81): undefined reference to `TkpSync'
+
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe
+: libtcl9tk90.a(tkWindow.o):tkWindow.c:(.rdata$.refptr.tkStubs[.refptr.tkStubs]+0x0): undefined refe
+rence to `tkStubs'
+
+C:/msys64/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe
+: libtcl9tk90.a(tkCmds.o): in function `Tk_WinfoObjCmd':
+C:/tcl/src/tk-core-9-0-3/generic/tkCmds.c:1403:(.text+0x35c9): undefined reference to `TkpCmapStress
+ed'
+
+Evolution à prévoir
+sous wish :
+% (1+1)
+inclut "\n" (contrairement à tclsh ?)
+Du coup le test préalable de tclParseCommand est en défaut => start[0]='(' && start[numBytes-1]='\n' / la commande est donc analysée par la voie standard.
+Modification basique du test de TclParseCommand (start[numBytes-1]='\n'&& start[numBytes-2]=')'
+
+
