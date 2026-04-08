@@ -123,32 +123,24 @@ proc tcl::mathfunc::roundRect {O L H rx {ry {}}} {(
     line($S7, $S8)
 )}
     
-# .c create {*}[(point("I", 500, 400))]
-# .c create {*}[(roundRect("I", 168, 100, 34))]
-
 .c create {*}[(point("A", 300, 700))]
 .c create {*}[(point("B", 800, 600))]
 .c create {*}[(point("C", 500, 100))]
 
 .c create {*}[(line("A", "B", "C", "A"))]
 
-.c create {*}[(point("Mab",
-    ([lindex [A coords] 0]+[lindex [B coords] 0])/2.0,
-    ([lindex [A coords] 1]+[lindex [B coords] 1])/2.0)
-)]
-.c create {*}[(point("Mac",
-    ([lindex [A coords] 0]+[lindex [C coords] 0])/2.0,
-    ([lindex [A coords] 1]+[lindex [C coords] 1])/2.0)
-)]
-.c create {*}[(point("Mbc",
-    ([lindex [B coords] 0]+[lindex [C coords] 0])/2.0,
-    ([lindex [B coords] 1]+[lindex [C coords] 1])/2.0)
-)]
-.c create {*}[(line("B","Mac"))]
-.c create {*}[(line("A","Mbc"))]
-.c create {*}[(line("C","Mab"))]
+.c create {*}[(point("mAB", ([A x]+[B x])/2.0,  ([A y]+[B y])/2.0)  )]
 
-.c create {*}[(point("G",
-    ([lindex [A coords] 0]+[lindex [B coords] 0]+[lindex [C coords] 0])/3.0,
-    ([lindex [A coords] 1]+[lindex [B coords] 1]+[lindex [C coords] 1])/3.0)
-)]
+.c create {*}[(point("mAC",  ([A x]+[C x])/2.0,  ([A y]+[C y])/2.0)  )]
+
+.c create {*}[(point("mBC",  ([B x]+[C x])/2.0,  ([B y]+[C y])/2.0)  )]
+
+.c create {*}[( line("A","mBC") )]
+.c create {*}[( line("B","mAC") )]
+.c create {*}[( line("C","mAB") )]
+
+.c create {*}[(point("G",  ([A x]+[B x]+[C x])/3.0, ([A y]+[B y]+[C y])/3.0)   )]
+
+Point create I 200 200
+.c create {*}[(roundRect("I", 168, 68, 20))]
+.c create {*}[(text("I","Triangle"))] -font [font create -size 30]

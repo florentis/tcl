@@ -28,6 +28,8 @@ typedef Point {x y} {
     coords {} {
 	return [list $x $y]
     }
+    x {} { return $x }
+    y {} {return $y}
     translation {dx dy} {
 	expr {("_x"=$x+$dx, "_y"=$y+$dy)}
     }
