@@ -826,16 +826,16 @@ TclSetByteCodeFromAny(
 	compEnv.clNext = &clLocPtr->loc[0];
     }
     /* Script Expression Shorthand Support :
-	* The script begin with a '(' and finish with a ')' ?
-	* compile it as expression ! */
+     * The script begin with a '(' and finish with a ')' ?
+     * compile it as expression ! */
     if (stringPtr[0] == '(' && stringPtr[length-1] == ')') {
-       	TclCompileExpr(interp, &stringPtr[1], length-2, &compEnv, 0);
-		TclEmitOpcode(INST_DONE, &compEnv);
+       	TclCompileExpr(interp, &stringPtr[0], length, &compEnv, 0);
+	TclEmitOpcode(INST_DONE, &compEnv);
      } else {
-	    TclCompileScript(interp, stringPtr, length, &compEnv);
-	     /*
-     	* Compilation succeeded. Add a "done" instruction at the end.
-     	*/
+	TclCompileScript(interp, stringPtr, length, &compEnv);
+	/*
+	 * Compilation succeeded. Add a "done" instruction at the end.
+	 */
 
     	TclEmitOpcode(INST_DONE, &compEnv);
 
@@ -863,7 +863,7 @@ TclSetByteCodeFromAny(
 		TclEmitOpcode(INST_DONE, &compEnv);
 		assert (compEnv.atCmdStart > 1);
     	}
-	}
+    }
 
     /*
      * Apply some peephole optimizations that can cross specific/generic
@@ -2281,18 +2281,21 @@ TclCompileScript(
 	     */
 	    iPtr->numLevels++;
 
-		/* Script Expression Shorthand : 
-		   if Token was of TCL_TOKEN_SUB_EXPR category.
-		   Compile it as expression.
-		*/
-        if (parsePtr->tokenPtr[0].type == TCL_TOKEN_SUB_EXPR) {
-			  TclCompileExpr(interp, &parsePtr->tokenPtr[1].start[0], parsePtr->tokenPtr[1].size, envPtr, true);
-              TclEmitOpcode(INST_POP, envPtr);
-              lastCmdIdx=envPtr->numCommands;
-              numBytes=0;
-        } else {
-            lastCmdIdx = CompileCommandTokens(interp, parsePtr, envPtr);
-        }
+	    /* Script Expression Shorthand : 
+	       if Token was of TCL_TOKEN_SUB_EXPR category.
+	       Compile it as expression.
+	    */
+	    if (parsePtr->tokenPtr[0].type == TCL_TOKEN_WORD
+		&& parsePtr->tokenPtr[0].numComponents == 1
+		&& parsePtr->tokenPtr[1].type == TCL_TOKEN_SUB_EXPR) {
+
+		TclCompileExpr(interp, parsePtr->tokenPtr[1].start,
+			       parsePtr->tokenPtr[1].size, envPtr, true);
+		TclEmitOpcode(INST_POP, envPtr);
+		lastCmdIdx=envPtr->numCommands;
+	    } else {
+		lastCmdIdx = CompileCommandTokens(interp, parsePtr, envPtr);
+	    }
 		
 	    iPtr->numLevels--;
 	    /*
@@ -2447,7 +2450,6 @@ TclCompileTokens(
     int isLiteral;
     Tcl_Size maxNumCL, numCL;
     Tcl_Size *clPosition = NULL;
-	int twoCharsSymbol = 0; //used in expr subst context
     int depth = TclGetStackDepth(envPtr);
 
     /*
@@ -2553,20 +2555,18 @@ TclCompileTokens(
 	    break;
 		
 	case TCL_TOKEN_SUB_EXPR :
-		/* EXPR Shorthand */
-		/* The traitment of accumulated char must be corrected for two symbol chars */
-        if (Tcl_DStringLength(&textBuffer) > 1) {
+	    /* EXPR Shorthand */
+	    if (Tcl_DStringLength(&textBuffer) > 0) {
         	int literal;
-            literal = TclRegisterDStringLiteral(envPtr, &textBuffer);
-            TclEmitPush(literal, envPtr);
-            numObjsToConcat++;
-            Tcl_DStringFree(&textBuffer);
-       }
-       twoCharsSymbol=1;
-       envPtr->line += adjust;
-       TclCompileExpr(interp,  tokenPtr->start+1, tokenPtr->size-2, envPtr, 0);
-       envPtr->line -= adjust;
-       numObjsToConcat++;
+		literal = TclRegisterDStringLiteral(envPtr, &textBuffer);
+		TclEmitPush(literal, envPtr);
+		numObjsToConcat++;
+		Tcl_DStringFree(&textBuffer);
+	    }
+	    envPtr->line += adjust;
+	    TclCompileExpr(interp,  tokenPtr->start, tokenPtr->size, envPtr, 0);
+	    envPtr->line -= adjust;
+	    numObjsToConcat++;
        break;
 
 	case TCL_TOKEN_VARIABLE:
@@ -2598,9 +2598,7 @@ TclCompileTokens(
     /*
      * Push any accumulated characters appearing at the end.
      */
-	/* twoCharsSymbol is a dirty hack (Expression Shorthand) */
-    if (Tcl_DStringLength(&textBuffer) > 0  
-		&&  twoCharsSymbol != 1 ) {
+    if (Tcl_DStringLength(&textBuffer) > 0 ) {
 	int literal = TclRegisterDStringLiteral(envPtr, &textBuffer);
 
 	TclEmitPush(literal, envPtr);

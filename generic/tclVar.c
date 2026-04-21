@@ -1076,14 +1076,7 @@ TclLookupArrayElement(
 {
     int isNew;
     Var *varPtr;
-	Tcl_Size len;
-	char *bytes;
-	/* Index Expression Shorthand */
-	bytes = Tcl_GetStringFromObj(elNamePtr, &len);
-    if (bytes[0] == '(' && bytes[len-1] == ')' ) {
-		Tcl_ExprObj(interp, elNamePtr, &elNamePtr);
-		bytes = Tcl_GetStringFromObj(elNamePtr, &len);
-    }
+    Tcl_Size len;
     /*
      * We're dealing with an array element. Make sure the variable is an array
      * and look up the element (create the element if desired).

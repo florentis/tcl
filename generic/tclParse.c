@@ -219,6 +219,8 @@ Tcl_ParseCommand(
     const char *termPtr;	/* Set by Tcl_ParseBraces/QuotedString to
 				 * point to char after terminating one. */
     Tcl_Size scanned;
+    bool script_expr = 0;
+    Tcl_Size expr_length = 0;
 
     if (numBytes < 0 && start) {
 	numBytes = strlen(start);
@@ -235,23 +237,33 @@ Tcl_ParseCommand(
     parsePtr->commentSize = 0;
     parsePtr->commandStart = NULL;
     parsePtr->commandSize = 0;
- 	if (start[0] == '(' && start[numBytes-1] == ')') {
-		// Script expression Shorthand : returns an Expression Token
-		parsePtr->commandStart = start;
- 		parsePtr->commandSize = numBytes;
- 		parsePtr->numWords =2;
- 		parsePtr->tokenPtr[0].type = TCL_TOKEN_SUB_EXPR;
- 		parsePtr->tokenPtr[0].numComponents=1;
-		parsePtr->tokenPtr[0].start = start;
- 		parsePtr->tokenPtr[0].size = 0;
-		TclGrowParseTokenArray(parsePtr, 1);
-	
- 		tokenPtr = &parsePtr->tokenPtr[1];
- 		tokenPtr->type = TCL_TOKEN_SIMPLE_WORD;
- 		tokenPtr->start = start;
- 		tokenPtr->size = numBytes;
- 		tokenPtr->numComponents=0;
- 		return TCL_OK;
+    if (start[0] == '(' ) {
+	if ( numBytes >= 1) {
+	    if (start[numBytes-1] == ')' ) {
+		script_expr = 1;
+		expr_length = numBytes;
+	    }
+	}
+	if (numBytes >= 2) {
+	    if (start[numBytes-2] == ')' && start[numBytes-1] == '\n' ) {
+		script_expr = 1;
+		expr_length = numBytes;
+	    }
+	}
+	if (script_expr == true) {
+	    // Script expression Shorthand : returns an Expression Token
+	    TclGrowParseTokenArray(parsePtr, 2);
+	    tokenPtr = &parsePtr->tokenPtr[1];
+	    parsePtr->tokenPtr[0].type = TCL_TOKEN_WORD;
+	    parsePtr->tokenPtr[1].type = TCL_TOKEN_SUB_EXPR;
+	    parsePtr->commandStart = parsePtr->tokenPtr[1].start = parsePtr->tokenPtr[0].start = start;
+	    parsePtr->commandSize = parsePtr->tokenPtr[1].size =parsePtr->tokenPtr[0].size = expr_length;
+	    parsePtr->tokenPtr[0].numComponents=1;
+	    parsePtr->tokenPtr[1].numComponents=0;
+	    parsePtr->numWords=1;
+	    
+	    return TCL_OK;
+	}
     }
     if (nested != 0) {
 	terminators = TYPE_COMMAND_END | TYPE_CLOSE_BRACK;
@@ -1129,7 +1141,7 @@ ParseTokens(
 	    src += parsePtr->tokenPtr[varToken].size;
 	    numBytes -= parsePtr->tokenPtr[varToken].size;
 	} else if (numBytes>=2 && src[0] == '[' && src[1] == '(') {
- 	    /* Inline Expression substitution context */
+	    /* Inline Expression substitution context */
 	    Tcl_Parse *exprParsePtr;
 	    exprParsePtr =(Tcl_Parse *)TclStackAlloc(parsePtr->interp, sizeof(Tcl_Parse));
 	    if (Tcl_ParseExpr(parsePtr->interp, src, numBytes, exprParsePtr) != TCL_OK) {
@@ -1139,6 +1151,7 @@ ParseTokens(
 	    tokenPtr->type = TCL_TOKEN_SUB_EXPR;
 	    tokenPtr->start = src;
 	    tokenPtr->size = exprParsePtr->commandSize+2;
+	    
 	    parsePtr->numTokens++;
 	    src+=exprParsePtr->commandSize+2;
 	    numBytes-=exprParsePtr->commandSize+2;
@@ -1495,9 +1508,9 @@ Tcl_ParseVarName(
 	     * recursively to parse the element name, since it could contain
 	     * any number of substitutions.
 	     */
-
+	    
 	    if (TCL_OK != ParseTokens(src+1, numBytes-1, TYPE_BAD_ARRAY_INDEX,
-		    TCL_SUBST_ALL, parsePtr)) {
+				      TCL_SUBST_ALL, parsePtr)) {
 		goto error;
 	    }
 	    if (parsePtr->term == src+numBytes){
@@ -2260,6 +2273,7 @@ TclSubstTokens(
 	case TCL_TOKEN_SUB_EXPR : {
 	    Tcl_Obj * expressionObj;
  	    expressionObj = Tcl_NewStringObj(tokenPtr->start+1, tokenPtr->size-2);
+	    Tcl_IncrRefCount(expressionObj);
  	    code = Tcl_ExprObj(interp, expressionObj, &appendObj);
  	    Tcl_DecrRefCount(expressionObj);
  	    break;

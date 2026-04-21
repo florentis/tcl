@@ -13,8 +13,8 @@ enum ParseTypeFlags {
     TYPE_CLOSE_BRACK = 0x20,
     TYPE_BRACE = 0x40,
     TYPE_OPEN_PAREN = 0x80,
-    TYPE_BAD_ARRAY_INDEX = (
-	TYPE_OPEN_PAREN | TYPE_CLOSE_PAREN | TYPE_QUOTE | TYPE_BRACE)
+    TYPE_BAD_ARRAY_INDEX = ( TYPE_OPEN_PAREN | TYPE_CLOSE_PAREN
+			    | TYPE_QUOTE | TYPE_BRACE)
 };
 
 #define CHAR_TYPE(c) tclCharTypeTable[(unsigned char)(c)]

@@ -282,9 +282,9 @@ enum LexemeCodes {
 				 * the CLOSE_PAREN lexeme and END pairs with
 				 * START, in the same way that CLOSE_PAREN
 				 * pairs with OPEN_PAREN. */
-	SEPARATOR = BINARY | 33,
+    SEPARATOR = BINARY | 33,
     ASSIGN = BINARY | 34               /* ASSIGN, like EXPON is right associative, 
-										  * and this distinction is coded directly in ParseExpr */
+				  * and this distinction is coded directly in ParseExpr */
 };
 
 /*
@@ -301,21 +301,21 @@ enum Precedence {
     PREC_START,		/* START */
     PREC_CLOSE_PAREN,	/* ")" */
     PREC_OPEN_PAREN,	/* "(" */
-    PREC_COMMA,		/* "," */
-    PREC_SEPARATOR,        /* ";" */
-    PREC_ASSIGN,          /* "=" */
+    PREC_COMMA,	/* "," */
+    PREC_SEPARATOR,      /* ";" */
+    PREC_ASSIGN,             /* "=" */
     PREC_CONDITIONAL,	/* "?", ":" */
     PREC_OR,		/* "||" */
     PREC_AND,		/* "&&" */
     PREC_BIT_OR,	/* "|" */
     PREC_BIT_XOR,	/* "^" */
     PREC_BIT_AND,	/* "&" */
-    PREC_EQUAL,		/* "==", "!=", "eq", "ne", "in", "ni" */
+    PREC_EQUAL,	/* "==", "!=", "eq", "ne", "in", "ni" */
     PREC_COMPARE,	/* "<", ">", "<=", ">=" */
     PREC_SHIFT,		/* "<<", ">>" */
     PREC_ADD,		/* "+", "-" */
     PREC_MULT,		/* "*", "/", "%" */
-    PREC_EXPON,		/* "**" */
+    PREC_EXPON,	/* "**" */
     PREC_UNARY		/* "+", "-", FUNCTION, "!", "~" , NULL_FUNC, LIST */
 };
 
@@ -633,7 +633,7 @@ ParseExpr(
 				 * error message readable, we impose this
 				 * limit on the substring size we extract. */
 
-	int nb_paren=0;
+    int nb_paren=0;
     int substExpressionContext=0;
     Tcl_Size originalLength=numBytes;
         
@@ -984,7 +984,7 @@ ParseExpr(
 		tokenPtr = parsePtr->tokenPtr + parsePtr->numTokens;
 		int nestSubstExprShorthand = 0;
 		if (numBytes > 1 && start[1] == '(') {
-			// To be seen : TCL_TOKEN_SUB_EXPR has been added is Tcl_ParseCommand since then 
+		    // Nested Sub expression
 		    tokenPtr->type = TCL_TOKEN_SUB_EXPR;
 		} else {
 			tokenPtr->type = TCL_TOKEN_COMMAND;
@@ -1003,12 +1003,12 @@ ParseExpr(
 			parsePtr->incomplete = nestedPtr->incomplete;
 			break;
 		    }
-			if (nestSubstExprShorthand == 1) {
-				// Expr nested shorthand : inline Expr shorthand in expr
-				// the size must be reduce by 2 because the expression doesn't contain the brackets
-			    start = nestedPtr->commandStart + nestedPtr->commandSize-2;
+		    if (nestSubstExprShorthand == 1) {
+			// Expr nested shorthand : inline Expr shorthand in expr
+			// the size must be reduce by 2 because the expression doesn't contain the brackets
+			start = nestedPtr->commandStart + nestedPtr->commandSize-2;
 		    } else {
-				start = nestedPtr->commandStart + nestedPtr->commandSize;
+			start = nestedPtr->commandStart + nestedPtr->commandSize;
 		    }
 		    Tcl_FreeParse(nestedPtr);
 		    if ((nestedPtr->term < end) && (nestedPtr->term[0] == ']')
@@ -1095,10 +1095,10 @@ ParseExpr(
 
 	case UNARY:
 	    if (substExpressionContext == 1) {
-			// We count the parents (in the aim to find the length of inline expression shorthand)
-			if (start[0]== '(') {
-		    	nb_paren++;    
-			}
+		// We count the parents (in the aim to find the length of inline expression shorthand)
+		if (start[0]== '(') {
+		    nb_paren++;    
+		}
 	    }
 	    /*
 	     * A unary operator appearing just after something that's not an
@@ -1113,19 +1113,19 @@ ParseExpr(
 		errCode = "MISSING";
 		goto error;
 	    }
-		 if (lexeme == OPEN_PAREN && nodePtr[-1].lexeme != FUNCTION ) {
-		 	/* Native list handling */
-			/* we don't know yet if there will be a "comma outside func error", 
-			   but we have to create a room to add list func in case */
-			nodePtr->lexeme = NULL_FUNC;
-			nodePtr->precedence = prec[NULL_FUNC];
-			nodePtr->mark = MARK_RIGHT;
-			nodePtr->constant = 0; 
-			nodePtr->p.prev = incomplete;
-			incomplete = lastParsed = nodesUsed;
-			Tcl_ListObjAppendElement(NULL, funcList, listName); 
-			nodesUsed++;
-			nodePtr = nodes + nodesUsed;
+	    if (lexeme == OPEN_PAREN && nodePtr[-1].lexeme != FUNCTION ) {
+		/* Native list handling */
+		/* we don't know yet if there will be a "comma outside func error", 
+		   but we have to create a room to add list func in case */
+		nodePtr->lexeme = NULL_FUNC;
+		nodePtr->precedence = prec[NULL_FUNC];
+		nodePtr->mark = MARK_RIGHT;
+		nodePtr->constant = 0; 
+		nodePtr->p.prev = incomplete;
+		incomplete = lastParsed = nodesUsed;
+		Tcl_ListObjAppendElement(NULL, funcList, listName); 
+		nodesUsed++;
+		nodePtr = nodes + nodesUsed;
 	    }
 	    /*
 	     * Create an OpNode for the unary operator.
@@ -1159,14 +1159,26 @@ ParseExpr(
 	    OpNode *incompletePtr;
 	    unsigned char precedence = prec[lexeme];
 	    if (substExpressionContext == 1) {
-			if (start[0] == ')') {
-		    	nb_paren--;
-		    	if (numBytes >= 1 && nb_paren == 0 && start[1] ==']') {
-					// we found the end of an inline expr substitution
-					parsePtr->commandSize = originalLength - numBytes;
-					numBytes=0; // make ParseLexeme add a END node
-		    	}					   
-			}		
+		if (start[0] == ')') {
+		    nb_paren--;
+		    if (numBytes >= 1 && nb_paren == 0 && start[1] ==']') {
+			// we found the end of an inline expr substitution
+			if (nodePtr[-1].lexeme == SEPARATOR) {
+			    if(IsOperator(lastParsed)) {
+				/* ';' before last ')' case : Treat this as an EMPTY LITERAL 
+				   and loop again on the close paren */
+				TclNewLiteralStringObj(literal, "");
+				Tcl_ListObjAppendElement(NULL, litList, literal);
+				complete = lastParsed = OT_LITERAL;
+				scanned=0;
+				nb_paren++;
+				break;
+			    }
+			}
+			parsePtr->commandSize = originalLength - numBytes;
+			numBytes=0; // make ParseLexeme add a END node
+		    }					   
+		}		
 	    }
 	    /*
 	     * A binary operator appearing just after another operator is a
@@ -1197,6 +1209,24 @@ ParseExpr(
 		    errCode = "EMPTY";
 		    goto error;
 		}
+		if ((lexeme == SEPARATOR)
+			&& (nodePtr[-1].lexeme == SEPARATOR)) {
+		    /* Two separators  ";;" case : Treat this as an EMPTY LITERAL */
+		    scanned = 0;
+		    TclNewLiteralStringObj(literal, "");
+		    Tcl_ListObjAppendElement(NULL, litList, literal);
+		    complete = lastParsed = OT_LITERAL;
+		    break;
+		}
+		if ((lexeme == SEPARATOR)
+		    && (nodePtr[-1].lexeme == COLON)) {
+		    /* colon / separator  ":;" case : Treat this as an EMPTY LITERAL */
+		    scanned = 0;
+		    TclNewLiteralStringObj(literal, "");
+		    Tcl_ListObjAppendElement(NULL, litList, literal);
+		    complete = lastParsed = OT_LITERAL;
+		    break;
+		}
 
 		if (nodePtr[-1].precedence > precedence) {
 		    if (nodePtr[-1].lexeme == OPEN_PAREN) {
@@ -1212,6 +1242,14 @@ ParseExpr(
 		    } else if (nodePtr[-1].lexeme == START) {
 			TclNewLiteralStringObj(msg, "empty expression");
 			errCode = "EMPTY";
+		    } else if (nodePtr[-1].lexeme == SEPARATOR
+			       && (lexeme == CLOSE_PAREN || lexeme == END) ) {
+			scanned = 0;
+			TclNewLiteralStringObj(literal, "");
+			Tcl_ListObjAppendElement(NULL, litList, literal);
+			complete = lastParsed = OT_LITERAL;
+			if (substExpressionContext == 1) {nb_paren++;}
+			break;
 		    }
 		} else if (lexeme == CLOSE_PAREN) {
 		    TclNewLiteralStringObj(msg, "unbalanced close paren");
@@ -1413,16 +1451,16 @@ ParseExpr(
 		if  ((incompletePtr->lexeme != OPEN_PAREN)
 			|| (incompletePtr[-1].lexeme != FUNCTION)) {
 			
-				if (incompletePtr[-1].lexeme == NULL_FUNC) {
-					// Native list handling : using the room we created before in UNARY Branch.
-					incompletePtr[-1].lexeme = FUNCTION;
-		    	} else {
-		    		TclNewLiteralStringObj(msg,
-			    		"unexpected \",\" outside function argument list");
-		    		errCode = "SURPRISE";
-		    		goto error;
-				}
-			}	
+		    if (incompletePtr[-1].lexeme == NULL_FUNC) {
+			// Native list handling : using the room we created before in UNARY Branch.
+			incompletePtr[-1].lexeme = FUNCTION;
+		    } else {
+			TclNewLiteralStringObj(msg,
+					       "unexpected \",\" outside function argument list");
+			errCode = "SURPRISE";
+			goto error;
+		    }
+		}	
 	    }	
 
 	    /* Operator ":" may only be right operand of "?" */
@@ -1955,7 +1993,7 @@ Tcl_ParseExpr(
     Tcl_Obj *litList;	/* List to hold the literals. */
     Tcl_Obj *funcList;	/* List to hold the functon names. */
     Tcl_Parse *exprParsePtr = (Tcl_Parse *)TclStackAlloc(interp, sizeof(Tcl_Parse));
-				/* Holds the Tcl_Tokens of substitutions. */
+    /* Holds the Tcl_Tokens of substitutions. */
 
     TclNewObj(litList);
     TclNewObj(funcList);
@@ -1970,13 +2008,13 @@ Tcl_ParseExpr(
 
     TclParseInit(interp, start, numBytes, parsePtr);
     if (code == TCL_OK) {
-		if(numBytes> 1 && start[0] == '[' && start[1] == '(' ) {
+	if(numBytes> 1 && start[0] == '[' && start[1] == '(' ) {
 	    // It was an Inlined Expression Substitution Context : transfert the command size to parseToken.
-	    	parsePtr->commandSize = exprParsePtr->commandSize;
-		} else {
-			ConvertTreeToTokens(start, numBytes,
-					opTree, exprParsePtr->tokenPtr, parsePtr);
-		}
+	    parsePtr->commandSize = exprParsePtr->commandSize;
+	} else {
+	    ConvertTreeToTokens(start, numBytes,
+				opTree, exprParsePtr->tokenPtr, parsePtr);
+	}
     } else {
 	parsePtr->term = exprParsePtr->term;
 	parsePtr->errorType = exprParsePtr->errorType;
