@@ -18,14 +18,15 @@
 Improving the readability of arithmetic calculations is a long term demand in Tcl. One of this first demand was [TIP 282](https://core.tcl-lang.org/tips/doc/trunk/tip/282.md). Periodically, expansive discussions about it occur on the wiki. There were many suggestions to make things more practical : [TIP 676](https://core.tcl-lang.org/tips/doc/trunk/tip/676.md), [TIP 674](https://core.tcl-lang.org/tips/doc/trunk/tip/674.md), [TIP 672](https://core.tcl-lang.org/tips/doc/trunk/tip/672.md).
 
 ## Specification
-At the Tcl parser level, the shorthand will allow this syntax :
+At the Tcl parser level, this ***mathematical expression substitution*** will be marked by this syntax :
 
 ```tcl
         set A [( *expression* )]
 ```
+This syntax will be named below as **inline expression shorthand**.
 
 This corresponds to this new rule of substitution :
-> * **Mathematical expression substitution** : If the first caracter of a word is an open-bracket and is immediately followed by an open-parenthese, then Tcl performs a *Mathematical expression substitution*. The expression has to follows the rules of the *expr* language. It must be closed by a closed-parenthese immediately followed by a closed-bracket. 
+> * **Mathematical expression substitution** : If the first caracter of a word is an open-bracket and is immediately followed by an open-parenthese, then Tcl performs a *Mathematical expression substitution*. The expression has to follows the rules of the *expr* mini-language. It must be closed by a closed-parenthese immediately followed by a closed-bracket. 
 
 ## Options
 
@@ -41,7 +42,7 @@ will be made equivalent to :
           set m [list [list 1 0 0] [list 0 1 0] [list 0 0 1]]]
 ```
 
-- Inclusion of **[TIP 282](https://core.tcl-lang.org/tips/doc/trunk/tip/282.md.html) proposals** :
+- **[TIP 282](https://core.tcl-lang.org/tips/doc/trunk/tip/282.md.html) proposals** :
   
 And a little improvement to allow us to use a bareword for variable name on the left side of the assignement operator. 
 
@@ -51,16 +52,22 @@ Then, we can write :
          set L [( x = 1; ($x, $x*2, $x*3) )]
 		 # set x to 1 and set L to {1 2 3}
 ```
+Some other things has been added : 
 
-- **Scripted expressions** :
+- - two semi-colons one after another is not an error.
+  - a semi-colon immediately after a colon is not an error
+- - a trailing semi-colon (just before the end) will "mute" the expression (it will then return an "empty string")
 
-  Every script value which begins with a `(` and finishes by a `)` will be evaluated, or compiled, as an expression when taken as a script by a command.
+- **Expression script** :
+
+  Every Tcl_Obj whose bytes representation is to be taken as a script by a command, when this one begins with a `(` and finishes by a `)`, will be compiled as an expression.
 
   ```tcl
   eval {(1+1)}; # return 2
   ```
   It should work with `if`, `while`, `for`, `foreach`, `lmap`, `eval`, `apply`, `proc`,...etc
-
+  
+  
 ## Examples :
 - Setting a variable :
 ```tcl
@@ -76,7 +83,7 @@ set bright [($red*0.3 + $green*0.59 + $blue*0.11)]
     }
 ```
 - Eratosthenes sieve :
-  - With **basic shorthand** :
+  - With **inline expression shorthand** :
   ```tcl
      proc sieve {n} {
        set L [lseq $n]
@@ -105,7 +112,7 @@ set bright [($red*0.3 + $green*0.59 + $blue*0.11)]
     }
    ```
 
-- Matrix calculus and affine transform example **with native list handling**, **script expression** and **TIP 282**
+- Matrix calculus and affine transform example **with native list handling**, **script expression**, **TIP 282**, **inline expression shorthand**
 
 ```tcl
 
@@ -190,7 +197,7 @@ puts TranslatedPoint\ :\ $TranslatedPoint ; # TranslatedPoint : {1.4210854715202
     .c create rect [($x, $y, $x+100, $y+100)]
 ```
 
-- Tensorial product, with **expression script**
+- Tensorial product, with **expression script** (2nd lmap)
 
 ```tcl
      proc TensorialProduct {V U} {
@@ -202,7 +209,7 @@ puts TranslatedPoint\ :\ $TranslatedPoint ; # TranslatedPoint : {1.4210854715202
      # {3 2 1} {6 4 2} {9 6 3}
 ```
 
-- Matrix transpose (2) : with **main shorthand**, **native list handling**, **TIP 282**, **expression script**
+- Matrix transpose (2) : with **inline expression substitution**, **native list handling**, **TIP 282**, **expression script**
 
 ```tcl
 proc transpose {M} {
@@ -216,7 +223,7 @@ proc transpose {M} {
 }
 ```
 
-- Determinant : with **TIP282 assignement**, **expression script**, **main shorthand** :
+- Determinant : with **TIP282 assignement**, **expression script**, **inline expression substitution** :
 
 ```tcl
 proc determinant {M} {
@@ -228,14 +235,12 @@ proc determinant {M} {
 }
 ```
 ## Implementation
-The code is made on top of Tcl9.04, in separated repositories, one for the main expr shorhand, the other one for the other optional features. Files tclsh.exe are compiled under cygwin above Win10 with gcc.
+The code is made on top of Tcl9.04. Last version can be found on [github](https://github.com/florentis/tcl90-exprSH) There is an Install_SH Folder with tclsh.exe / wish.exe compiled under mingw64 above Win10 with gcc.
 
-*Do note that all exemples written in the previous section have been tested and are working in the [tcl-ExprShorthand-index-list-TIP282](https://github.com/florentis/tcl-ExprShorthand-index-list-TIP282) implementation.*
+### Code for inline expression substition
+It should allow this syntax :
 
-### Code for main shorthand
-It can be found at [tcl-ExprShorthand](https://github.com/florentis/tcl-ExprShorthand). It should allow this syntax :
-
-     set A [(1+1)]; # $A is 2
+	 set A [(1+1)]; # $A is 2
 
 #### Principles of the changes
  * In tclParse.c :
@@ -247,20 +252,8 @@ It can be found at [tcl-ExprShorthand](https://github.com/florentis/tcl-ExprShor
  * In TclCompile.c
      * in *TclCompileTokens* : Add a case to handle TCL_TOKEN_SUB_EXPR
      
-### Code for array index shorthand
-It can be found at [tcl-ExprShorthand-index](https://github.com/florentis/tcl-ExprShorthand-index). It includes the changes made for the main shorthand. It should allow this syntax :
-
-      set B((1+1)) [(2+2)]; # $B(2) is 4
-
-#### Principles of the changes
-
- * in TclVar.c
-   * in *TclLookupArrayElement* : Check if the name of the element begin with a '(' and finish by ')'. If so, substitute its value by the expression value.
- * in TclCompile.c
-   * in *TclPushVarName* :  Check if the name of the element begin with a '(' and finish by ')'. If so, mark it as TCL_TOKEN_SUB_EXPR.
-
 ### Code for native list handling
-It can be found at [tcl-ExprShorthand-index-list](https://github.com/florentis/tcl-ExprShorthand-index-list). It includes the changes made for the main shorthand, as well as the changes made for the array index shorthand. It should allow this syntax :
+It should allow this syntax :
 
      set C((1+1)) [(  (1+1, 2+2, 3+3),  
                       (2*4, 2*5, 2*6)    )]  
@@ -269,11 +262,13 @@ It can be found at [tcl-ExprShorthand-index-list](https://github.com/florentis/t
 #### Principles of the changes
 
   * In TclCompExpr.c :
-     * In *ParseExpr* : In the case of OPEN_PAREN unary operator not preceded by a FUNCTION operator, create a FUNCTION operator and add a list function in the litlist. This allows to avoid the "comma out function argument" error and to return a list instead.
+     * In *ParseExpr* : For each OPEN_PAREN unary operator not preceded by a FUNCTION operator, create a NULL_FUNC unary operator and add the list function in the litlist. If an error "comma out function argument" occurs, change this NULL_FUNC operator by a FUNC operator.
+     * In Tcl_CompileExprTree :
+        * add NULL_FUNC case, which does nothing except skip the current element in the list of func
   * In tclBasic.c : add Tcl_ListObjCmd in the table for mathfunc.
 
 ### Code for TIP282 integration 
-It can be found at [tcl-ExprShorthand-index-list-TIP282](https://github.com/florentis/tcl-ExprShorthand-index-list-TIP282). It includes all the previous additions, as well as the changes made to integrate TIP282. It should allow this syntax :
+It should allow this syntax :
 
       set K [( x=10; y=50; ($x*$y, $y/$x) )]
       # will set K to {500 5}
@@ -286,51 +281,29 @@ It can be found at [tcl-ExprShorthand-index-list-TIP282](https://github.com/flor
  
 ### Script shorthand
 
-It can be found at [tcl-ExprShorthand-index-list-TIP282-script](https://github.com/florentis/tcl9.1-shorthand-index-list-TIP282-script). It includes all the previous additions, as well as the changes made for *scripted expression*. In a context where a script has to be compiled (proc, lambda), the shorthand should allow this syntax :
+ In a context where a script has to be compiled (proc, lambda, ...etc), the shorthand should allow this syntax :
 
-         proc P args {( *expression* )}
+         proc P0 args {( *expression* )} 
+		 proc P1 args "( *expression* )" ; # 
+		 proc P2 args (**expression**) ; # (if no space)
 
 #### Principles of the changes
 * In tclParse.c :
-	* In *Tcl_ParseCommand* : At the begining, detect if the string begins with a `(` and finishes with a `)` then fills the parse structure with a TCL_TOKEN_SUB_EXPR, containing a TCL_TOKEN_SIMPLE_WORD.
+	* In *Tcl_ParseCommand* : At the begining, detect if the string begins with a `(` and finishes with a `)` [or `)\n`] then fills the parse structure with a TCL_TOKEN_WORD, containing a TCL_TOKEN_SUB_EXPR
  * In tclCompile.c :
  	* In *TclSetBytcodesFromAny* : Check if the string begins with a `(` and finishes with a `)`, then compile it as an *expression*. Avoid optimisation.
-   	* In *TclCompileScript* :  Check if Tcl_ParseCommand returns a TCL_TOKEN_SUB_EXPR token. If so, compile its component as an expression
+   	* In *TclCompileScript* :  Check if Tcl_ParseCommand returns a TCL_TOKEN_WORD containing a TCL_TOKEN_SUB_EXPR token. If so, compile its component as an expression
 
 
 ## Incompatibilities :
- * Main shorthand : Any proc which is named '(' will be shadowed by the shorthand. However, it will still be possible to use it, either by protecting it by a backslash '\\(', or simply, but less readable, by inserting a space between the open-bracket and the open-parenthese.
+ * inline expression substition : Any proc which is named '(' will be shadowed by the shorthand. However, it will still be possible to use it, either by protecting it by a backslash '\\(', or simply, but less readable, by inserting a space between the open-bracket and the open-parenthese.
  
         set A [\( protect-it with backslash to eval the '(' proc ]
       
  * Index shorthand : As Tcl9 now forbid parentheses into array index, there should be none.
- 
-## Further developpements ideas :
 
-- Allow barewords as variables ?
-
-- **Implement prefixes** on operators and functions to allow richer infix expressions :
-
-        protocol -regexp expr function {^(:{2}\w*)+$} {prefix funcName args} { 
-           if {$prefix ne {}} {
-             set func [namespace join $namespace $funcName]
-             return [$func {*}$args]
-           }
-        }
-        protocol -regexp expr operator {^(:{2}\w*)+$} {prefix opName left right} {
-            if {$prefix ne {}} {
-               set op [namespace join $namespace $opName]
-               return [$op $left $right]
-            }
-        }
-
-        set Modulus [( $z {::math::complexnumbers}* {::math::complexnumbers}conj($z) )]
-
-- Implement the `{*}` prefix operator in expr to returns the prefixed word as a comma separated list. 
-
-  	set L [list 1 2 3]
-    set min [expr {min({*}$L)}]
-  
+## Comment
+to be added
 ## Copyright
 
 This document has been placed in the public domain.
