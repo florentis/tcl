@@ -1,0 +1,104 @@
+# https://wiki.tcl-lang.org/page/Incomplete+gamma
+#package require math
+#package require math::statistics
+
+# Adapted from Fortran code in the Royal Statistical Society's StatLib
+# library (http://lib.stat.cmu.edu/apstat/), algorithm AS 32 (with
+# some modifications from AS 239)
+#
+# Calculate normalized incomplete gamma function
+#
+#                 1/ x         / p-1 
+#   P(p,x) =  --------      |   dt exp(-t) * t
+#             Gamma(p)  / 0
+#
+# Tested some values against R's pgamma function
+
+proc incompleteGamma {x p {tol 1.0e-9}} {
+    set overflow 1.0e37
+
+    if {$x < 0} {
+        error "x must be positive"
+        return
+    }
+    if {$p <= 0} {
+        error "p must be greater than or equal to zero"
+        return
+    }
+    
+    # If x is zero, incGamma is zero
+    if {$x == 0.0} {
+        return 0.0
+    }
+    
+    # Use normal approx is p > 1000
+    if {$p > 1000} {
+	return
+        # set pn1 [(3.0 * sqrt($p) * (pow(1.0 * $x/$p, 1.0/3.0) + 1.0/(9.0 * $p) - 1.0))]
+        # pnorm is not robust enough for this calculation (overflows); cdf-normal could also be used
+        # return [::math::statistics::pnorm_quicker $pn1]
+    }
+    
+    # If x is extremely large compared to a (and now know p < 1000), then return 1.0
+    if {$x > 1.e8} {
+        return 1.0
+    }
+    
+    set factor [(exp($p * log($x) -$x - [::math::ln_Gamma $p]))]
+    
+    # Use series expansion (first option) or continued fraction
+    if {$x <= 1.0 || $x < $p} {
+        [(      gin=1.0;
+	    term=1.0;
+	    rn=$p; )]
+        while {1} {
+            [(	rn=$rn + 1.0;
+		term= 1.0 * $term * $x/$rn;
+		gin=$gin + $term; )]
+	    
+            if {$term < $tol} {
+                [(gin = 1.0 * $gin * $factor/$p; )]
+                break
+            }
+        }
+    } else {
+	[( a =1.0 - $p;  b = $a + $x + 1.0;
+	    term = 0.0;
+	    pn1 = 1.0;  pn2 = $x;
+	    pn3 = $x + 1.0;
+	    pn4 = $x * $b;
+	    gin = 1.0 * $pn3/$pn4; )]
+	
+        while {1} {
+	    [(      a = $a + 1.0; b = $b + 2.0;
+		term = $term + 1.0;
+		an = $a * $term;
+		pn5 = $b * $pn3 - $an * $pn1;
+		pn6 = $b * $pn4 - $an * $pn2; )]
+	    
+            if {$pn6 != 0.0} {
+                [(  rn = 1.0 * $pn5/$pn6;     dif = abs($gin - $rn); )]
+                if {$dif <= $tol && $dif <= $tol * $rn} {
+                    break
+                }
+                set gin $rn
+            }
+            set pn1 $pn3
+            set pn2 $pn4
+            set pn3 $pn5
+            set pn4 $pn6
+            # Too big? Rescale
+            if {abs($pn5) >= $overflow} {(
+                pn1 + $pn1 / $overflow;
+                pn2 = $pn2 / $overflow;
+                pn3 = $pn3 / $overflow;
+                pn4 = $pn4 / $overflow;
+            )}
+        }
+        [( gin = 1.0 - $factor * $gin )]
+    }
+    
+    return $gin    
+}
+
+console show

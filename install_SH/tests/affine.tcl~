@@ -1,0 +1,82 @@
+proc rotation angle {(pi=acos(-1); a=$angle/180.0*$pi; c=cos($a), s=sin($a), -$s, $c, 0, 0)}
+proc translation {dx dy} (1,0,0,1,\$dx,\$dy)
+proc reflect-x {} (1,0,0,-1,0,0)
+proc reflect-y {} (-1,0,0,1,0,0)
+proc shear {sx sy} (1,\$sx,\$sy,1,0,0)
+
+proc apply_affine2 {transform args} {
+    if {[llength $args]==1} {set args [lindex $args 0]}
+    set result [list]
+    lassign $transform a b c d e f
+    foreach {x y} $args {
+        lappend result [expr {$a*$x+$b*$y+$e}] [expr {$c*$x+$d*$y+$f}]
+    }
+    return $result
+}
+
+proc apply_affine {transform args} {
+    if {[llength $args]==1} {(args=[lindex $args 0])}
+    set result [list]
+    lassign $transform a b c d e f
+    foreach {x y} $args {
+	lappend result [($a*$x+$b*$y+$e)] [($c*$x+$d*$y+$f)]
+    }
+    return $result
+}
+
+proc combine_affine {transform args} {
+    lassign $transform a b c d e f
+    foreach xform $args {
+        lassign $xform i j k l m n
+        lassign [(
+	      $a*$i+$c*$j,         $b*$i+$d*$j,
+	      $a*$k+$c*$l,        $b*$k+$d*$l,
+	      $e*$i+$f*$j+$m,  $e*$k+$f*$l+$n
+	    )] a b c d e f
+    }
+    list $a $b $c $d $e $f
+}
+
+proc combine_affine2 {transform args} {
+    lassign $transform a b c d e f
+    foreach xform $args {
+        lassign $xform i j k l m n
+        # Next line does simultaneous assignment...
+        lassign [list \
+                 [expr {$a*$i+$c*$j}]    [expr {$b*$i+$d*$j}] \
+                 [expr {$a*$k+$c*$l}]    [expr {$b*$k+$d*$l}] \
+                 [expr {$e*$i+$f*$j+$m}] [expr {$e*$k+$f*$l+$n}]] \
+            a b c d e f
+    }
+    list $a $b $c $d $e $f
+}
+
+set Point {200 100}
+set chan [open ./tests/affine.log w]
+puts $chan Translation
+puts $chan [set T [translation 20 40]]
+puts $chan Rotation
+puts $chan [set R [rotation 30]]
+set C [combine_affine $T $R]
+puts $chan "Combine SH [string length [set body [info body combine_affine]]]"
+puts $chan [timerate [list combine_affine $T $R]]
+puts $chan $body
+puts $chan [tcl::unsupported::disassemble proc combine_affine]
+# puts [combine_affine $T $R]
+puts $chan "Combine Orig [string length [set body [info body combine_affine2]]]"
+puts $chan [timerate [list combine_affine2 $T $R]]
+puts $chan $body
+puts $chan [tcl::unsupported::disassemble proc combine_affine2]
+# puts [combine_affine2 $T $R]
+puts $chan "Apply SH, length [string length [set body [info body apply_affine]]]"
+puts $chan [timerate [list apply_affine $C $Point]]
+puts $chan [tcl::unsupported::disassemble proc apply_affine]
+puts $chan $body
+#puts [apply_affine2 $C $Point]
+puts $chan "Apply Orig, length [string length [set body [info body apply_affine2]]]"
+puts $chan [timerate [list apply_affine2 $C $Point]]
+puts $chan $body
+
+#puts [apply_affine2 $C $Point]
+puts $chan [tcl::unsupported::disassemble proc apply_affine2]
+

@@ -20,7 +20,7 @@ TK_MINOR_VERSION='0'
 TK_PATCH_LEVEL='.3'
 
 # -D flags for use with the C compiler.
-TK_DEFS='-DPACKAGE_NAME=\"tk\" -DPACKAGE_TARNAME=\"tk\" -DPACKAGE_VERSION=\"9.0\" -DPACKAGE_STRING=\"tk\ 9.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DHAVE_STDIO_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STRINGS_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_UNISTD_H=1 -DSTDC_HEADERS=1 -DSTATIC_BUILD=1 -DMODULE_SCOPE=extern -DTCL_CFG_DO64BIT=1 -DHAVE_NO_SEH=1 -DHAVE_CAST_TO_UNION=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DTCL_MEM_DEBUG=1 -DTCL_COMPILE_DEBUG=1 -DTCL_COMPILE_STATS=1'
+TK_DEFS='-DPACKAGE_NAME=\"tk\" -DPACKAGE_TARNAME=\"tk\" -DPACKAGE_VERSION=\"9.0\" -DPACKAGE_STRING=\"tk\ 9.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DHAVE_STDIO_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_STRINGS_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_UNISTD_H=1 -DSTDC_HEADERS=1 -DSTATIC_BUILD=1 -DMODULE_SCOPE=extern -DTCL_CFG_DO64BIT=1 -DHAVE_NO_SEH=1 -DHAVE_CAST_TO_UNION=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1'
 
 # Flag, 1: we built a shared lib, 0 we didn't
 TK_SHARED_BUILD=0
@@ -48,7 +48,7 @@ TK_LIB_FLAG='-ltcl9tk90'
 
 # String to pass to linker to pick up the Tk library from its
 # build directory.
-TK_BUILD_LIB_SPEC='-LC:/tcl/src/tk-core-9-0-3/win -ltcl9tk90'
+TK_BUILD_LIB_SPEC='-LC:/Tcl/src/tk-core-9-0-3/win -ltcl9tk90'
 
 # String to pass to linker to pick up the Tk library from its
 # installed directory.
@@ -60,7 +60,7 @@ TK_LIB_SPEC='-Lc:/Tcl/src/Install_SH/lib -ltcl9tk90'
 # different place than the directory containing the source files, this
 # points to the location of the sources, not the location where Tk was
 # compiled.
-TK_SRC_DIR='C:/tcl/src/tk-core-9-0-3'
+TK_SRC_DIR='C:/Tcl/src/tk-core-9-0-3'
 
 # Needed if you want to make a 'fat' shared library library
 # containing tk objects or link a different wish.
@@ -75,14 +75,14 @@ TK_STUB_LIB_FLAG='-ltkstub'
 
 # String to pass to linker to pick up the Tk stub library from its
 # build directory.
-TK_BUILD_STUB_LIB_SPEC='-LC:/tcl/src/tk-core-9-0-3/win -ltkstub'
+TK_BUILD_STUB_LIB_SPEC='-LC:/Tcl/src/tk-core-9-0-3/win -ltkstub'
 
 # String to pass to linker to pick up the Tk stub library from its
 # installed directory.
 TK_STUB_LIB_SPEC='-Lc:/Tcl/src/Install_SH/lib -ltkstub'
 
 # Path to the Tk stub library in the build directory.
-TK_BUILD_STUB_LIB_PATH='C:/tcl/src/tk-core-9-0-3/win/libtkstub.a'
+TK_BUILD_STUB_LIB_PATH='C:/Tcl/src/tk-core-9-0-3/win/libtkstub.a'
 
 # Path to the Tk stub library in the install directory.
 TK_STUB_LIB_PATH='c:/Tcl/src/Install_SH/lib/libtkstub.a'

@@ -1,0 +1,162 @@
+console show
+catch {set w [canvas .c -height 800 -width 1000]}
+pack $w
+source [file join [file dirname [info script]] typedef.tcl]
+namespace eval ::font {
+    set summit [list -font [font create -size 20 -family {Helvetic bold roman}]]
+    set side [list -font [font create -size 30 -family {Helvetic normal italic}]]
+}
+namespace eval ::style {
+    set markers [list -fill red]
+    set summit [list -fill green]
+    set sides [list -fill blue]
+    set medianes [list -fill DeepPink1]
+}
+
+
+proc tcl::mathfunc::line args {
+    set Poly [PolyLine new {*}$args]
+    list line [join [$Poly coords]]
+}
+
+proc tcl::mathfunc::point {P x y {dx 0} {dy 0}} {(
+    # define the Point object
+    [Point create ::$P $x $y];
+    # Draw the intersection
+    P1x=$x-20; P1y=$y;
+    P1 = [Point new $P1x $P1y];
+    P2x=$x+20; P2y=$y;
+    P2 = [Point new $P2x $P2y];
+    P3x=$x; P3y=$y-20;
+    P3 = [Point new $P3x $P3y];
+    P4x=$x; P4y=$y+20;
+    P4 = [Point new $P4x $P4y];
+    # Define the text Position
+    Tx = $x+$dx; Ty = $y+$dy;
+    T = [Point new $Tx $Ty];
+    
+    [$::w create {*}[(line($P1, $P2) )] -tag point.markers {*}$::style::markers
+     $::w create {*}[(text($T, $P))] -tag point.name {*}$::font::summit {*}$::style::summit
+     list line [list {*}[$P3 coords] {*}[$P4 coords]] -tag point.markers  {*}$::style::markers]
+)}
+
+proc tcl::mathfunc::text {P text} {
+    list text [$P coords] -text $text -tag text
+}
+			  
+
+proc tcl::mathfunc::arc {O Rx Ry start extent} {(
+    x1 = [$O x]-$Rx;
+    x2 = [$O x]+$Rx;
+    y1 = [$O y]-$Ry;
+    y2 = [$O y]+$Ry;
+    [list arc $x1 $y1 $x2 $y2 -start $start -extent $extent]
+    )}
+
+proc tcl::mathfunc::circle {O R} {(
+    x1 = [$O x]-$R;
+    x2 = [$O x]+$R;
+    y1 = [$O y]-$R;
+    y2 = [$O y]+$R;
+    [list oval $x1 $y1 $x2 $y2]
+)}
+
+proc tcl::mathfunc::ellipse {O Rx Ry} {(
+    # coords of the box
+    x1 = [$O x] - $Rx;
+    x2 = [$O x]+$Rx;
+    y1 = [$O y] - $Ry;
+    y2 = [$O y]+$Ry;
+    [list oval $x1 $y1 $x2 $y2]
+)}
+
+proc tcl::mathfunc::polygon args {
+    
+    list polygon $args
+}
+
+proc tcl::mathfunc::rectangle {O L H} {(
+    tag=[if {$L == $H} {("square")} else {("rectangle")}
+    x1 = [$O x] - double($L)/2;
+    x2 = [$O x] + double($L)/2;
+    y1 = [$O y] - double($H)/2;
+    y2 = [$O y] + double($H)/2;
+    [list rect $x1 $y1 $x2 $y2 -tag $tag]
+)}
+
+proc tcl::mathfunc::triangle {A B C} {
+    list polygon [$A x] [$A y] [$B x] [$B y] [$C x] [$C y] -tag triangle
+ }
+
+proc tcl::mathfunc::roundRect {O L H rx {ry {}}} {(
+    $ry eq {} ? (ry = $rx): "" ;
+    # Coordinate of corner of the box
+    Ax = [$O x] - double($L)/2;     Ay = [$O y] - double($H)/2;
+    Cx = [$O x] + double($L)/2;   Cy = [$O y] + double($H)/2;
+    # create the Points 
+    A=[Point new $Ax $Ay];  B=[Point new $Cx $Ay];
+    C=[Point new $Cx $Cy];  D=[Point new $Ax $Cy];
+    # coordinates of center of arcs
+    O1x = $Ax+$rx; O1y = $Ay+$ry;
+    O2x = $Cx-$rx; O2y = $Ay+$ry;
+    O3x = $Cx-$rx; O3y = $Cy-$ry;
+    O4x = $Ax+$rx; O4y = $Cy-$ry;
+    # create the arc center points
+    O1=[Point new $O1x $O1y]; O2=[Point new $O2x $O2y];
+    O3=[Point new $O3x $O3y]; O4=[Point new $O4x $O4y];
+    # create the segment limits (joining the arcs)
+    S1=[Point new $O1x $Ay];  S2=[Point new $O2x $Ay];
+    S3=[Point new $Cx $O2y];  S4=[Point new $Cx $O3y];
+    S5=[Point new $O3x $Cy];  S6=[Point new $O4x $Cy];
+    S7=[Point new $Ax $O4y];  S8=[Point new $Ax $O1y];
+    
+    [# up left
+     $::w create {*}[( arc($O1, $rx, $ry, 90, 90))] -style arc
+     #up
+     $::w create {*}[( line($S1, $S2) )]
+     #up right
+     $::w create {*}[( arc($O2, $rx, $ry, 0, 90) )] -style arc
+     # right
+     $::w create {*}[( line($S3, $S4) )]
+     #bottom right
+     $::w create {*}[( arc($O3, $rx, $ry, 0, -90) )] -style arc
+     #bottom
+     $::w create {*}[( line($S5, $S6) )]
+     # bottom left
+     $::w create {*}[( arc($O4, $rx, $ry, -90, -90) )] -style arc
+    ]; # left
+    line($S7, $S8)
+)}
+.c create {*}[( point("A", 300, 700, -20, 20) )] 
+.c create {*}[( point("B", 800, 600, 20, 20)  )] 
+.c create {*}[( point("C", 500, 100, 0, -40)   )] 
+
+.c create {*}[( line("A", "B", "C", "A") )] {*}$style::sides
+
+.c create {*}[( point("mAB", ([A x]+[B x])/2.0, ([A y]+[B y])/2.0, -40, -20)  )] 
+
+.c create {*}[(point("mAC",  ([A x]+[C x])/2.0,  ([A y]+[C y])/2.0, 50, -20)  )]
+
+.c create {*}[(point("mBC",  ([B x]+[C x])/2.0,  ([B y]+[C y])/2.0, -50, -20)  )]
+
+.c create {*}[( line("A","mBC") )] 
+.c create {*}[( line("B","mAC") )]
+.c create {*}[( line("C","mAB") )]
+
+.c create {*}[(point("G",  ([A x]+[B x]+[C x])/3.0, ([A y]+[B y]+[C y])/3.0, +40, 0)   )]
+
+Point create I 200 200
+.c create {*}[(roundRect("I", 168, 68, 20))]
+.c create {*}[(text("I","Triangle"))] -font [set F1 [font create -size 30 -weight bold]]
+
+set F2 [font create -size 30 -family Helvetica]
+
+foreach {P1 P2 n dx dy} {B C a 50 0 C A b -50 0  A B c 0 50} {
+    
+    set P [Point new {*}[( [$P1 x]/2.0 + [$P2 x]/2.0 +$dx, [$P1 y]/2.0 + [$P2 y]/2.0 + $dy )]]
+
+    .c create {*}[(text($P, $n))] {*}$::font::side
+    
+    $P destroy
+}
+

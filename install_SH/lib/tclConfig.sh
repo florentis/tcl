@@ -21,7 +21,7 @@ TCL_PATCH_LEVEL='.4'
 TCL_CC='gcc'
 
 # -D flags for use with the C compiler.
-TCL_DEFS='-DPACKAGE_NAME=\"tcl\" -DPACKAGE_TARNAME=\"tcl\" -DPACKAGE_VERSION=\"9.0\" -DPACKAGE_STRING=\"tcl\ 9.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DTCL_CFGVAL_ENCODING=\"utf-8\" -DSTATIC_BUILD=1 -DMODULE_SCOPE=extern -DTCL_CFG_DO64BIT=1 -DHAVE_NO_SEH=1 -DHAVE_CAST_TO_UNION=1 -DTCL_WITH_INTERNAL_ZLIB=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DHAVE_INTRIN_H=1 -DHAVE_CPUID_H=1 -DHAVE_WSPIAPI_H=1 -DTCL_MEM_DEBUG=1 -DTCL_COMPILE_DEBUG=1 -DTCL_COMPILE_STATS=1'
+TCL_DEFS='-DPACKAGE_NAME=\"tcl\" -DPACKAGE_TARNAME=\"tcl\" -DPACKAGE_VERSION=\"9.0\" -DPACKAGE_STRING=\"tcl\ 9.0\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DTCL_CFGVAL_ENCODING=\"utf-8\" -DSTATIC_BUILD=1 -DMODULE_SCOPE=extern -DTCL_CFG_DO64BIT=1 -DHAVE_NO_SEH=1 -DHAVE_CAST_TO_UNION=1 -DTCL_WITH_INTERNAL_ZLIB=1 -DHAVE_INTPTR_T=1 -DHAVE_UINTPTR_T=1 -DHAVE_INTRIN_H=1 -DHAVE_CPUID_H=1 -DHAVE_WSPIAPI_H=1'
 
 # Default flags used in an optimized and debuggable build, respectively.
 TCL_CFLAGS_DEBUG='-g'
@@ -104,7 +104,7 @@ TCL_LIB_FLAG='libtcl90.a'
 
 # String to pass to linker to pick up the Tcl library from its
 # build directory.
-TCL_BUILD_LIB_SPEC='-LC:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win libtcl90.a'
+TCL_BUILD_LIB_SPEC='-LC:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win libtcl90.a'
 
 # String to pass to linker to pick up the Tcl library from its
 # installed directory.
@@ -139,7 +139,7 @@ TCL_UNSHARED_LIB_SUFFIX='${NODOT_VERSION}.a'
 # different place than the directory containing the source files, this
 # points to the location of the sources, not the location where Tcl was
 # compiled.
-TCL_SRC_DIR='C:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW'
+TCL_SRC_DIR='C:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW'
 
 # List of standard directories in which to look for packages during
 # "package require" commands.  Contains the "prefix" directory plus also
@@ -157,14 +157,14 @@ TCL_STUB_LIB_FLAG='-ltclstub'
 
 # String to pass to linker to pick up the Tcl stub library from its
 # build directory.
-TCL_BUILD_STUB_LIB_SPEC='-LC:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win -ltclstub'
+TCL_BUILD_STUB_LIB_SPEC='-LC:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win -ltclstub'
 
 # String to pass to linker to pick up the Tcl stub library from its
 # installed directory.
 TCL_STUB_LIB_SPEC='-Lc:/Tcl/src/Install_SH/lib -ltclstub'
 
 # Path to the Tcl stub library in the build directory.
-TCL_BUILD_STUB_LIB_PATH='C:/tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win/libtclstub.a'
+TCL_BUILD_STUB_LIB_PATH='C:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/win/libtclstub.a'
 
 # Path to the Tcl stub library in the install directory.
 TCL_STUB_LIB_PATH='c:/Tcl/src/Install_SH/lib/libtclstub.a'

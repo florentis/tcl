@@ -1,0 +1,331 @@
+------------------------------------
+roundRect2_Orig
+------------------------------------
+ByteCode 0x6d8c568, refCt 1, epoch 21, interp 0x12f20c8 (epoch 21)
+  Source "\n   set p [expr {$r * 0.44771525}]; # 1 - (4 * (sqrt(2..."
+  File "C:/Tcl/src/install_SH/bin/tests/rounded_rect.tcl" Line 82
+  Cmds 27, src 482, inst 412, litObjs 5, aux 0, stkDepth 54, code/src 1.62
+  Code 780 = header 208+inst 412+litObj 40+exc 0+aux 0+cmdMap 116
+  Proc 0x6b268f8, refCt 1, args 7, compiled locals 8
+      slot 0, scalar, arg, "c"
+      slot 1, scalar, arg, "x1"
+      slot 2, scalar, arg, "y1"
+      slot 3, scalar, arg, "x2"
+      slot 4, scalar, arg, "y2"
+      slot 5, scalar, arg, "r"
+      slot 6, scalar, arg, "args"
+      slot 7, scalar, "p"
+  Commands 27:
+      1: pc 0-7, src 4-33        2: pc 0-4, src 11-32
+      3: pc 8-410, src 72-480        4: pc 15-28, src 92-99
+      5: pc 31-44, src 107-114        6: pc 47-60, src 123-130
+      7: pc 63-76, src 138-145        8: pc 79-92, src 154-161
+      9: pc 97-110, src 173-180       10: pc 113-126, src 189-196
+     11: pc 129-142, src 204-211       12: pc 145-158, src 220-227
+     13: pc 161-174, src 235-242       14: pc 177-190, src 251-258
+     15: pc 191-204, src 262-269       16: pc 207-220, src 278-285
+     17: pc 223-236, src 293-300       18: pc 239-252, src 309-316
+     19: pc 255-268, src 324-331       20: pc 271-284, src 339-346
+     21: pc 289-302, src 358-365       22: pc 305-318, src 374-381
+     23: pc 321-334, src 389-396       24: pc 337-350, src 405-412
+     25: pc 353-366, src 420-427       26: pc 369-382, src 436-443
+     27: pc 383-396, src 447-454
+  Command 1: "set p [expr {$r * 0.44771525}]..."
+  Command 2: "expr {$r * 0.44771525}..."
+    (0) loadScalar1 %v5 	# var "r"
+    (2) push1 0 	# "0.44771525"
+    (4) mult 
+    (5) storeScalar1 %v7 	# var "p"
+    (7) pop 
+  Command 3: "$c create polygon  [+ $x1 $r] $y1 [+ $x1 $r] $y1  [- $x..."
+    (8) expandStart 
+    (9) loadScalar1 %v0 	# var "c"
+    (11) push1 1 	# "create"
+    (13) push1 2 	# "polygon"
+  Command 4: "+ $x1 $r..."
+    (15) startCommand +14 1 	# next cmd at pc 29, 1 cmds start here
+    (24) loadScalar1 %v1 	# var "x1"
+    (26) loadScalar1 %v5 	# var "r"
+    (28) add 
+    (29) loadScalar1 %v2 	# var "y1"
+  Command 5: "+ $x1 $r..."
+    (31) startCommand +14 1 	# next cmd at pc 45, 1 cmds start here
+    (40) loadScalar1 %v1 	# var "x1"
+    (42) loadScalar1 %v5 	# var "r"
+    (44) add 
+    (45) loadScalar1 %v2 	# var "y1"
+  Command 6: "- $x2 $r..."
+    (47) startCommand +14 1 	# next cmd at pc 61, 1 cmds start here
+    (56) loadScalar1 %v3 	# var "x2"
+    (58) loadScalar1 %v5 	# var "r"
+    (60) sub 
+    (61) loadScalar1 %v2 	# var "y1"
+  Command 7: "- $x2 $r..."
+    (63) startCommand +14 1 	# next cmd at pc 77, 1 cmds start here
+    (72) loadScalar1 %v3 	# var "x2"
+    (74) loadScalar1 %v5 	# var "r"
+    (76) sub 
+    (77) loadScalar1 %v2 	# var "y1"
+  Command 8: "- $x2 $p..."
+    (79) startCommand +14 1 	# next cmd at pc 93, 1 cmds start here
+    (88) loadScalar1 %v3 	# var "x2"
+    (90) loadScalar1 %v7 	# var "p"
+    (92) sub 
+    (93) loadScalar1 %v2 	# var "y1"
+    (95) loadScalar1 %v3 	# var "x2"
+  Command 9: "+ $y1 $p..."
+    (97) startCommand +14 1 	# next cmd at pc 111, 1 cmds start here
+    (106) loadScalar1 %v2 	# var "y1"
+    (108) loadScalar1 %v7 	# var "p"
+    (110) add 
+    (111) loadScalar1 %v3 	# var "x2"
+  Command 10: "+ $y1 $r..."
+    (113) startCommand +14 1 	# next cmd at pc 127, 1 cmds start here
+    (122) loadScalar1 %v2 	# var "y1"
+    (124) loadScalar1 %v5 	# var "r"
+    (126) add 
+    (127) loadScalar1 %v3 	# var "x2"
+  Command 11: "+ $y1 $r..."
+    (129) startCommand +14 1 	# next cmd at pc 143, 1 cmds start here
+    (138) loadScalar1 %v2 	# var "y1"
+    (140) loadScalar1 %v5 	# var "r"
+    (142) add 
+    (143) loadScalar1 %v3 	# var "x2"
+  Command 12: "- $y2 $r..."
+    (145) startCommand +14 1 	# next cmd at pc 159, 1 cmds start here
+    (154) loadScalar1 %v4 	# var "y2"
+    (156) loadScalar1 %v5 	# var "r"
+    (158) sub 
+    (159) loadScalar1 %v3 	# var "x2"
+  Command 13: "- $y2 $r..."
+    (161) startCommand +14 1 	# next cmd at pc 175, 1 cmds start here
+    (170) loadScalar1 %v4 	# var "y2"
+    (172) loadScalar1 %v5 	# var "r"
+    (174) sub 
+    (175) loadScalar1 %v3 	# var "x2"
+  Command 14: "- $y2 $p..."
+    (177) startCommand +14 1 	# next cmd at pc 191, 1 cmds start here
+    (186) loadScalar1 %v4 	# var "y2"
+    (188) loadScalar1 %v7 	# var "p"
+    (190) sub 
+  Command 15: "- $x2 $p..."
+    (191) startCommand +14 1 	# next cmd at pc 205, 1 cmds start here
+    (200) loadScalar1 %v3 	# var "x2"
+    (202) loadScalar1 %v7 	# var "p"
+    (204) sub 
+    (205) loadScalar1 %v4 	# var "y2"
+  Command 16: "- $x2 $r..."
+    (207) startCommand +14 1 	# next cmd at pc 221, 1 cmds start here
+    (216) loadScalar1 %v3 	# var "x2"
+    (218) loadScalar1 %v5 	# var "r"
+    (220) sub 
+    (221) loadScalar1 %v4 	# var "y2"
+  Command 17: "- $x2 $r..."
+    (223) startCommand +14 1 	# next cmd at pc 237, 1 cmds start here
+    (232) loadScalar1 %v3 	# var "x2"
+    (234) loadScalar1 %v5 	# var "r"
+    (236) sub 
+    (237) loadScalar1 %v4 	# var "y2"
+  Command 18: "+ $x1 $r..."
+    (239) startCommand +14 1 	# next cmd at pc 253, 1 cmds start here
+    (248) loadScalar1 %v1 	# var "x1"
+    (250) loadScalar1 %v5 	# var "r"
+    (252) add 
+    (253) loadScalar1 %v4 	# var "y2"
+  Command 19: "+ $x1 $r..."
+    (255) startCommand +14 1 	# next cmd at pc 269, 1 cmds start here
+    (264) loadScalar1 %v1 	# var "x1"
+    (266) loadScalar1 %v5 	# var "r"
+    (268) add 
+    (269) loadScalar1 %v4 	# var "y2"
+  Command 20: "+ $x1 $p..."
+    (271) startCommand +14 1 	# next cmd at pc 285, 1 cmds start here
+    (280) loadScalar1 %v1 	# var "x1"
+    (282) loadScalar1 %v7 	# var "p"
+    (284) add 
+    (285) loadScalar1 %v4 	# var "y2"
+    (287) loadScalar1 %v1 	# var "x1"
+  Command 21: "- $y2 $p..."
+    (289) startCommand +14 1 	# next cmd at pc 303, 1 cmds start here
+    (298) loadScalar1 %v4 	# var "y2"
+    (300) loadScalar1 %v7 	# var "p"
+    (302) sub 
+    (303) loadScalar1 %v1 	# var "x1"
+  Command 22: "- $y2 $r..."
+    (305) startCommand +14 1 	# next cmd at pc 319, 1 cmds start here
+    (314) loadScalar1 %v4 	# var "y2"
+    (316) loadScalar1 %v5 	# var "r"
+    (318) sub 
+    (319) loadScalar1 %v1 	# var "x1"
+  Command 23: "- $y2 $r..."
+    (321) startCommand +14 1 	# next cmd at pc 335, 1 cmds start here
+    (330) loadScalar1 %v4 	# var "y2"
+    (332) loadScalar1 %v5 	# var "r"
+    (334) sub 
+    (335) loadScalar1 %v1 	# var "x1"
+  Command 24: "+ $y1 $r..."
+    (337) startCommand +14 1 	# next cmd at pc 351, 1 cmds start here
+    (346) loadScalar1 %v2 	# var "y1"
+    (348) loadScalar1 %v5 	# var "r"
+    (350) add 
+    (351) loadScalar1 %v1 	# var "x1"
+  Command 25: "+ $y1 $r..."
+    (353) startCommand +14 1 	# next cmd at pc 367, 1 cmds start here
+    (362) loadScalar1 %v2 	# var "y1"
+    (364) loadScalar1 %v5 	# var "r"
+    (366) add 
+    (367) loadScalar1 %v1 	# var "x1"
+  Command 26: "+ $y1 $p..."
+    (369) startCommand +14 1 	# next cmd at pc 383, 1 cmds start here
+    (378) loadScalar1 %v2 	# var "y1"
+    (380) loadScalar1 %v7 	# var "p"
+    (382) add 
+  Command 27: "+ $x1 $p..."
+    (383) startCommand +14 1 	# next cmd at pc 397, 1 cmds start here
+    (392) loadScalar1 %v1 	# var "x1"
+    (394) loadScalar1 %v7 	# var "p"
+    (396) add 
+    (397) loadScalar1 %v2 	# var "y1"
+    (399) push1 3 	# "-smooth"
+    (401) push1 4 	# "raw"
+    (403) loadScalar1 %v6 	# var "args"
+    (405) expandStkTop 54 
+    (410) invokeExpanded 
+    (411) done 
+
+------------------------------------
+------------------------------------
+roundRect2_SH
+------------------------------------
+ByteCode 0x6932598, refCt 1, epoch 21, interp 0x12f20c8 (epoch 21)
+  Source "(\n    p = $r * 0.44771525;\n    [$c create polygon [(\n..."
+  File "C:/Tcl/src/install_SH/bin/tests/rounded_rect.tcl" Line 115
+  Cmds 1, src 419, inst 201, litObjs 7, aux 0, stkDepth 52, code/src 1.16
+  Code 484 = header 208+inst 201+litObj 56+exc 0+aux 0+cmdMap 12
+  Proc 0x6b28248, refCt 1, args 7, compiled locals 8
+      slot 0, scalar, arg, "c"
+      slot 1, scalar, arg, "x1"
+      slot 2, scalar, arg, "y1"
+      slot 3, scalar, arg, "x2"
+      slot 4, scalar, arg, "y2"
+      slot 5, scalar, arg, "r"
+      slot 6, scalar, arg, "args"
+      slot 7, scalar, "p"
+  Commands 1:
+      1: pc 9-199, src 32-411
+    (0) push1 0 	# "p"
+    (2) loadScalar1 %v5 	# var "r"
+    (4) push1 1 	# "0.44771525"
+    (6) mult 
+    (7) storeStk 
+    (8) pop 
+  Command 1: "$c create polygon [(\n\t$x1+$r, $y1, $x1+$r, $y1,\n\t$x..."
+    (9) expandStart 
+    (10) loadScalar1 %v0 	# var "c"
+    (12) push1 2 	# "create"
+    (14) push1 3 	# "polygon"
+    (16) push1 4 	# "tcl::mathfunc::list"
+    (18) loadScalar1 %v1 	# var "x1"
+    (20) loadScalar1 %v5 	# var "r"
+    (22) add 
+    (23) loadScalar1 %v2 	# var "y1"
+    (25) loadScalar1 %v1 	# var "x1"
+    (27) loadScalar1 %v5 	# var "r"
+    (29) add 
+    (30) loadScalar1 %v2 	# var "y1"
+    (32) loadScalar1 %v3 	# var "x2"
+    (34) loadScalar1 %v5 	# var "r"
+    (36) sub 
+    (37) loadScalar1 %v2 	# var "y1"
+    (39) loadScalar1 %v3 	# var "x2"
+    (41) loadScalar1 %v5 	# var "r"
+    (43) sub 
+    (44) loadScalar1 %v2 	# var "y1"
+    (46) loadScalar1 %v3 	# var "x2"
+    (48) loadScalar1 %v7 	# var "p"
+    (50) sub 
+    (51) loadScalar1 %v2 	# var "y1"
+    (53) loadScalar1 %v3 	# var "x2"
+    (55) loadScalar1 %v2 	# var "y1"
+    (57) loadScalar1 %v7 	# var "p"
+    (59) add 
+    (60) loadScalar1 %v3 	# var "x2"
+    (62) loadScalar1 %v2 	# var "y1"
+    (64) loadScalar1 %v5 	# var "r"
+    (66) add 
+    (67) loadScalar1 %v3 	# var "x2"
+    (69) loadScalar1 %v2 	# var "y1"
+    (71) loadScalar1 %v5 	# var "r"
+    (73) add 
+    (74) loadScalar1 %v3 	# var "x2"
+    (76) loadScalar1 %v4 	# var "y2"
+    (78) loadScalar1 %v5 	# var "r"
+    (80) sub 
+    (81) loadScalar1 %v3 	# var "x2"
+    (83) loadScalar1 %v4 	# var "y2"
+    (85) loadScalar1 %v5 	# var "r"
+    (87) sub 
+    (88) loadScalar1 %v3 	# var "x2"
+    (90) loadScalar1 %v4 	# var "y2"
+    (92) loadScalar1 %v7 	# var "p"
+    (94) sub 
+    (95) loadScalar1 %v3 	# var "x2"
+    (97) loadScalar1 %v7 	# var "p"
+    (99) sub 
+    (100) loadScalar1 %v4 	# var "y2"
+    (102) loadScalar1 %v3 	# var "x2"
+    (104) loadScalar1 %v5 	# var "r"
+    (106) sub 
+    (107) loadScalar1 %v4 	# var "y2"
+    (109) loadScalar1 %v3 	# var "x2"
+    (111) loadScalar1 %v5 	# var "r"
+    (113) sub 
+    (114) loadScalar1 %v4 	# var "y2"
+    (116) loadScalar1 %v1 	# var "x1"
+    (118) loadScalar1 %v5 	# var "r"
+    (120) add 
+    (121) loadScalar1 %v4 	# var "y2"
+    (123) loadScalar1 %v1 	# var "x1"
+    (125) loadScalar1 %v5 	# var "r"
+    (127) add 
+    (128) loadScalar1 %v4 	# var "y2"
+    (130) loadScalar1 %v1 	# var "x1"
+    (132) loadScalar1 %v7 	# var "p"
+    (134) add 
+    (135) loadScalar1 %v4 	# var "y2"
+    (137) loadScalar1 %v1 	# var "x1"
+    (139) loadScalar1 %v4 	# var "y2"
+    (141) loadScalar1 %v7 	# var "p"
+    (143) sub 
+    (144) loadScalar1 %v1 	# var "x1"
+    (146) loadScalar1 %v4 	# var "y2"
+    (148) loadScalar1 %v5 	# var "r"
+    (150) sub 
+    (151) loadScalar1 %v1 	# var "x1"
+    (153) loadScalar1 %v4 	# var "y2"
+    (155) loadScalar1 %v5 	# var "r"
+    (157) sub 
+    (158) loadScalar1 %v1 	# var "x1"
+    (160) loadScalar1 %v2 	# var "y1"
+    (162) loadScalar1 %v5 	# var "r"
+    (164) add 
+    (165) loadScalar1 %v1 	# var "x1"
+    (167) loadScalar1 %v2 	# var "y1"
+    (169) loadScalar1 %v5 	# var "r"
+    (171) add 
+    (172) loadScalar1 %v1 	# var "x1"
+    (174) loadScalar1 %v2 	# var "y1"
+    (176) loadScalar1 %v7 	# var "p"
+    (178) add 
+    (179) loadScalar1 %v1 	# var "x1"
+    (181) loadScalar1 %v7 	# var "p"
+    (183) add 
+    (184) loadScalar1 %v2 	# var "y1"
+    (186) invokeStk1 49 
+    (188) push1 5 	# "-smooth"
+    (190) push1 6 	# "raw"
+    (192) loadScalar1 %v6 	# var "args"
+    (194) expandStkTop 7 
+    (199) invokeExpanded 
+    (200) done 
+

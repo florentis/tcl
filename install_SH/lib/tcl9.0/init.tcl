@@ -56,7 +56,7 @@ if {![info exists auto_path]} {
 	set auto_path ""
     }
 }
-
+proc {} {} {}
 namespace eval tcl {
     if {![interp issafe]} {
 	variable Dir

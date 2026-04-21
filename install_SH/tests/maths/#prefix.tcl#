@@ -1,0 +1,32 @@
+[(x = {1 2 3}; {list}($x * 2) )]
+
+[(  M = {matrix}((1+5, 4*3),(2+2, 8.0*4))  )]
+
+[(  (M0 is Matrix(2,2)) = ((1+5, 4*3),(2+2, 8.0*4));
+    M1 = 2* 'M0' ;
+    a = 'M0(0(0))';
+    b = 'M0(0(1))';
+    c = 'M0(1(0))';
+    d = 'M0(1(1))';
+    (a, b),(c ,d) = $M0;
+
+    
+    )]
+
+typedef Matrix(rows,cols) {list($rows)}{{list($cols)}num}
+#
+typedef num {
+    char type;
+    union {
+	int i;
+	float f;
+	double g;
+    }
+}
+
+#define Matrix(rows,cols) num[rows][cols]
+"C:/Users/Florent/Documents/GitHub/tcl90-exprSH/generic"
+"C:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/generic"
+c:/cygwin/diff  "C:/Users/Florent/Documents/GitHub/tcl90-exprSH/generic" "C:/Tcl/src/tcl90-exprSH-core-9-0-branch-mingW/generic"
+
+    

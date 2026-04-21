@@ -1,0 +1,57 @@
+# proc {} {} {}
+
+proc command {} {
+    # Command mode
+    set x 0
+    # index shorthand
+    set y([($x+3)]) 0; # ok
+
+    # Inline shorthand
+    [( # Expr mode
+	x = $x+1;
+	#index shorthand into inline shorthand
+	"y([($x+2)])" = $y([($x+2)])+1;
+	)]
+    
+    # Command mode
+    incr x
+    # inline shorthand into index
+    incr y([($x-1)]); # ok
+    
+    [(  # Expr mode
+	x = $x+1;
+	# inline shorthand into index into inline shorthand
+	"y([($x+1)])" = $y([($x-2)])+1; 
+	z = $z+1;   )]
+    
+    # Command mode
+    list $x $y $z
+}
+
+
+proc expression {} {(
+    # Expr mode
+    x=0;
+    "y([($x+1)])"=0;
+    
+    [ # Command mode
+	incr x
+	incr y([($x+1)])	incr z   ];
+    
+    # Expr mode
+    x = $x+1;
+    "y([(1+1)])" = $y([(1+1)])+1;
+    
+    [# Command mode
+     	incr x
+	incr y
+	incr z   ];
+    
+    # Expr mode
+    $x, $y, $z
+)}
+
+
+
+
+# console show
