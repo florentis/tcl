@@ -1076,7 +1076,6 @@ TclLookupArrayElement(
 {
     int isNew;
     Var *varPtr;
-    Tcl_Size len;
     /*
      * We're dealing with an array element. Make sure the variable is an array
      * and look up the element (create the element if desired).
