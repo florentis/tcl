@@ -2,29 +2,31 @@
 
 This is the **Tcl 9.0.4** source distribution with **expr shorthand**
 
+# what is it ?
+- In expr parser,
+  - includes TIP282 proposal : 
+    - separating instructions with `;`
+    - assigning vars with `=`
+  - add a new feature :
+    - a comma separated list of elements between parenthesese is taken as a list : `expr {((1,2,3),(4,5,6),(7,8,9))}` is equivalent to `{{1 2 3} {4 5 6} {7 8 9}}`
+- In Tcl parser
+  - A new rule has been added to the Tcl parser : the math expression substitution. A word enclosed with `[(` ... `)]` is taken as an expression. there is two situations here
+    - with a trailing semi-colon, nothing is returned (muted expression)
+    - else the result is returned (inline expression)
+- in Tcl compiler
+  - if a script begins with a `(` and finish with a `)`, then it will be compiled as an expression.
 
-You can get any source release of Tcl from [the distribution
-site](https://sourceforge.net/projects/tcl/files/Tcl/).
+# examples
 
-9.1 (in development, daily build)
-[![Build Status](https://github.com/tcltk/tcl/actions/workflows/linux-build.yml/badge.svg?branch=main)](https://github.com/tcltk/tcl/actions/workflows/linux-build.yml?query=branch%3Amain)
-[![Build Status](https://github.com/tcltk/tcl/actions/workflows/win-build.yml/badge.svg?branch=main)](https://github.com/tcltk/tcl/actions/workflows/win-build.yml?query=branch%3Amain)
-[![Build Status](https://github.com/tcltk/tcl/actions/workflows/mac-build.yml/badge.svg?branch=main)](https://github.com/tcltk/tcl/actions/workflows/mac-build.yml?query=branch%3Amain)
-<br>
-9.0 (production release, daily build)
-[![Build Status](https://github.com/tcltk/tcl/actions/workflows/linux-build.yml/badge.svg?branch=core-9-0-branch)](https://github.com/tcltk/tcl/actions/workflows/linux-build.yml?query=branch%3Acore-9-0-branch)
-[![Build Status](https://github.com/tcltk/tcl/actions/workflows/win-build.yml/badge.svg?branch=core-9-0-branch)](https://github.com/tcltk/tcl/actions/workflows/win-build.yml?query=branch%3Acore-9-0-branch)
-[![Build Status](https://github.com/tcltk/tcl/actions/workflows/mac-build.yml/badge.svg?branch=core-9-0-branch)](https://github.com/tcltk/tcl/actions/workflows/mac-build.yml?query=branch%3Acore-9-0-branch)
+    # Tcl parser
+    set x [( 1 + 1 )]; # inline
+    [( y = 2 * 2 ;)] ;# muted
+    # Tcl compiler 
+    if (1=1) ("hello")
+    switch $x 2 ("ok")
+    lmap z [lseq 10] {($z * 2)}
+    
+# in this repository :
+you will find the modified Tcl source.
 
-## Contents
- 1. [Introduction](#intro)
- 2. [Documentation](#doc)
- 3. [Thank you](#thanks)
-
-## <a id="intro">1.</a> Introduction
-
-## <a id="doc">2.</a> Documentation
-
-## <a id="thanks">3.</a> Thank You
-We'd like to express our thanks to the Tcl community for all the
-helpful suggestions, bug reports.
+you will find a binary distribution, with Tk, compiled with Msys under Windows 10, in the folder `Install_SH`
