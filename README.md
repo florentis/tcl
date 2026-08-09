@@ -22,9 +22,9 @@ This is the **Tcl 9.0.4** source distribution with **expr shorthand**
     set x [( 1 + 1 )]; # inline
     [( y = 2 * 2 ;)] ;# muted
     # Tcl compiler 
-    if (1=1) ("hello")
-    switch $x 2 ("ok")
-    lmap z [lseq 10] {($z * 2)}
+    if {($x == 2)} ("ok x")
+    switch $y 2 ("ok y")
+    lmap z [lseq 10] (\$z*2)
     
 # in this repository :
 you will find the modified Tcl source.
